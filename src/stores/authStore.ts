@@ -1,8 +1,8 @@
 import { atom, map } from 'nanostores';
-import type { User } from '@/types';
+import type { AuthUser } from '@/types';
 
 export interface AuthState {
-  user: User | null;
+  user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
@@ -13,7 +13,7 @@ export const authStore = map<AuthState>({
   isLoading: false,
 });
 
-export function setUser(user: User | null) {
+export function setUser(user: AuthUser | null) {
   authStore.setKey('user', user);
   authStore.setKey('isAuthenticated', user !== null);
 }
