@@ -1,0 +1,99 @@
+---
+import Logo from '@/components/shared/Logo.astro';
+
+interface Props {
+  activeRoute?: string;
+}
+
+const { activeRoute = 'home' } = Astro.props;
+
+const navItems = [
+  { label: 'Inicio', href: '/home', key: 'home' },
+  { label: 'Subir imagen', href: '/subir', key: 'subir' },
+  { label: 'Historial', href: '/historial', key: 'historial' },
+  { label: 'Dashboard', href: '/dashboards', key: 'dashboards' },
+  { label: 'Mis parcelas', href: '/parcelas', key: 'parcelas' },
+];
+---
+
+<nav class="bg-white border-b border-outline sticky top-0 z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16">
+      <!-- Logo y Nombre -->
+      <a href="/home" class="flex items-center gap-2 sm:gap-3 hover:opacity-80 transition-opacity">
+        <Logo width={40} height={40} class="shrink-0" />
+        <span class="text-lg sm:text-xl font-bold text-primary hidden sm:block">SmartPotatoLeaf</span>
+      </a>
+
+      <!-- Navegación Central (Desktop) -->
+      <div class="hidden lg:flex items-center gap-6">
+        {navItems.map(item => (
+          <a
+            href={item.href}
+            class={`text-sm font-medium transition-colors hover:text-primary ${
+              activeRoute === item.key ? 'text-primary' : 'text-state-idle'
+            }`}
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+
+      <!-- Buscador y Acciones -->
+      <div class="flex items-center gap-3 sm:gap-4">
+        <!-- Buscador (Desktop) -->
+        <div class="hidden md:flex items-center relative">
+          <i class="fas fa-search absolute left-3 text-state-idle text-sm"></i>
+          <input
+            type="search"
+            placeholder="Buscar diagnostico por severidad o parcela"
+            class="pl-10 pr-4 py-2 text-sm border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary w-64 lg:w-80"
+          />
+        </div>
+
+        <!-- Botón buscar móvil -->
+        <button class="md:hidden p-2 text-state-idle hover:text-primary transition-colors">
+          <i class="fas fa-search text-lg"></i>
+        </button>
+
+        <!-- Settings -->
+        <button class="p-2 text-state-idle hover:text-primary transition-colors">
+          <i class="fas fa-cog text-lg"></i>
+        </button>
+
+        <!-- Menú hamburguesa (Mobile) -->
+        <button class="lg:hidden p-2 text-state-idle hover:text-primary transition-colors">
+          <i class="fas fa-bars text-lg"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Menú móvil expandible -->
+    <div class="lg:hidden hidden" id="mobile-menu">
+      <div class="py-3 space-y-1">
+        {navItems.map(item => (
+          <a
+            href={item.href}
+            class={`block px-3 py-2 text-sm font-medium rounded-md transition-colors ${
+              activeRoute === item.key
+                ? 'bg-primary/10 text-primary'
+                : 'text-state-idle hover:bg-gray-50 hover:text-primary'
+            }`}
+          >
+            {item.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Toggle mobile menu
+  const menuButton = document.querySelector('button i.fa-bars')?.parentElement;
+  const mobileMenu = document.getElementById('mobile-menu');
+
+  menuButton?.addEventListener('click', () => {
+    mobileMenu?.classList.toggle('hidden');
+  });
+</script>
