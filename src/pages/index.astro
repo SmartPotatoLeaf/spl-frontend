@@ -2,15 +2,187 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout>
-	<main class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-		<div class="text-center">
-			<h1 class="text-6xl font-bold text-gray-900 mb-4">
-				Hello <span class="text-primary">Astro</span> 🚀
-			</h1>
-			<p class="text-xl text-gray-600">
-				Ready to build something amazing
-			</p>
+<Layout title="Smart Potato Leaf - Paleta de Colores">
+	<main class="min-h-screen bg-gray-50 py-12 px-4">
+		<div class="max-w-6xl mx-auto">
+			<div class="text-center mb-12">
+				<h1 class="text-5xl font-bold text-state-idle mb-4">
+					Smart Potato Leaf
+				</h1>
+				<p class="text-xl text-gray-600">
+					Paleta de colores configurada con Tailwind v4
+				</p>
+			</div>
+
+			<section class="mb-12">
+				<h2 class="text-2xl font-bold text-state-idle mb-4">Colores Principales</h2>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-primary h-24"></div>
+						<div class="p-4">
+							<p class="font-semibold">Primary</p>
+							<p class="text-sm text-gray-600">#61A253</p>
+						</div>
+					</div>
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-outline h-24"></div>
+						<div class="p-4">
+							<p class="font-semibold">Outline</p>
+							<p class="text-sm text-gray-600">#DEE1E6</p>
+						</div>
+					</div>
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-error h-24"></div>
+						<div class="p-4">
+							<p class="font-semibold">Error</p>
+							<p class="text-sm text-gray-600">#DB6468</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="mb-12">
+				<h2 class="text-2xl font-bold text-state-idle mb-4">Tags</h2>
+				<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-tag-low h-20"></div>
+						<div class="p-3">
+							<p class="font-semibold text-sm">Low</p>
+							<p class="text-xs text-gray-600">#A4C400</p>
+						</div>
+					</div>
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-tag-healthy h-20"></div>
+						<div class="p-3">
+							<p class="font-semibold text-sm">Healthy</p>
+							<p class="text-xs text-gray-600">#4CAF50</p>
+						</div>
+					</div>
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-tag-mid h-20"></div>
+						<div class="p-3">
+							<p class="font-semibold text-sm">Mid</p>
+							<p class="text-xs text-gray-600">#F4B400</p>
+						</div>
+					</div>
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-tag-severe h-20"></div>
+						<div class="p-3">
+							<p class="font-semibold text-sm">Severe</p>
+							<p class="text-xs text-gray-600">#D32F2F</p>
+						</div>
+					</div>
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-tag-local h-20"></div>
+						<div class="p-3">
+							<p class="font-semibold text-sm">Local</p>
+							<p class="text-xs text-gray-600">#E4F09C</p>
+						</div>
+					</div>
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-tag-remote h-20"></div>
+						<div class="p-3">
+							<p class="font-semibold text-sm">Remote</p>
+							<p class="text-xs text-gray-600">#9CF0E6</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="mb-12">
+				<h2 class="text-2xl font-bold text-state-idle mb-4">States</h2>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-state-selected h-24"></div>
+						<div class="p-4">
+							<p class="font-semibold">Selected</p>
+							<p class="text-sm text-gray-600">#61A253</p>
+						</div>
+					</div>
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-state-idle h-24"></div>
+						<div class="p-4">
+							<p class="font-semibold">Idle</p>
+							<p class="text-sm text-gray-600">#171A1F</p>
+						</div>
+					</div>
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-state-disabled h-24"></div>
+						<div class="p-4">
+							<p class="font-semibold">Disabled</p>
+							<p class="text-sm text-gray-600">#ACB3AA</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="mb-12">
+				<h2 class="text-2xl font-bold text-state-idle mb-4">Confidence</h2>
+				<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-confidence-mid h-24"></div>
+						<div class="p-4">
+							<p class="font-semibold">Mid</p>
+							<p class="text-sm text-gray-600">#E6E670</p>
+						</div>
+					</div>
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-confidence-high h-24"></div>
+						<div class="p-4">
+							<p class="font-semibold">High</p>
+							<p class="text-sm text-gray-600">#8CE670</p>
+						</div>
+					</div>
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-confidence-low h-24"></div>
+						<div class="p-4">
+							<p class="font-semibold">Low</p>
+							<p class="text-sm text-gray-600">#E67072</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="mb-12">
+				<h2 class="text-2xl font-bold text-state-idle mb-4">Switch</h2>
+				<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-switch-off h-24"></div>
+						<div class="p-4">
+							<p class="font-semibold">Off</p>
+							<p class="text-sm text-gray-600">#80B488</p>
+						</div>
+					</div>
+					<div class="bg-white rounded-lg shadow-md overflow-hidden">
+						<div class="bg-switch-on h-24"></div>
+						<div class="p-4">
+							<p class="font-semibold">On</p>
+							<p class="text-sm text-gray-600">#05BC21</p>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<section class="bg-white rounded-lg shadow-md p-6">
+				<h2 class="text-2xl font-bold text-state-idle mb-4">Ejemplo de Uso</h2>
+				<div class="flex gap-3 flex-wrap">
+					<button class="bg-primary text-white px-6 py-2 rounded-lg hover:opacity-90 transition">
+						Primary Button
+					</button>
+					<button class="bg-error text-white px-6 py-2 rounded-lg hover:opacity-90 transition">
+						Error Button
+					</button>
+					<button class="bg-state-disabled text-gray-600 px-6 py-2 rounded-lg cursor-not-allowed">
+						Disabled Button
+					</button>
+				</div>
+				<div class="mt-4 flex gap-2 flex-wrap">
+					<span class="bg-tag-healthy text-white px-3 py-1 rounded-full text-sm">Healthy</span>
+					<span class="bg-tag-severe text-white px-3 py-1 rounded-full text-sm">Severe</span>
+					<span class="bg-tag-mid text-white px-3 py-1 rounded-full text-sm">Mid</span>
+					<span class="bg-tag-low text-white px-3 py-1 rounded-full text-sm">Low</span>
+				</div>
+			</section>
 		</div>
 	</main>
 </Layout>
