@@ -17,6 +17,9 @@ importers:
       astro:
         specifier: ^5.15.3
         version: 5.15.3(@types/node@24.9.1)(jiti@2.6.1)(lightningcss@1.30.2)(rollup@4.52.5)(typescript@5.9.3)
+      formz:
+        specifier: ^2.8.4
+        version: 2.8.4(react@19.2.0)
       nanostores:
         specifier: ^1.0.1
         version: 1.0.1
@@ -1029,6 +1032,11 @@ packages:
 
   fontkit@2.0.4:
     resolution: {integrity: sha512-syetQadaUEDNdxdugga9CpEYVaQIxOwk7GlwZWWZ19//qW4zE5bknOKeMBDYAASwnpaSHKJITRLMF9m1fp3s6g==}
+
+  formz@2.8.4:
+    resolution: {integrity: sha512-L8DuGuXYRQIFFP98DSk94TN7OhHtTNSYEcEPvxMZsStccnFXfrMzHWnN1pF7P8nxfwrOVu5ZoguvdrC9ZfPCxw==}
+    peerDependencies:
+      react: '>= 17'
 
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
@@ -2838,6 +2846,10 @@ snapshots:
       tiny-inflate: 1.0.3
       unicode-properties: 1.4.1
       unicode-trie: 2.0.0
+
+  formz@2.8.4(react@19.2.0):
+    dependencies:
+      react: 19.2.0
 
   fsevents@2.3.3:
     optional: true
