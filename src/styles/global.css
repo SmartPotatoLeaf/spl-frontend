@@ -1,13 +1,11 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 
-/* Configuración del tema */
 @theme {
-  /* Colores principales */
   --color-primary: #61A253;
   --color-outline: #DEE1E6;
   --color-error: #DB6468;
   
-  /* Tags */
   --color-tag-low: #A4C400;
   --color-tag-healthy: #4CAF50;
   --color-tag-mid: #F4B400;
@@ -15,24 +13,23 @@
   --color-tag-local: #E4F09C;
   --color-tag-remote: #9CF0E6;
   
-  /* States */
   --color-state-selected: #61A253;
   --color-state-idle: #171A1F;
   --color-state-disabled: #ACB3AA;
   
-  /* Confidence */
   --color-confidence-mid: #E6E670;
   --color-confidence-high: #8CE670;
   --color-confidence-low: #E67072;
   
-  /* Switch */
   --color-switch-off: #80B488;
   --color-switch-on: #05BC21;
+  
+  --font-family-base: 'Roboto', sans-serif;
 }
 
-/* Estilos base */
 @layer base {
   body {
     @apply antialiased;
+    font-family: var(--font-family-base);
   }
 }
