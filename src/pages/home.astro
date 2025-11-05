@@ -1,82 +1,40 @@
 ---
 import DashboardLayout from '@/layouts/DashboardLayout.astro';
-import StatsCard from '@/components/home/StatsCard.astro';
-import DiagnosticCard from '@/components/home/DiagnosticCard.astro';
-import SummaryChart from '@/components/home/SummaryChart.astro';
+import HomeDashboard from '@/components/home/HomeDashboard';
 import { getDashboardStats, getRecentDiagnostics } from '@/services/homeService';
-import { authStore } from '@/stores/authStore';
 
 const stats = await getDashboardStats();
 const recentDiagnostics = await getRecentDiagnostics();
-const auth = authStore.get();
-const userName = auth.user?.username || 'Usuario';
 ---
 
 <DashboardLayout title="Home - Smart Potato Leaf" activeRoute="home">
-  <div class="space-y-6 sm:space-y-8">
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-      <h1 class="text-2xl sm:text-3xl font-bold text-state-idle">Bienvenido {userName}</h1>
-      <a 
-        href="/subir"
-        class="inline-flex items-center justify-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-opacity-90 transition-colors"
-      >
-        <i class="fas fa-camera"></i>
-        Nuevo diagnóstico
-      </a>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-      <StatsCard
-        title="Diagnósticos esta semana"
-        value={stats.weekStats.currentWeek}
-        change={stats.weekStats.percentageChange}
-        icon="fa-chart-line"
-        iconColor="text-primary"
-      />
-      
-      <StatsCard
-        title="Diagnósticos generales sin rancha"
-        value={`${stats.generalStats.healthyPercentage}%`}
-        change={stats.generalStats.percentageChange}
-        icon="fa-check-circle"
-        iconColor="text-tag-healthy"
-        valueColor="text-tag-healthy"
-      />
-      
-      <StatsCard
-        title="Severidad general promedio"
-        value={stats.severityAverage.value.toFixed(1)}
-        change={stats.severityAverage.change}
-        icon="fa-tag"
-        iconColor="text-tag-mid"
-        valueColor="text-tag-mid"
-      />
-    </div>
-
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
-      <div class="lg:col-span-2 space-y-6">
-        <div>
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-xl font-semibold text-state-idle">Últimos diagnósticos</h2>
-            <a 
-              href="/history"
-              class="inline-flex items-center gap-2 text-primary hover:underline text-sm font-medium"
-            >
-              <i class="fas fa-external-link-alt"></i>
-            </a>
-          </div>
-          <div class="space-y-3">
-            {recentDiagnostics.map((diagnostic) => (
-              <DiagnosticCard diagnostic={diagnostic} />
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div class="lg:col-span-1">
-        <h2 class="text-xl font-semibold text-state-idle mb-4">Resumen de diagnósticos</h2>
-        <SummaryChart summary={stats.summary} />
-      </div>
-    </div>
-  </div>
+  <HomeDashboard client:load />
 </DashboardLayout>
+
+<script>
+  import { setHomeData } from '@/stores';
+
+  const homeData = document.getElementById('home-data');
+  if (homeData) {
+    const { stats, diagnostics } = JSON.parse(homeData.textContent || '{}', (key, value) => {
+      if (key === 'predictionId' || key === 'imageId' || key === 'labelId') {
+        return BigInt(value);
+      }
+      if (key === 'predictedAt' || key === 'uploadedAt') {
+        return new Date(value);
+      }
+      return value;
+    });
+    setHomeData(stats, diagnostics);
+  }
+</script>
+
+<script id="home-data" type="application/json" set:html={JSON.stringify({ stats, diagnostics: recentDiagnostics }, (key, value) => {
+  if (typeof value === 'bigint') {
+    return value.toString();
+  }
+  if (value instanceof Date) {
+    return value.toISOString();
+  }
+  return value;
+})} />
