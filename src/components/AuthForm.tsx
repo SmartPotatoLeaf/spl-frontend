@@ -9,6 +9,44 @@ interface AuthFormProps {
   onToggleMode: () => void;
 }
 
+interface ValidationErrors {
+  username?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+  terms?: string;
+  submit?: string;
+}
+
+const validateEmail = (email: string): string | undefined => {
+  if (!email) return 'El email es requerido';
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) return 'Email inválido';
+  return undefined;
+};
+
+const validatePassword = (password: string, isRegister: boolean): string | undefined => {
+  if (!password) return 'La contraseña es requerida';
+  
+  if (isRegister) {
+    if (password.length < 8) return 'Mínimo 8 caracteres';
+    if (!/[A-Z]/.test(password)) return 'Debe incluir al menos una mayúscula';
+    if (!/[a-z]/.test(password)) return 'Debe incluir al menos una minúscula';
+    if (!/[0-9]/.test(password)) return 'Debe incluir al menos un número';
+    if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return 'Debe incluir al menos un carácter especial';
+  }
+  
+  return undefined;
+};
+
+const validateUsername = (username: string): string | undefined => {
+  if (!username) return 'El nombre de usuario es requerido';
+  if (username.length < 3) return 'Mínimo 3 caracteres';
+  if (username.length > 20) return 'Máximo 20 caracteres';
+  if (!/^[a-zA-Z0-9_]+$/.test(username)) return 'Solo letras, números y guión bajo';
+  return undefined;
+};
+
 export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
   const { isLoading } = useStore(authStore);
   
@@ -19,57 +57,106 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
     confirmPassword: '',
   });
   
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<ValidationErrors>({});
   const [acceptTerms, setAcceptTerms] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [touchedFields, setTouchedFields] = useState<Set<string>>(new Set());
 
-  const validateLogin = (): boolean => {
-    const newErrors: Record<string, string> = {};
+  const handleChange = (field: keyof typeof formData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
     
-    if (!formData.email) {
-      newErrors.email = 'El email es requerido';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email inválido';
+    if (touchedFields.has(field)) {
+      validateField(field, value);
     }
-    
-    if (!formData.password) {
-      newErrors.password = 'La contraseña es requerida';
-    }
-    
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
   };
 
-  const validateRegister = (): boolean => {
-    const newErrors: Record<string, string> = {};
-    
-    if (!formData.username) {
-      newErrors.username = 'El nombre de usuario es requerido';
-    } else if (formData.username.length < 3) {
-      newErrors.username = 'Mínimo 3 caracteres';
+  const handleBlur = (field: keyof typeof formData) => {
+    setTouchedFields(prev => new Set(prev).add(field));
+    validateField(field, formData[field]);
+  };
+
+  const validateField = (field: keyof typeof formData, value: string) => {
+    const newErrors = { ...errors };
+
+    switch (field) {
+      case 'username':
+        if (mode === 'register') {
+          const usernameError = validateUsername(value);
+          if (usernameError) {
+            newErrors.username = usernameError;
+          } else {
+            delete newErrors.username;
+          }
+        }
+        break;
+      
+      case 'email':
+        const emailError = validateEmail(value);
+        if (emailError) {
+          newErrors.email = emailError;
+        } else {
+          delete newErrors.email;
+        }
+        break;
+      
+      case 'password':
+        const passwordError = validatePassword(value, mode === 'register');
+        if (passwordError) {
+          newErrors.password = passwordError;
+        } else {
+          delete newErrors.password;
+        }
+        
+        if (mode === 'register' && formData.confirmPassword && touchedFields.has('confirmPassword')) {
+          if (value !== formData.confirmPassword) {
+            newErrors.confirmPassword = 'Las contraseñas no coinciden';
+          } else {
+            delete newErrors.confirmPassword;
+          }
+        }
+        break;
+      
+      case 'confirmPassword':
+        if (mode === 'register') {
+          if (!value) {
+            newErrors.confirmPassword = 'Confirma tu contraseña';
+          } else if (value !== formData.password) {
+            newErrors.confirmPassword = 'Las contraseñas no coinciden';
+          } else {
+            delete newErrors.confirmPassword;
+          }
+        }
+        break;
     }
-    
-    if (!formData.email) {
-      newErrors.email = 'El email es requerido';
-    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Email inválido';
+
+    setErrors(newErrors);
+  };
+
+  const validateAllFields = (): boolean => {
+    const newErrors: ValidationErrors = {};
+
+    const emailError = validateEmail(formData.email);
+    if (emailError) newErrors.email = emailError;
+
+    const passwordError = validatePassword(formData.password, mode === 'register');
+    if (passwordError) newErrors.password = passwordError;
+
+    if (mode === 'register') {
+      const usernameError = validateUsername(formData.username);
+      if (usernameError) newErrors.username = usernameError;
+
+      if (!formData.confirmPassword) {
+        newErrors.confirmPassword = 'Confirma tu contraseña';
+      } else if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = 'Las contraseñas no coinciden';
+      }
+
+      if (!acceptTerms) {
+        newErrors.terms = 'Debes aceptar los términos y condiciones';
+      }
     }
-    
-    if (!formData.password) {
-      newErrors.password = 'La contraseña es requerida';
-    } else if (formData.password.length < 6) {
-      newErrors.password = 'Mínimo 6 caracteres';
-    }
-    
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Confirma tu contraseña';
-    } else if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Las contraseñas no coinciden';
-    }
-    
-    if (!acceptTerms) {
-      newErrors.terms = 'Debes aceptar los términos';
-    }
-    
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -77,7 +164,7 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const isValid = mode === 'login' ? validateLogin() : validateRegister();
+    const isValid = validateAllFields();
     if (!isValid) return;
 
     try {
@@ -100,13 +187,6 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
       }
     } catch (error) {
       setErrors({ submit: error instanceof Error ? error.message : 'Error desconocido' });
-    }
-  };
-
-  const handleChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
     }
   };
 
@@ -155,11 +235,16 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
               id="username"
               value={formData.username}
               onChange={(e) => handleChange('username', e.target.value)}
+              onBlur={() => handleBlur('username')}
               placeholder="Introduce tu nombre de usuario"
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+              className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 ${
+                errors.username && touchedFields.has('username')
+                  ? 'border-error focus:ring-error'
+                  : 'border-outline focus:ring-primary'
+              }`}
             />
-            {errors.username && (
-              <p className="mt-1 text-sm text-error">{errors.username}</p>
+            {errors.username && touchedFields.has('username') && (
+              <p className="mt-1 text-xs sm:text-sm text-error">{errors.username}</p>
             )}
           </div>
         )}
@@ -173,11 +258,16 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
             id="email"
             value={formData.email}
             onChange={(e) => handleChange('email', e.target.value)}
+            onBlur={() => handleBlur('email')}
             placeholder={mode === 'login' ? 'Ingresa tu email o usuario' : 'Introduce tu correo electrónico'}
-            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 ${
+              errors.email && touchedFields.has('email')
+                ? 'border-error focus:ring-error'
+                : 'border-outline focus:ring-primary'
+            }`}
           />
-          {errors.email && (
-            <p className="mt-1 text-sm text-error">{errors.email}</p>
+          {errors.email && touchedFields.has('email') && (
+            <p className="mt-1 text-xs sm:text-sm text-error">{errors.email}</p>
           )}
         </div>
 
@@ -185,16 +275,64 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
           <label htmlFor="password" className="block text-sm font-medium text-state-idle mb-2">
             Contraseña
           </label>
-          <input
-            type="password"
-            id="password"
-            value={formData.password}
-            onChange={(e) => handleChange('password', e.target.value)}
-            placeholder={mode === 'login' ? 'Ingresa tu contraseña' : 'Crea tu contraseña'}
-            className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-          />
-          {errors.password && (
-            <p className="mt-1 text-sm text-error">{errors.password}</p>
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              value={formData.password}
+              onChange={(e) => handleChange('password', e.target.value)}
+              onBlur={() => handleBlur('password')}
+              placeholder={mode === 'login' ? 'Ingresa tu contraseña' : 'Crea tu contraseña'}
+              className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 pr-10 sm:pr-12 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 ${
+                errors.password && touchedFields.has('password')
+                  ? 'border-error focus:ring-error'
+                  : 'border-outline focus:ring-primary'
+              }`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-state-idle hover:text-primary transition-colors"
+            >
+              <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+            </button>
+          </div>
+          {errors.password && touchedFields.has('password') && (
+            <p className="mt-1 text-xs sm:text-sm text-error">{errors.password}</p>
+          )}
+          {mode === 'register' && formData.password && touchedFields.has('password') && (
+            <div className="mt-2 space-y-1">
+              <p className={`text-xs flex items-center gap-1.5 ${
+                formData.password.length >= 8 ? 'text-tag-healthy' : 'text-state-idle'
+              }`}>
+                <i className={`fas ${formData.password.length >= 8 ? 'fa-check-circle' : 'fa-circle'}`}></i>
+                Mínimo 8 caracteres
+              </p>
+              <p className={`text-xs flex items-center gap-1.5 ${
+                /[A-Z]/.test(formData.password) ? 'text-tag-healthy' : 'text-state-idle'
+              }`}>
+                <i className={`fas ${/[A-Z]/.test(formData.password) ? 'fa-check-circle' : 'fa-circle'}`}></i>
+                Una letra mayúscula
+              </p>
+              <p className={`text-xs flex items-center gap-1.5 ${
+                /[a-z]/.test(formData.password) ? 'text-tag-healthy' : 'text-state-idle'
+              }`}>
+                <i className={`fas ${/[a-z]/.test(formData.password) ? 'fa-check-circle' : 'fa-circle'}`}></i>
+                Una letra minúscula
+              </p>
+              <p className={`text-xs flex items-center gap-1.5 ${
+                /[0-9]/.test(formData.password) ? 'text-tag-healthy' : 'text-state-idle'
+              }`}>
+                <i className={`fas ${/[0-9]/.test(formData.password) ? 'fa-check-circle' : 'fa-circle'}`}></i>
+                Un número
+              </p>
+              <p className={`text-xs flex items-center gap-1.5 ${
+                /[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? 'text-tag-healthy' : 'text-state-idle'
+              }`}>
+                <i className={`fas ${/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? 'fa-check-circle' : 'fa-circle'}`}></i>
+                Un carácter especial
+              </p>
+            </div>
           )}
         </div>
 
@@ -203,16 +341,30 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
             <label htmlFor="confirmPassword" className="block text-sm font-medium text-state-idle mb-2">
               Confirmar Contraseña
             </label>
-            <input
-              type="password"
-              id="confirmPassword"
-              value={formData.confirmPassword}
-              onChange={(e) => handleChange('confirmPassword', e.target.value)}
-              placeholder="Confirma tu contraseña"
-              className="w-full px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-            />
-            {errors.confirmPassword && (
-              <p className="mt-1 text-sm text-error">{errors.confirmPassword}</p>
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? 'text' : 'password'}
+                id="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={(e) => handleChange('confirmPassword', e.target.value)}
+                onBlur={() => handleBlur('confirmPassword')}
+                placeholder="Confirma tu contraseña"
+                className={`w-full px-3 sm:px-4 py-2.5 sm:py-3 pr-10 sm:pr-12 text-sm sm:text-base border rounded-lg focus:outline-none focus:ring-2 ${
+                  errors.confirmPassword && touchedFields.has('confirmPassword')
+                    ? 'border-error focus:ring-error'
+                    : 'border-outline focus:ring-primary'
+                }`}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-state-idle hover:text-primary transition-colors"
+              >
+                <i className={`fas ${showConfirmPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+              </button>
+            </div>
+            {errors.confirmPassword && touchedFields.has('confirmPassword') && (
+              <p className="mt-1 text-xs sm:text-sm text-error">{errors.confirmPassword}</p>
             )}
           </div>
         )}
@@ -226,33 +378,39 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
         )}
 
         {mode === 'register' && (
-          <div className="flex items-start gap-2 mb-4 sm:mb-6">
-            <input
-              type="checkbox"
-              id="terms"
-              checked={acceptTerms}
-              onChange={(e) => {
-                setAcceptTerms(e.target.checked);
-                if (errors.terms) {
-                  setErrors(prev => ({ ...prev, terms: '' }));
-                }
-              }}
-              className="mt-1 shrink-0"
-            />
-            <label htmlFor="terms" className="text-xs sm:text-sm text-state-idle">
-              Acepto los{' '}
-              <a href="#" className="text-primary hover:underline">
-                Términos de servicio
-              </a>{' '}
-              y la{' '}
-              <a href="#" className="text-primary hover:underline">
-                Política de privacidad
-              </a>
-            </label>
+          <div className="mb-4 sm:mb-6">
+            <div className="flex items-start gap-2">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={acceptTerms}
+                onChange={(e) => {
+                  setAcceptTerms(e.target.checked);
+                  if (e.target.checked && errors.terms) {
+                    setErrors(prev => {
+                      const newErrors = { ...prev };
+                      delete newErrors.terms;
+                      return newErrors;
+                    });
+                  }
+                }}
+                className="mt-1 shrink-0"
+              />
+              <label htmlFor="terms" className="text-xs sm:text-sm text-state-idle">
+                Acepto los{' '}
+                <a href="#" className="text-primary hover:underline">
+                  Términos de servicio
+                </a>{' '}
+                y la{' '}
+                <a href="#" className="text-primary hover:underline">
+                  Política de privacidad
+                </a>
+              </label>
+            </div>
+            {errors.terms && (
+              <p className="mt-1 text-xs sm:text-sm text-error">{errors.terms}</p>
+            )}
           </div>
-        )}
-        {errors.terms && (
-          <p className="text-xs sm:text-sm text-error mb-3 sm:mb-4">{errors.terms}</p>
         )}
 
         {mode === 'login' && (
