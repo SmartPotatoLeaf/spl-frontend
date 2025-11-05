@@ -1,8 +1,7 @@
-import type { Plot, PlotImage, Image, Prediction, Label } from './database';
+import type { Plot } from './database';
 
 /**
- * PlotSummary - Tipo de presentación que extiende Plot de database.ts
- * Añade campos calculados para mostrar estadísticas
+ * PlotSummary - Extiende Plot de database.ts con estadísticas calculadas
  */
 export interface PlotSummary extends Omit<Plot, 'user_id'> {
   diagnosticsCount: number;
@@ -14,7 +13,7 @@ export interface PlotSummary extends Omit<Plot, 'user_id'> {
 }
 
 /**
- * PlotDetail - Información completa de parcela con imágenes recientes
+ * PlotDetail - Información completa de parcela con gráficos
  */
 export interface PlotDetail extends PlotSummary {
   recentImages: Array<{
@@ -29,4 +28,29 @@ export interface PlotDetail extends PlotSummary {
       predicted_at: Date;
     };
   }>;
+  trendData: PlotTrendData;
+  distributionData: PlotDistributionData;
+}
+
+/**
+ * PlotTrendData - Gráfico de tendencia temporal (Chart.js line)
+ */
+export interface PlotTrendData {
+  labels: string[];
+  datasets: Array<{
+    label: string;
+    data: number[];
+    borderColor: string;
+    backgroundColor: string;
+  }>;
+}
+
+/**
+ * PlotDistributionData - Gráfico de distribución (Chart.js donut)
+ */
+export interface PlotDistributionData {
+  healthy: number;
+  low: number;
+  moderate: number;
+  severe: number;
 }

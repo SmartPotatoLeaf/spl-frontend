@@ -1,0 +1,20 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import PlotDetailView from '@/components/plots/PlotDetailView';
+
+export const prerender = false;
+
+const { id } = Astro.params;
+
+if (!id) {
+  return Astro.redirect('/plots');
+}
+---
+
+<DashboardLayout 
+  title="Detalles de Parcela - Smart Potato Leaf"
+  description="Análisis detallado de la parcela"
+  activeRoute="parcelas"
+>
+  <PlotDetailView plotId={id} client:load />
+</DashboardLayout>

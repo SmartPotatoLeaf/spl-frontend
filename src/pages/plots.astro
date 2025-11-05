@@ -1,0 +1,49 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import PlotsGrid from '@/components/plots/PlotsGrid';
+import { getAllPlots } from '@/services/plotService';
+
+const plots = await getAllPlots();
+---
+
+<DashboardLayout 
+  title="Mis Parcelas - Smart Potato Leaf" 
+  description="Gestión de parcelas de cultivo"
+  activeRoute="parcelas"
+>
+  <div class="mb-6 flex items-center justify-between flex-wrap gap-4">
+    <div>
+      <h1 class="text-2xl sm:text-3xl font-bold text-state-idle mb-2">Mis parcelas</h1>
+      <p class="text-state-disabled">Gestiona y monitorea tus parcelas de cultivo</p>
+    </div>
+    <a
+      href="/plots/new"
+      class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors"
+    >
+      <i class="fas fa-plus"></i>
+      Agregar parcela
+    </a>
+  </div>
+
+  <PlotsGrid client:load />
+
+  <script>
+    import { setPlotsData } from '@/stores';
+
+    const plotsDataElement = document.getElementById('plots-data');
+    if (plotsDataElement) {
+      const plotsData = JSON.parse(plotsDataElement.textContent || '[]', (key, value) => {
+        if (key === 'id') return BigInt(value);
+        if (key === 'create_at' || key === 'updated_at' || key === 'lastDiagnosticDate') {
+          return value ? new Date(value) : undefined;
+        }
+        return value;
+      });
+      setPlotsData(plotsData);
+    }
+  </script>
+
+  <script id="plots-data" type="application/json" set:html={JSON.stringify(plots, (key, value) => 
+    typeof value === 'bigint' ? value.toString() : value
+  )} />
+</DashboardLayout>
