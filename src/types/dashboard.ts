@@ -1,27 +1,26 @@
-import type { Prediction, Image, Label } from './database';
-
 export type SeverityLevel = 'healthy' | 'low' | 'moderate' | 'severe';
 
 /**
- * Diagnostic - Tipo de presentación compuesto de Prediction + Image + Label
- * Este tipo transforma los datos de database.ts para la UI
+ * Diagnostic - Tipo de presentación para la UI
+ * Combina datos de Prediction + Image + Label de database.ts transformados
+ * para facilitar el renderizado en componentes
  */
 export interface Diagnostic {
-  // IDs de entidades de database.ts
+  // IDs de referencia a database.ts
   predictionId: bigint;
   imageId: bigint;
   labelId: bigint;
   
   // Datos transformados para presentación
-  imageUrl: string; // Transformado de Image.filepath
-  status: SeverityLevel; // Transformado de Label.name
-  statusLabel: string; // Transformado de Label.name
-  confidence: number; // De Prediction.confidence
-  predictedAt: Date; // De Prediction.predicted_at
-  uploadedAt: Date; // De Image.uploaded_at
+  imageUrl: string;
+  status: SeverityLevel;
+  statusLabel: string;
+  confidence: number;
+  predictedAt: Date;
+  uploadedAt: Date;
   
-  // Información adicional opcional
-  location?: string; // De PlotImage si existe relación
+  // Información adicional
+  location?: string;
   hasLocation: boolean;
 }
 

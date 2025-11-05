@@ -1,7 +1,8 @@
-import type { User, Prediction, Image } from './database';
+import type { Prediction, Image } from './database';
+import type { AuthUser } from './auth';
 
 export interface AuthState {
-  user: User | null;
+  user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 }
