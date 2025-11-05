@@ -1,99 +1,146 @@
-# Smart Potato Leaf 🍃# Astro Starter Kit: Basics
+# Smart Potato Leaf
 
+Solución tecnológica para la detección temprana de la enfermedad Phytophthora infestans en cultivos de papa basada en ResNet-50.
 
+## Descripción del Proyecto
 
-Proyecto construido con **Astro 5** y **Tailwind CSS v4**.```sh
+La rancha, causada por el hongo Phytophthora infestans, es una de las enfermedades más destructivas que afectan los cultivos de papa en el Perú. El diagnóstico tardío e impreciso, causado por la inexperiencia o un diagnóstico visual erróneo por parte del agricultor, provoca que la enfermedad se propague en exceso hasta que ya es demasiado tarde para controlarla.
 
-pnpm create astro@latest -- --template basics
+Este proyecto implementa una solución basada en Deep Learning utilizando ResNet-50 para la detección temprana y precisa de la enfermedad, proporcionando una herramienta de apoyo para los agricultores peruanos.
 
-## 🚀 Stack```
+## Stack Tecnológico
 
+### Frontend
 
+- [Astro 5.15.3](https://astro.build) - Framework web moderno para aplicaciones rápidas
+- [Tailwind CSS v4.1.16](https://tailwindcss.com) - Framework CSS utility-first
+- [TypeScript 5](https://www.typescriptlang.org/) - Tipado estático para JavaScript
+- [Vite 6](https://vitejs.dev/) - Build tool de última generación
 
-- **[Astro 5.15.3](https://astro.build)** - Framework web moderno> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+### Machine Learning
 
-- **[Tailwind CSS v4.1.16](https://tailwindcss.com)** - CSS utility-first
+- ResNet-50 - Arquitectura de red neuronal para clasificación de imágenes
+- Deep Learning - Detección de Phytophthora infestans
 
-- **[TypeScript 5](https://www.typescriptlang.org/)** - Type safety## 🚀 Project Structure
-
-- **[Vite 6](https://vitejs.dev/)** - Build tool
-
-Inside of your Astro project, you'll see the following folders and files:
-
-## 📂 Estructura del Proyecto
-
-```text
-
-```/
-
-/├── public/
-
-├── public/          # Assets estáticos│   └── favicon.svg
-
-├── src/├── src
-
-│   ├── assets/      # Imágenes, fuentes, etc.│   ├── assets
-
-│   ├── components/  # Componentes Astro│   │   └── astro.svg
-
-│   ├── layouts/     # Layouts de página│   ├── components
-
-│   ├── pages/       # Rutas de la aplicación│   │   └── Welcome.astro
-
-│   └── styles/      # Estilos globales (Tailwind v4)│   ├── layouts
-
-└── package.json│   │   └── Layout.astro
-
-```│   └── pages
-
-│       └── index.astro
-
-## 🧞 Comandos└── package.json
+## Estructura del Proyecto
 
 ```
+/
+├── public/              # Assets estáticos
+├── src/
+│   ├── assets/          # Imágenes, fuentes
+│   ├── components/      # Componentes Astro reutilizables
+│   ├── layouts/         # Layouts de página
+│   ├── pages/           # Rutas de la aplicación
+│   └── styles/          # Estilos globales (Tailwind v4)
+├── astro.config.mjs     # Configuración de Astro
+├── tailwind.config.mjs  # Configuración de Tailwind
+└── tsconfig.json        # Configuración de TypeScript
+```
 
-| Comando                | Acción                                      |
+## Instalación
 
-| :--------------------- | :------------------------------------------ |To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+### Requisitos Previos
 
-| `pnpm install`         | Instala las dependencias                    |
+- Node.js 18.0 o superior
+- pnpm 8.0 o superior
 
-| `pnpm dev`             | Inicia servidor de desarrollo en `localhost:4321` |## 🧞 Commands
+### Pasos de Instalación
 
-| `pnpm build`           | Construye el sitio para producción en `./dist/` |
+1. Clonar el repositorio
 
-| `pnpm preview`         | Vista previa del build antes de desplegar   |All commands are run from the root of the project, from a terminal:
+```bash
+git clone https://github.com/tu-usuario/smart_potato_leaf.git
+cd smart_potato_leaf
+```
 
-| `pnpm astro ...`       | Ejecuta comandos de Astro CLI              |
+2. Instalar dependencias
 
-| Command                   | Action                                           |
+```bash
+pnpm install
+```
 
-## 🎨 Tailwind CSS v4| :------------------------ | :----------------------------------------------- |
+3. Iniciar servidor de desarrollo
 
-| `pnpm install`             | Installs dependencies                            |
+```bash
+pnpm dev
+```
 
-Este proyecto usa Tailwind CSS v4 con configuración CSS-first. Personaliza los colores y estilos en:| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
+El proyecto estará disponible en `http://localhost:4321`
 
-| `pnpm build`           | Build your production site to `./dist/`          |
+## Comandos Disponibles
 
-```| `pnpm preview`         | Preview your build locally, before deploying     |
+| Comando          | Descripción                             |
+| :--------------- | :-------------------------------------- |
+| `pnpm install`   | Instala las dependencias del proyecto   |
+| `pnpm dev`       | Inicia el servidor de desarrollo        |
+| `pnpm build`     | Construye la aplicación para producción |
+| `pnpm preview`   | Previsualiza el build de producción     |
+| `pnpm astro ...` | Ejecuta comandos CLI de Astro           |
 
-src/styles/global.css| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
+## Paleta de Colores
 
-```| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+### Principales
 
+- `primary` - #61A253 (Verde)
+- `outline` - #DEE1E6 (Gris claro)
+- `error` - #DB6468 (Rojo)
 
+### Tags de Severidad
 
-### Colores disponibles:## 👀 Want to learn more?
+- `tag-low` - #A4C400 (Verde lima)
+- `tag-healthy` - #4CAF50 (Verde)
+- `tag-mid` - #F4B400 (Amarillo)
+- `tag-severe` - #D32F2F (Rojo)
+- `tag-local` - #E4F09C (Lima claro)
+- `tag-remote` - #9CF0E6 (Cyan)
 
-- `primary` - Azul (#3b82f6)
+### Estados de Interfaz
 
-- `secondary` - Púrpura (#8b5cf6)Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- `state-selected` - #61A253 (Verde)
+- `state-idle` - #171A1F (Negro)
+- `state-disabled` - #ACB3AA (Gris)
 
-- `accent` - Ámbar (#f59e0b)
+### Niveles de Confianza
 
-## 📖 Recursos
+- `confidence-high` - #8CE670 (Verde)
+- `confidence-mid` - #E6E670 (Amarillo)
+- `confidence-low` - #E67072 (Rojo)
+
+### Controles
+
+- `switch-on` - #05BC21 (Verde brillante)
+- `switch-off` - #80B488 (Verde apagado)
+
+## Uso de Colores
+
+```astro
+<!-- Colores principales -->
+<div class="bg-primary text-white">Primary</div>
+<div class="border-2 border-outline">Outline</div>
+<div class="text-error">Error message</div>
+
+<!-- Tags -->
+<span class="bg-tag-healthy text-white">Healthy</span>
+<span class="bg-tag-severe text-white">Severe</span>
+
+<!-- States -->
+<button class="bg-state-selected">Selected</button>
+<button class="bg-state-disabled">Disabled</button>
+
+<!-- Confidence -->
+<div class="bg-confidence-high">High confidence</div>
+
+<!-- Switch -->
+<div class="bg-switch-on">Switch ON</div>
+```
+
+## Arquitectura del Modelo
+
+El proyecto utiliza ResNet-50, una arquitectura de red neuronal convolucional profunda con 50 capas, conocida por su efectividad en tareas de clasificación de imágenes. El modelo ha sido entrenado específicamente para detectar Phytophthora infestans en hojas de papa.
+
+## Recursos Adicionales
 
 - [Documentación de Astro](https://docs.astro.build)
 - [Documentación de Tailwind CSS](https://tailwindcss.com/docs)
-- [Discord de Astro](https://astro.build/chat)
+- [TypeScript Handbook](https://www.typescriptlang.org/docs/)
