@@ -1,0 +1,16 @@
+@import "tailwindcss";
+
+/* Configuración del tema */
+@theme {
+  /* Colores personalizados */
+  --color-primary: #3b82f6;
+  --color-secondary: #8b5cf6;
+  --color-accent: #f59e0b;
+}
+
+/* Estilos base */
+@layer base {
+  body {
+    @apply antialiased;
+  }
+}
