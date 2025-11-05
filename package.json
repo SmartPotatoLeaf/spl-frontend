@@ -12,9 +12,11 @@
     "@astrojs/react": "^4.4.1",
     "@nanostores/react": "^1.0.0",
     "astro": "^5.15.3",
+    "chart.js": "^4.5.1",
     "formz": "^2.8.4",
     "nanostores": "^1.0.1",
     "react": "^19.2.0",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.2.0"
   },
   "devDependencies": {
