@@ -1,0 +1,40 @@
+---
+interface Props {
+  title: string;
+  value: string | number;
+  change?: number;
+  icon: string;
+  iconColor?: string;
+  valueColor?: string;
+}
+
+const { 
+  title, 
+  value, 
+  change, 
+  icon,
+  iconColor = 'text-primary',
+  valueColor = 'text-state-idle'
+} = Astro.props;
+
+const changeColor = change && change > 0 ? 'text-primary' : change && change < 0 ? 'text-error' : 'text-state-disabled';
+const changeIcon = change && change > 0 ? 'fa-arrow-up' : change && change < 0 ? 'fa-arrow-down' : '';
+---
+
+<div class="bg-white rounded-lg shadow-sm border border-outline p-4 sm:p-6">
+  <div class="flex items-start justify-between">
+    <div class="flex-1">
+      <p class="text-sm text-state-disabled font-normal mb-2">{title}</p>
+      <p class={`text-3xl sm:text-4xl font-bold ${valueColor} mb-2`}>{value}</p>
+      {change !== undefined && (
+        <div class={`flex items-center gap-1 text-sm font-medium ${changeColor}`}>
+          {changeIcon && <i class={`fas ${changeIcon} text-xs`}></i>}
+          <span>{Math.abs(change)}%</span>
+        </div>
+      )}
+    </div>
+    <div class={`${iconColor} text-2xl sm:text-3xl`}>
+      <i class={`fas ${icon}`}></i>
+    </div>
+  </div>
+</div>
