@@ -1,0 +1,54 @@
+[
+  {
+    "id": "1",
+    "name": "Parcela A",
+    "description": "Sector Norte - Variedad Canchan",
+    "create_at": "2025-08-15T00:00:00Z",
+    "updated_at": "2025-10-25T00:00:00Z",
+    "diagnosticsCount": 45,
+    "healthyCount": 32,
+    "infectedCount": 13,
+    "lastDiagnosticDate": "2025-11-01T00:00:00Z",
+    "variety": "Canchan",
+    "sector": "Sector Norte"
+  },
+  {
+    "id": "2",
+    "name": "Parcela B",
+    "description": "Sector Sur - Variedad Perricholi",
+    "create_at": "2025-08-20T00:00:00Z",
+    "updated_at": "2025-10-24T00:00:00Z",
+    "diagnosticsCount": 28,
+    "healthyCount": 20,
+    "infectedCount": 8,
+    "lastDiagnosticDate": "2025-10-30T00:00:00Z",
+    "variety": "Perricholi",
+    "sector": "Sector Sur"
+  },
+  {
+    "id": "3",
+    "name": "Parcela C",
+    "description": "Sector Este - Variedad Yungay",
+    "create_at": "2025-08-25T00:00:00Z",
+    "updated_at": "2025-10-20T00:00:00Z",
+    "diagnosticsCount": 15,
+    "healthyCount": 10,
+    "infectedCount": 5,
+    "lastDiagnosticDate": "2025-10-26T00:00:00Z",
+    "variety": "Yungay",
+    "sector": "Sector Este"
+  },
+  {
+    "id": "4",
+    "name": "Parcela D",
+    "description": "Sector Oeste - Variedad Huayro",
+    "create_at": "2025-09-01T00:00:00Z",
+    "updated_at": "2025-10-18T00:00:00Z",
+    "diagnosticsCount": 12,
+    "healthyCount": 8,
+    "infectedCount": 4,
+    "lastDiagnosticDate": "2025-10-24T00:00:00Z",
+    "variety": "Huayro",
+    "sector": "Sector Oeste"
+  }
+]
