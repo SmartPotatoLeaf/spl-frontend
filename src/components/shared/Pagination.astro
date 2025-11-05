@@ -1,0 +1,70 @@
+---
+interface Props {
+  currentPage: number;
+  totalPages: number;
+  baseUrl?: string;
+}
+
+const { currentPage, totalPages, baseUrl = '/historial' } = Astro.props;
+
+const getPageUrl = (page: number) => `${baseUrl}?page=${page}`;
+
+const pages: (number | string)[] = [];
+
+if (totalPages <= 7) {
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push(i);
+  }
+} else {
+  if (currentPage <= 3) {
+    pages.push(1, 2, 3, 4, '...', totalPages);
+  } else if (currentPage >= totalPages - 2) {
+    pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+  } else {
+    pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
+  }
+}
+---
+
+<nav class="flex items-center justify-center gap-2 mt-6">
+  <a
+    href={currentPage > 1 ? getPageUrl(currentPage - 1) : '#'}
+    class={`px-3 py-2 rounded-lg border transition-colors ${
+      currentPage > 1
+        ? 'border-outline hover:bg-gray-50 text-state-idle'
+        : 'border-outline text-state-disabled cursor-not-allowed'
+    }`}
+    aria-label="Página anterior"
+  >
+    <i class="fas fa-chevron-left"></i>
+  </a>
+
+  {pages.map((page) => (
+    typeof page === 'number' ? (
+      <a
+        href={getPageUrl(page)}
+        class={`px-4 py-2 rounded-lg border transition-colors ${
+          page === currentPage
+            ? 'bg-primary text-white border-primary'
+            : 'border-outline hover:bg-gray-50 text-state-idle'
+        }`}
+      >
+        {page}
+      </a>
+    ) : (
+      <span class="px-2 py-2 text-state-disabled">...</span>
+    )
+  ))}
+
+  <a
+    href={currentPage < totalPages ? getPageUrl(currentPage + 1) : '#'}
+    class={`px-3 py-2 rounded-lg border transition-colors ${
+      currentPage < totalPages
+        ? 'border-outline hover:bg-gray-50 text-state-idle'
+        : 'border-outline text-state-disabled cursor-not-allowed'
+    }`}
+    aria-label="Página siguiente"
+  >
+    <i class="fas fa-chevron-right"></i>
+  </a>
+</nav>
