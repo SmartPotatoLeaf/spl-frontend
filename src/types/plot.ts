@@ -1,6 +1,16 @@
 import type { Plot } from './database';
 
 /**
+ * PlotFormData - Datos para crear o editar una parcela
+ */
+export interface PlotFormData {
+  name: string;
+  description: string;
+  variety?: string;
+  sector?: string;
+}
+
+/**
  * PlotSummary - Extiende Plot de database.ts con estadísticas calculadas
  */
 export interface PlotSummary extends Omit<Plot, 'user_id'> {

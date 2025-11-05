@@ -1,6 +1,8 @@
 ---
 import DashboardLayout from '@/layouts/DashboardLayout.astro';
-import PlotForm from '@/components/plots/PlotForm';
+import PlotFormWrapper from '@/components/plots/PlotFormWrapper';
+
+export const prerender = false;
 ---
 
 <DashboardLayout 
@@ -19,41 +21,7 @@ import PlotForm from '@/components/plots/PlotForm';
     </div>
 
     <div class="bg-white rounded-lg border border-outline p-6">
-      <PlotForm client:load />
+      <PlotFormWrapper mode="create" client:load />
     </div>
   </div>
-
-  <script>
-    import { addPlot } from '@/stores';
-    import type { PlotFormData } from '@/components/plots/PlotForm';
-
-    window.addEventListener('plot-form-submit', ((event: CustomEvent<PlotFormData>) => {
-      const formData = event.detail;
-      
-      // TODO: En producción, hacer POST a la API
-      // const response = await fetch('/api/plots', { method: 'POST', body: JSON.stringify(formData) });
-      // const newPlot = await response.json();
-      
-      // Mock: crear plot con datos temporales
-      const newPlot = {
-        id: BigInt(Date.now()),
-        name: formData.name,
-        description: formData.description,
-        variety: formData.variety,
-        sector: formData.sector,
-        create_at: new Date(),
-        updated_at: new Date(),
-        diagnosticsCount: 0,
-        healthyCount: 0,
-        infectedCount: 0,
-      };
-
-      addPlot(newPlot);
-      window.location.href = '/plots';
-    }) as EventListener);
-
-    window.addEventListener('plot-form-cancel', () => {
-      window.location.href = '/plots';
-    });
-  </script>
 </DashboardLayout>

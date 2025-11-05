@@ -4,10 +4,14 @@ import PlotDetailView from '@/components/plots/PlotDetailView';
 
 export const prerender = false;
 
-const { id } = Astro.params;
+// @ts-ignore - Astro.params works correctly in .astro files
+const id = Astro.params.id;
 
 if (!id) {
-  return Astro.redirect('/plots');
+  return new Response(null, {
+    status: 302,
+    headers: { Location: '/plots' }
+  });
 }
 ---
 

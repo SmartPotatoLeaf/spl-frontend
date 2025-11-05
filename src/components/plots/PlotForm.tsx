@@ -1,18 +1,14 @@
 import { useState } from 'react';
-
-export interface PlotFormData {
-  name: string;
-  description: string;
-  variety?: string;
-  sector?: string;
-}
+import type { PlotFormData } from '@/types';
 
 interface PlotFormProps {
-  initialData?: PlotFormData;
+  initialData?: PlotFormData & { id?: bigint };
   mode?: 'create' | 'edit';
+  onSubmit: (data: PlotFormData) => Promise<void>;
+  onCancel: () => void;
 }
 
-export default function PlotForm({ initialData, mode = 'create' }: PlotFormProps) {
+export default function PlotForm({ initialData, mode = 'create', onSubmit, onCancel }: PlotFormProps) {
   const [formData, setFormData] = useState<PlotFormData>({
     name: initialData?.name || '',
     description: initialData?.description || '',
@@ -20,41 +16,64 @@ export default function PlotForm({ initialData, mode = 'create' }: PlotFormProps
     sector: initialData?.sector || '',
   });
 
-  const [errors, setErrors] = useState<Partial<PlotFormData>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof PlotFormData, string>>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (errors[name as keyof PlotFormData]) {
-      setErrors(prev => ({ ...prev, [name]: '' }));
+  const handleChange = (field: keyof PlotFormData, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    // Limpiar error del campo al escribir
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
 
   const validate = (): boolean => {
-    const newErrors: Partial<PlotFormData> = {};
+    const newErrors: Partial<Record<keyof PlotFormData, string>> = {};
 
     if (!formData.name.trim()) {
       newErrors.name = 'El nombre es requerido';
+    } else if (formData.name.trim().length < 3) {
+      newErrors.name = 'El nombre debe tener al menos 3 caracteres';
+    } else if (formData.name.trim().length > 100) {
+      newErrors.name = 'El nombre no puede exceder 100 caracteres';
     }
 
     if (!formData.description.trim()) {
       newErrors.description = 'La descripción es requerida';
+    } else if (formData.description.trim().length < 10) {
+      newErrors.description = 'La descripción debe tener al menos 10 caracteres';
+    } else if (formData.description.trim().length > 500) {
+      newErrors.description = 'La descripción no puede exceder 500 caracteres';
+    }
+
+    if (formData.variety && formData.variety.length > 50) {
+      newErrors.variety = 'La variedad no puede exceder 50 caracteres';
+    }
+
+    if (formData.sector && formData.sector.length > 50) {
+      newErrors.sector = 'El sector no puede exceder 50 caracteres';
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (validate()) {
-      // Emitir evento para que lo maneje la página de Astro
-      window.dispatchEvent(new CustomEvent('plot-form-submit', { detail: formData }));
-    }
-  };
 
-  const handleCancel = () => {
-    window.dispatchEvent(new CustomEvent('plot-form-cancel'));
+    if (!validate()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await onSubmit(formData);
+    } catch (error) {
+      console.error('Error al guardar parcela:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -66,16 +85,21 @@ export default function PlotForm({ initialData, mode = 'create' }: PlotFormProps
         <input
           type="text"
           id="name"
-          name="name"
           value={formData.name}
-          onChange={handleChange}
-          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary ${
-            errors.name ? 'border-error' : 'border-outline'
+          onChange={(e) => handleChange('name', e.target.value)}
+          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+            errors.name
+              ? 'border-error focus:ring-error/20'
+              : 'border-outline focus:ring-primary/20 focus:border-primary'
           }`}
           placeholder="Ej: Parcela A"
+          disabled={isSubmitting}
         />
         {errors.name && (
-          <p className="mt-1 text-sm text-error">{errors.name}</p>
+          <p className="mt-1 text-sm text-error flex items-center gap-1">
+            <i className="fas fa-exclamation-circle"></i>
+            {errors.name}
+          </p>
         )}
       </div>
 
@@ -85,18 +109,26 @@ export default function PlotForm({ initialData, mode = 'create' }: PlotFormProps
         </label>
         <textarea
           id="description"
-          name="description"
           value={formData.description}
-          onChange={handleChange}
+          onChange={(e) => handleChange('description', e.target.value)}
           rows={4}
-          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary resize-none ${
-            errors.description ? 'border-error' : 'border-outline'
+          className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors resize-none ${
+            errors.description
+              ? 'border-error focus:ring-error/20'
+              : 'border-outline focus:ring-primary/20 focus:border-primary'
           }`}
           placeholder="Describe la ubicación, características del suelo, etc."
+          disabled={isSubmitting}
         />
         {errors.description && (
-          <p className="mt-1 text-sm text-error">{errors.description}</p>
+          <p className="mt-1 text-sm text-error flex items-center gap-1">
+            <i className="fas fa-exclamation-circle"></i>
+            {errors.description}
+          </p>
         )}
+        <p className="mt-1 text-xs text-state-disabled">
+          {formData.description.length}/500 caracteres
+        </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -107,12 +139,22 @@ export default function PlotForm({ initialData, mode = 'create' }: PlotFormProps
           <input
             type="text"
             id="variety"
-            name="variety"
             value={formData.variety}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            onChange={(e) => handleChange('variety', e.target.value)}
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+              errors.variety
+                ? 'border-error focus:ring-error/20'
+                : 'border-outline focus:ring-primary/20 focus:border-primary'
+            }`}
             placeholder="Ej: Canchan, Perricholi, Yungay"
+            disabled={isSubmitting}
           />
+          {errors.variety && (
+            <p className="mt-1 text-sm text-error flex items-center gap-1">
+              <i className="fas fa-exclamation-circle"></i>
+              {errors.variety}
+            </p>
+          )}
         </div>
 
         <div>
@@ -122,28 +164,41 @@ export default function PlotForm({ initialData, mode = 'create' }: PlotFormProps
           <input
             type="text"
             id="sector"
-            name="sector"
             value={formData.sector}
-            onChange={handleChange}
-            className="w-full px-4 py-2 border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+            onChange={(e) => handleChange('sector', e.target.value)}
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
+              errors.sector
+                ? 'border-error focus:ring-error/20'
+                : 'border-outline focus:ring-primary/20 focus:border-primary'
+            }`}
             placeholder="Ej: Sector Norte"
+            disabled={isSubmitting}
           />
+          {errors.sector && (
+            <p className="mt-1 text-sm text-error flex items-center gap-1">
+              <i className="fas fa-exclamation-circle"></i>
+              {errors.sector}
+            </p>
+          )}
         </div>
       </div>
 
-      <div className="flex items-center gap-4 pt-4 border-t border-outline">
-        <button
-          type="submit"
-          className="flex-1 sm:flex-initial px-6 py-2 bg-primary text-white rounded-lg font-medium hover:bg-opacity-90 transition-colors"
-        >
-          {mode === 'edit' ? 'Guardar cambios' : 'Crear parcela'}
-        </button>
+      <div className="flex items-center justify-end gap-4 pt-4 border-t border-outline">
         <button
           type="button"
-          onClick={handleCancel}
-          className="flex-1 sm:flex-initial px-6 py-2 border border-outline text-state-idle rounded-lg font-medium hover:bg-gray-50 transition-colors"
+          onClick={onCancel}
+          disabled={isSubmitting}
+          className="px-6 py-2 text-state-idle hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Cancelar
+        </button>
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+        >
+          {isSubmitting && <i className="fas fa-spinner fa-spin"></i>}
+          {mode === 'edit' ? 'Guardar cambios' : 'Crear parcela'}
         </button>
       </div>
     </form>
