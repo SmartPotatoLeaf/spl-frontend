@@ -29,14 +29,40 @@ Este proyecto implementa una solución basada en Deep Learning utilizando ResNet
 ├── public/              # Assets estáticos
 ├── src/
 │   ├── assets/          # Imágenes, fuentes
-│   ├── components/      # Componentes Astro reutilizables
+│   ├── components/      # Componentes organizados por bounded context
+│   │   ├── auth/        # Autenticación (login, registro)
+│   │   ├── detection/   # Detección de enfermedades
+│   │   ├── shared/      # Componentes compartidos (Logo, etc.)
+│   │   └── ui/          # Componentes UI genéricos
 │   ├── layouts/         # Layouts de página
-│   ├── pages/           # Rutas de la aplicación
+│   ├── pages/           # Rutas de la aplicación (file-based routing)
+│   ├── services/        # Servicios API organizados por contexto
+│   │   └── authService.ts
+│   ├── stores/          # Nano Stores para gestión de estado global
+│   │   └── authStore.ts
+│   ├── types/           # Definiciones de tipos TypeScript
+│   │   ├── auth.ts
+│   │   └── index.ts
 │   └── styles/          # Estilos globales (Tailwind v4)
 ├── astro.config.mjs     # Configuración de Astro
 ├── tailwind.config.mjs  # Configuración de Tailwind
 └── tsconfig.json        # Configuración de TypeScript
 ```
+
+### Organización por Bounded Context
+
+El proyecto sigue una arquitectura de **Bounded Contexts** (DDD) para mantener el código modular y escalable:
+
+- **`auth/`** - Todo lo relacionado con autenticación y autorización
+- **`detection/`** - Lógica y UI para detección de enfermedades
+- **`shared/`** - Componentes compartidos entre diferentes contextos
+- **`ui/`** - Componentes de interfaz genéricos y reutilizables
+
+Esta estructura facilita:
+- ✅ Separación clara de responsabilidades
+- ✅ Escalabilidad del proyecto
+- ✅ Mantenimiento a largo plazo
+- ✅ Testing aislado por contexto
 
 ## Instalación
 
@@ -67,6 +93,16 @@ pnpm dev
 ```
 
 El proyecto estará disponible en `http://localhost:4321`
+
+## Credenciales de Prueba
+
+Para probar la aplicación en desarrollo, utiliza las siguientes credenciales de acceso:
+
+**Mock Credentials:**
+- **Email:** `test@example.com`
+- **Password:** `password123`
+
+Estas credenciales funcionan únicamente en modo desarrollo con datos simulados. En producción, el sistema se conectará a la API real con autenticación JWT.
 
 ## Comandos Disponibles
 
