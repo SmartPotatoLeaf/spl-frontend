@@ -32,21 +32,102 @@ Este proyecto implementa una solución basada en Deep Learning utilizando ResNet
 │   ├── components/      # Componentes organizados por bounded context
 │   │   ├── auth/        # Autenticación (login, registro)
 │   │   ├── detection/   # Detección de enfermedades
-│   │   ├── shared/      # Componentes compartidos (Logo, etc.)
+│   │   ├── home/        # Componentes de la página principal
+│   │   ├── dashboards/  # Componentes de dashboards avanzados
+│   │   ├── shared/      # Componentes compartidos (Logo, Navbar, Cards, etc.)
 │   │   └── ui/          # Componentes UI genéricos
 │   ├── layouts/         # Layouts de página
+│   │   ├── Layout.astro        # Layout base general
+│   │   └── DashboardLayout.astro # Layout con navbar para dashboard
 │   ├── pages/           # Rutas de la aplicación (file-based routing)
+│   │   ├── index.astro  # Landing page
+│   │   ├── auth.astro   # Autenticación
+│   │   ├── home.astro   # Página principal (después del login)
+│   │   ├── history.astro # Historial de diagnósticos
+│   │   └── dashboard.astro # Redirect a /home (backwards compatibility)
 │   ├── services/        # Servicios API organizados por contexto
-│   │   └── authService.ts
+│   │   ├── authService.ts
+│   │   └── homeService.ts
 │   ├── stores/          # Nano Stores para gestión de estado global
 │   │   └── authStore.ts
 │   ├── types/           # Definiciones de tipos TypeScript
-│   │   ├── auth.ts
-│   │   └── index.ts
+│   │   ├── database.ts  # ⭐ FUENTE DE VERDAD - Mapping de base de datos
+│   │   ├── auth.ts      # Tipos de presentación para autenticación
+│   │   ├── dashboard.ts # Tipos de presentación para dashboard
+│   │   ├── plot.ts      # Tipos de presentación para parcelas
+│   │   └── index.ts     # Barrel export de todos los tipos
 │   └── styles/          # Estilos globales (Tailwind v4)
 ├── astro.config.mjs     # Configuración de Astro
 ├── tailwind.config.mjs  # Configuración de Tailwind
 └── tsconfig.json        # Configuración de TypeScript
+```
+
+## Sistema de Tipos
+
+### Jerarquía de Tipos
+
+El proyecto sigue una arquitectura de tipos estricta donde **`database.ts` es la fuente de verdad absoluta**:
+
+1. **`src/types/database.ts`** - Tipos base que mapean directamente la estructura de la base de datos PostgreSQL
+   - `User`, `Plot`, `Image`, `Prediction`, `Label`, `PlotImage`, etc.
+   - Usa `bigint` para IDs (compatibilidad con PostgreSQL)
+   - Usa `Date` para timestamps (create_at, updated_at, etc.)
+
+2. **Tipos de presentación** - Extienden o transforman los tipos de `database.ts`:
+   - `auth.ts` - `AuthUser` referencia `User`
+   - `dashboard.ts` - `Diagnostic` combina `Prediction` + `Image` + `Label`
+   - `plot.ts` - `PlotSummary` extiende `Plot` con campos calculados
+
+### Reglas Críticas
+
+**NUNCA duplicar tipos que ya existen en `database.ts`**
+**SIEMPRE importar y extender tipos de `database.ts`**
+**Mantener consistencia entre frontend y backend**
+
+### Ejemplo Correcto
+
+```typescript
+// CORRECTO - Extendiendo de database.ts
+import type { Plot } from './database';
+
+export interface PlotSummary extends Omit<Plot, 'user_id'> {
+  diagnosticsCount: number;
+  healthyCount: number;
+  infectedCount: number;
+}
+
+// ❌ INCORRECTO - Duplicando tipo
+export interface PlotSummary {
+  id: string; // Debería ser bigint
+  name: string;
+  description?: string;
+}
+```
+
+### Transformación de Datos
+
+Los servicios transforman tipos de base de datos a tipos de presentación:
+
+```typescript
+// database.ts → Tipo base
+export interface Prediction {
+  id: bigint;
+  image_id: bigint;
+  label_id: bigint;
+  confidence: number;
+  predicted_at: Date;
+}
+
+// dashboard.ts → Tipo de presentación
+export interface Diagnostic {
+  predictionId: bigint;  // De Prediction
+  imageId: bigint;       // De Image
+  labelId: bigint;       // De Label
+  imageUrl: string;      // Transformado de Image.filepath
+  status: SeverityLevel; // Transformado de Label.name
+  confidence: number;    // De Prediction
+  predictedAt: Date;     // De Prediction
+}
 ```
 
 ### Organización por Bounded Context
@@ -55,14 +136,77 @@ El proyecto sigue una arquitectura de **Bounded Contexts** (DDD) para mantener e
 
 - **`auth/`** - Todo lo relacionado con autenticación y autorización
 - **`detection/`** - Lógica y UI para detección de enfermedades
-- **`shared/`** - Componentes compartidos entre diferentes contextos
+- **`home/`** - Componentes de la página principal después del login
+- **`dashboards/`** - Componentes para dashboards avanzados de análisis
+- **`shared/`** - Componentes compartidos entre diferentes contextos (Logo, Navbar, StatsCard, DiagnosticCard, SummaryChart)
 - **`ui/`** - Componentes de interfaz genéricos y reutilizables
 
 Esta estructura facilita:
-- ✅ Separación clara de responsabilidades
-- ✅ Escalabilidad del proyecto
-- ✅ Mantenimiento a largo plazo
-- ✅ Testing aislado por contexto
+- Separación clara de responsabilidades
+- Escalabilidad del proyecto
+- Mantenimiento a largo plazo
+- Testing aislado por contexto
+
+## Páginas Disponibles
+
+### Landing Page (`/`)
+Página de inicio con acceso al sistema de autenticación.
+
+### Autenticación (`/auth`)
+Sistema completo de login y registro con:
+- Validaciones en tiempo real
+- Indicadores de fortaleza de contraseña
+- Toggle de visibilidad de contraseña
+- Diseño responsive mobile-first
+- Animación smooth entre modos
+
+**Credenciales de prueba:**
+- Email: `test@example.com`
+- Password: `password123`
+- Usuario: Usuario Test
+
+### Home (`/home`)
+Panel principal con estadísticas y diagnósticos recientes:
+- **Stats Cards**: Diagnósticos semanales, porcentaje de salud general, severidad promedio
+- **Últimos 5 Diagnósticos**: Lista con botón para ver historial completo
+- **Gráfico de Resumen**: Barras horizontales por categoría de severidad
+- **Navbar**: Navegación horizontal sticky con búsqueda integrada
+
+Componentes:
+- `StatsCard` - Tarjetas de estadísticas con cambios porcentuales
+- `DiagnosticCard` - Filas horizontales de diagnósticos con estado y ubicación
+- `HistoryCard` - Cards cuadradas para el grid del historial
+- `SummaryChart` - Gráfico de barras para resumen por categorías
+- `Navbar` - Barra de navegación horizontal responsive
+
+### History (`/history`)
+Página completa con todos los diagnósticos del usuario:
+- **Filtros avanzados funcionales**:
+  - Rango de fechas (De... A...) con validación:
+    * "Hasta" no puede ser anterior a "Desde"
+    * Validación en tiempo real
+  - Severidad (Todas, Sin rancha, Rancha leve, moderada, severa)
+  - Parcela (dropdown con parcelas registradas)
+  - Botón "Aplicar filtros"
+  - Botón "Restablecer filtros"
+- **Auto-submit**: Los select filtran automáticamente al cambiar
+- **Grid de cards**: 4 columnas en desktop, 2 en tablet, 1 en móvil (componente `HistoryCard`)
+- **Paginación**: 8 diagnósticos por página con filtros persistentes
+- **Exportar**: Botones para PDF y CSV (UI only)
+- **Contador**: "Mostrando X - Y de Z diagnósticos"
+- **Responsive**: Diseño adaptable mobile-first
+
+Componentes:
+- `HistoryCard` - Card cuadrada con imagen, badge, ubicación, fecha y link
+- `Pagination` - Paginador con lógica inteligente de ellipsis
+
+### Dashboard (`/dashboards`)
+Página de dashboards avanzados (pendiente de implementación).
+
+### Mis Parcelas (`/parcelas`)
+Gestión de parcelas del usuario (pendiente de implementación).
+- 4 parcelas dummy disponibles: Parcela A, B, C, D
+- Datos: nombre, descripción, contadores de diagnósticos
 
 ## Instalación
 
@@ -101,8 +245,18 @@ Para probar la aplicación en desarrollo, utiliza las siguientes credenciales de
 **Mock Credentials:**
 - **Email:** `test@example.com`
 - **Password:** `password123`
+- **Usuario:** Usuario Test
 
 Estas credenciales funcionan únicamente en modo desarrollo con datos simulados. En producción, el sistema se conectará a la API real con autenticación JWT.
+
+## Documentación para Backend
+
+Si eres parte del equipo de backend, revisa estos documentos:
+
+- **`API_SPEC.md`** - Especificaciones completas de todos los endpoints requeridos
+- **`BACKEND_INFO.md`** - Información sobre tipos, formato de datos y patrones del frontend
+
+Estos documentos contienen toda la información necesaria para implementar los endpoints que el frontend consume.
 
 ## Comandos Disponibles
 
