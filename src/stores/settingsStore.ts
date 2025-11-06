@@ -19,6 +19,16 @@ export interface SettingsState {
   hasUnsavedChanges: boolean;
 }
 
+const getInitialLanguage = (): Language => {
+  if (typeof window !== 'undefined') {
+    const savedLang = localStorage.getItem('i18nextLng');
+    if (savedLang === 'en' || savedLang === 'es-PE') {
+      return savedLang;
+    }
+  }
+  return 'es-PE';
+};
+
 const defaultSettings: AppSettings = {
   user: {
     username: '',
@@ -51,7 +61,7 @@ const defaultSettings: AppSettings = {
     theme: 'light',
   },
   language: {
-    language: 'es-PE',
+    language: getInitialLanguage(), // Leer desde localStorage
     dateFormat: 'dd/mm/yyyy',
     timezone: 'America/Lima',
     autoDetectTimezone: true,

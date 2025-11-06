@@ -20,7 +20,6 @@ i18n
   .init({
     resources,
     fallbackLng: 'es-PE', // Idioma por defecto si no se detecta ninguno
-    lng: 'es-PE', // Idioma inicial
     debug: false, // Modo debug para desarrollo
     
     interpolation: {

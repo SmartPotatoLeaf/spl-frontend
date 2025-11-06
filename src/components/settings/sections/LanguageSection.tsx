@@ -21,18 +21,22 @@ export default function LanguageSection() {
     try {
       setSettingsSaving(true);
       
-      // Primero cambiar el idioma en i18next
+      // Cambiar el idioma en i18next
       await i18n.changeLanguage(newLanguage);
       
-      // Luego actualizar el store
+      // Actualizar el store
       setLanguage(newLanguage);
       
       await updateLanguage(newLanguage, dateFormat, timezone);
       markSettingsSaved();
       toast.success(t('settings.languageSection.successLanguage'));
+      
+      // Recargar la página después de 500ms para que se vea el toast
+      setTimeout(() => {
+        window.location.reload();
+      }, 500);
     } catch (error) {
       toast.error(t('settings.languageSection.errorLanguage'));
-    } finally {
       setSettingsSaving(false);
     }
   };
