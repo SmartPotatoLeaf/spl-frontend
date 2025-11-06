@@ -4,6 +4,9 @@ import PlotsListView from '@/components/plots/PlotsListView';
 import { getAllPlots } from '@/services/plotService';
 
 const plots = await getAllPlots();
+const plotsJson = JSON.stringify(plots, (key, value) => 
+  typeof value === 'bigint' ? value.toString() : value
+);
 ---
 
 <DashboardLayout 
@@ -11,25 +14,5 @@ const plots = await getAllPlots();
   description="Gestión de parcelas de cultivo"
   activeRoute="parcelas"
 >
-  <PlotsListView client:load />
-
-  <script>
-    import { setPlotsData } from '@/stores';
-
-    const plotsDataElement = document.getElementById('plots-data');
-    if (plotsDataElement) {
-      const plotsData = JSON.parse(plotsDataElement.textContent || '[]', (key, value) => {
-        if (key === 'id') return BigInt(value);
-        if (key === 'create_at' || key === 'updated_at' || key === 'lastDiagnosticDate') {
-          return value ? new Date(value) : undefined;
-        }
-        return value;
-      });
-      setPlotsData(plotsData);
-    }
-  </script>
-
-  <script id="plots-data" type="application/json" set:html={JSON.stringify(plots, (key, value) => 
-    typeof value === 'bigint' ? value.toString() : value
-  )} />
+  <PlotsListView client:load initialPlots={plotsJson} />
 </DashboardLayout>

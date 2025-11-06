@@ -1,8 +1,33 @@
 import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
+import { setPlotsData } from '@/stores';
 import PlotsGrid from './PlotsGrid';
+import type { PlotSummary } from '@/types';
 
-export default function PlotsListView() {
+interface Props {
+  initialPlots?: string;
+}
+
+export default function PlotsListView({ initialPlots }: Props) {
   const { t } = useTranslation();
+
+  useEffect(() => {
+    if (initialPlots) {
+      try {
+        const plots: PlotSummary[] = JSON.parse(initialPlots, (key, value) => {
+          if (key === 'id') return BigInt(value);
+          if (key === 'create_at' || key === 'updated_at' || key === 'lastDiagnosticDate') {
+            return value ? new Date(value) : undefined;
+          }
+          return value;
+        });
+        setPlotsData(plots);
+      } catch (error) {
+        console.error('Error parsing plots data:', error);
+        setPlotsData([]);
+      }
+    }
+  }, [initialPlots]);
 
   return (
     <>
