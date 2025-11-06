@@ -1,7 +1,9 @@
 import { useStore } from '@nanostores/react';
+import { useTranslation } from 'react-i18next';
 import { dashboardStore, setDashboardFilters, plotsStore } from '@/stores';
 
 export default function DashboardFilters() {
+  const { t } = useTranslation();
   const { filters } = useStore(dashboardStore);
   const { plots } = useStore(plotsStore);
 
@@ -14,14 +16,14 @@ export default function DashboardFilters() {
       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
         <div className="flex items-center gap-2 text-state-idle">
           <i className="fas fa-filter"></i>
-          <span className="font-medium">Filtros:</span>
+          <span className="font-medium">{t('dashboard.filters.title')}</span>
         </div>
 
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
           <div className="flex items-center gap-2">
             <label htmlFor="filter-date-from" className="text-sm text-state-disabled whitespace-nowrap">
               <i className="fas fa-calendar mr-1"></i>
-              De
+              {t('dashboard.filters.dateFrom')}
             </label>
             <input
               type="date"
@@ -34,7 +36,7 @@ export default function DashboardFilters() {
 
           <div className="flex items-center gap-2">
             <label htmlFor="filter-date-to" className="text-sm text-state-disabled whitespace-nowrap">
-              A
+              {t('dashboard.filters.dateTo')}
             </label>
             <input
               type="date"
@@ -47,7 +49,7 @@ export default function DashboardFilters() {
 
           <div className="flex items-center gap-2">
             <label htmlFor="filter-severity" className="text-sm text-state-disabled">
-              Severidad
+              {t('dashboard.filters.severity')}
             </label>
             <select
               id="filter-severity"
@@ -55,17 +57,17 @@ export default function DashboardFilters() {
               value={filters.severity || 'all'}
               onChange={(e) => handleFilterChange('severity', e.target.value)}
             >
-              <option value="all">Todas</option>
-              <option value="healthy">Sin rancha</option>
-              <option value="low">Leve</option>
-              <option value="moderate">Moderada</option>
-              <option value="severe">Severa</option>
+              <option value="all">{t('dashboard.filters.allSeverities')}</option>
+              <option value="healthy">{t('dashboard.categories.healthy')}</option>
+              <option value="low">{t('dashboard.categories.low')}</option>
+              <option value="moderate">{t('dashboard.categories.moderate')}</option>
+              <option value="severe">{t('dashboard.categories.severe')}</option>
             </select>
           </div>
 
           <div className="flex items-center gap-2">
             <label htmlFor="filter-plot" className="text-sm text-state-disabled">
-              Parcela
+              {t('dashboard.filters.plot')}
             </label>
             <select
               id="filter-plot"
@@ -73,7 +75,7 @@ export default function DashboardFilters() {
               value={filters.plotId || 'all'}
               onChange={(e) => handleFilterChange('plotId', e.target.value)}
             >
-              <option value="all">Todas</option>
+              <option value="all">{t('dashboard.filters.allPlots')}</option>
               {plots.map(plot => (
                 <option key={plot.id.toString()} value={plot.id.toString()}>
                   {plot.name}
@@ -94,7 +96,7 @@ export default function DashboardFilters() {
             className="px-4 py-2 text-sm text-primary hover:bg-primary/10 rounded-lg transition-colors whitespace-nowrap"
           >
             <i className="fas fa-redo mr-2"></i>
-            Restablecer filtros
+            {t('dashboard.filters.resetFilters')}
           </button>
         </div>
       </div>

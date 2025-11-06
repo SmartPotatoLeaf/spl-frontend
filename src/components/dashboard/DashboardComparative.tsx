@@ -1,11 +1,13 @@
 import { useStore } from '@nanostores/react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { dashboardStore, plotsStore, setSelectedPlots, setComparativeData, setComparativeLoading } from '@/stores';
 import { getComparativeData } from '@/services/dashboardService';
 import { toast } from '@/stores';
 import DashboardComparativeView from './DashboardComparativeView';
 
 export default function DashboardComparative() {
+  const { t } = useTranslation();
   const { selectedPlots, comparativeData, isLoadingComparative } = useStore(dashboardStore);
   const { plots } = useStore(plotsStore);
   
@@ -14,12 +16,12 @@ export default function DashboardComparative() {
 
   const handleCompare = async () => {
     if (!localPlot1 || !localPlot2) {
-      toast.warning('Selecciona dos parcelas', 'Debes seleccionar ambas parcelas para comparar');
+      toast.warning(t('dashboard.comparative.warningTitle'), t('dashboard.comparative.warningSelectTwo'));
       return;
     }
 
     if (localPlot1 === localPlot2) {
-      toast.error('Parcelas duplicadas', 'Debes seleccionar dos parcelas diferentes');
+      toast.error(t('dashboard.comparative.errorDuplicateTitle'), t('dashboard.comparative.errorDuplicate'));
       return;
     }
 
@@ -30,7 +32,7 @@ export default function DashboardComparative() {
       const data = await getComparativeData(localPlot1, localPlot2);
       setComparativeData(data);
     } catch (err) {
-      toast.error('Error al comparar', err instanceof Error ? err.message : 'Error al obtener datos');
+      toast.error(t('dashboard.comparative.errorComparison'), err instanceof Error ? err.message : t('dashboard.comparative.errorComparisonMessage'));
       setComparativeData(null);
     }
   };
@@ -46,9 +48,9 @@ export default function DashboardComparative() {
           <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
             <i className="fas fa-balance-scale text-3xl text-primary"></i>
           </div>
-          <h2 className="text-2xl font-bold text-state-idle mb-2">Comparar parcelas</h2>
+          <h2 className="text-2xl font-bold text-state-idle mb-2">{t('dashboard.comparative.title')}</h2>
           <p className="text-state-disabled">
-            Selecciona dos parcelas para ver una comparación detallada de sus diagnósticos
+            {t('dashboard.comparative.subtitle')}
           </p>
         </div>
 
@@ -56,7 +58,7 @@ export default function DashboardComparative() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="plot1" className="block text-sm font-medium text-state-idle mb-2">
-                Primera parcela
+                {t('dashboard.comparative.firstPlot')}
               </label>
               <select
                 id="plot1"
@@ -65,7 +67,7 @@ export default function DashboardComparative() {
                 className="w-full px-4 py-3 border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 disabled={isLoadingComparative}
               >
-                <option value="">Seleccionar parcela...</option>
+                <option value="">{t('dashboard.comparative.selectPlot')}</option>
                 {plots.map(plot => (
                   <option key={plot.id.toString()} value={plot.id.toString()}>
                     {plot.name}
@@ -76,7 +78,7 @@ export default function DashboardComparative() {
 
             <div>
               <label htmlFor="plot2" className="block text-sm font-medium text-state-idle mb-2">
-                Segunda parcela
+                {t('dashboard.comparative.secondPlot')}
               </label>
               <select
                 id="plot2"
@@ -85,7 +87,7 @@ export default function DashboardComparative() {
                 className="w-full px-4 py-3 border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 disabled={isLoadingComparative}
               >
-                <option value="">Seleccionar parcela...</option>
+                <option value="">{t('dashboard.comparative.selectPlot')}</option>
                 {plots.map(plot => (
                   <option 
                     key={plot.id.toString()} 
@@ -107,12 +109,12 @@ export default function DashboardComparative() {
             {isLoadingComparative ? (
               <>
                 <i className="fas fa-spinner fa-spin"></i>
-                Cargando comparación...
+                {t('common.loading')}
               </>
             ) : (
               <>
                 <i className="fas fa-balance-scale"></i>
-                Comparar parcelas
+                {t('dashboard.comparative.compareButton')}
               </>
             )}
           </button>
@@ -121,7 +123,7 @@ export default function DashboardComparative() {
         {plots.length === 0 && (
           <div className="mt-6 text-center p-4 bg-gray-50 rounded-lg">
             <p className="text-state-disabled text-sm">
-              No hay parcelas registradas. Agrega parcelas para poder compararlas.
+              {t('plots.empty.subtitle')}
             </p>
           </div>
         )}
@@ -129,7 +131,7 @@ export default function DashboardComparative() {
         {plots.length === 1 && (
           <div className="mt-6 text-center p-4 bg-gray-50 rounded-lg">
             <p className="text-state-disabled text-sm">
-              Necesitas al menos dos parcelas para poder hacer una comparación.
+              {t('dashboard.comparative.warningSelectTwo')}
             </p>
           </div>
         )}

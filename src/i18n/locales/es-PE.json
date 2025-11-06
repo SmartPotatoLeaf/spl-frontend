@@ -423,46 +423,71 @@
     }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "mode": {
+    "title": "Dashboards",
+    "modes": {
       "normal": "Normal",
       "comparative": "Comparativo"
     },
-    "filters": "Filtros",
-    "from": "Desde",
-    "to": "Hasta",
-    "severityFilter": "Severidad",
-    "all": "Todos",
-    "plot": "Parcela",
-    "resetFilters": "Restablecer filtros",
+    "filters": {
+      "title": "Filtros:",
+      "dateFrom": "De",
+      "dateTo": "A",
+      "severity": "Severidad",
+      "plot": "Parcela",
+      "allSeverities": "Todas",
+      "allPlots": "Todas",
+      "resetFilters": "Restablecer filtros"
+    },
     "stats": {
       "totalDiagnostics": "Diagnósticos totales",
-      "healthyPercentage": "Sin rancha",
+      "healthyDiagnostics": "Diagnósticos sin rancha",
       "averageSeverity": "Severidad promedio",
       "totalPlots": "Parcelas",
-      "vsPreviousWeek": "vs semana anterior",
-      "vsPreviousMonth": "vs mes anterior"
+      "totalPlotsDesc": "Total de parcelas registradas",
+      "vsLastWeek": "vs semana anterior",
+      "vsLastMonth": "vs mes anterior"
     },
     "charts": {
-      "trend": "Tendencia de diagnósticos",
-      "distribution": "Distribución de diagnósticos",
-      "total": "Total"
+      "trendTitle": "Tendencia de diagnósticos",
+      "distributionTitle": "Distribución por categorías",
+      "download": "Descargar",
+      "expand": "Expandir",
+      "total": "Total",
+      "severity": "Severidad",
+      "diagnostics": "Diagnósticos",
+      "percentage": "%"
     },
-    "severity": {
+    "categories": {
       "healthy": "Sin rancha",
       "low": "Rancha leve",
       "moderate": "Rancha moderada",
       "severe": "Rancha severa"
     },
     "comparative": {
-      "selectPlots": "Selecciona dos parcelas",
-      "plot1": "Parcela 1",
-      "plot2": "Parcela 2",
-      "compare": "Comparar parcelas",
-      "selectTwoPlots": "Selecciona dos parcelas",
-      "selectDifferentPlots": "Selecciona dos parcelas diferentes",
-      "selectOtherPlots": "Seleccionar otras parcelas",
-      "needTwoPlots": "Necesitas al menos 2 parcelas para comparar"
-    }
+      "title": "Comparar parcelas",
+      "subtitle": "Selecciona dos parcelas para ver una comparación detallada de sus diagnósticos",
+      "firstPlot": "Primera parcela",
+      "secondPlot": "Segunda parcela",
+      "selectPlot": "Seleccionar parcela...",
+      "compareButton": "Comparar parcelas",
+      "selectOthers": "Seleccionar otras parcelas",
+      "comparisonTitle": "Comparación de parcelas",
+      "totalDiagnostics": "Total diagnósticos",
+      "healthyPercentage": "Sin rancha",
+      "averageSeverity": "Severidad promedio",
+      "infected": "Infectados",
+      "trend": "Tendencia",
+      "distribution": "Distribución",
+      "warningSelectTwo": "Debes seleccionar ambas parcelas para comparar",
+      "errorDuplicate": "Debes seleccionar dos parcelas diferentes",
+      "errorDuplicateTitle": "Parcelas duplicadas",
+      "warningTitle": "Selecciona dos parcelas",
+      "errorComparison": "Error al comparar",
+      "errorComparisonMessage": "Error al obtener datos"
+    },
+    "loading": "Cargando dashboard...",
+    "error": "Error al cargar el dashboard",
+    "errorMessage": "Error al cargar datos",
+    "retry": "Reintentar"
   }
 }

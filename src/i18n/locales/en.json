@@ -423,46 +423,71 @@
     }
   },
   "dashboard": {
-    "title": "Dashboard",
-    "mode": {
+    "title": "Dashboards",
+    "modes": {
       "normal": "Normal",
       "comparative": "Comparative"
     },
-    "filters": "Filters",
-    "from": "From",
-    "to": "To",
-    "severityFilter": "Severity",
-    "all": "All",
-    "plot": "Plot",
-    "resetFilters": "Reset filters",
+    "filters": {
+      "title": "Filters:",
+      "dateFrom": "From",
+      "dateTo": "To",
+      "severity": "Severity",
+      "plot": "Plot",
+      "allSeverities": "All",
+      "allPlots": "All",
+      "resetFilters": "Reset filters"
+    },
     "stats": {
       "totalDiagnostics": "Total diagnostics",
-      "healthyPercentage": "Healthy",
+      "healthyDiagnostics": "Healthy diagnostics",
       "averageSeverity": "Average severity",
       "totalPlots": "Plots",
-      "vsPreviousWeek": "vs previous week",
-      "vsPreviousMonth": "vs previous month"
+      "totalPlotsDesc": "Total registered plots",
+      "vsLastWeek": "vs last week",
+      "vsLastMonth": "vs last month"
     },
     "charts": {
-      "trend": "Diagnostics trend",
-      "distribution": "Diagnostics distribution",
-      "total": "Total"
+      "trendTitle": "Diagnostics trend",
+      "distributionTitle": "Distribution by categories",
+      "download": "Download",
+      "expand": "Expand",
+      "total": "Total",
+      "severity": "Severity",
+      "diagnostics": "Diagnostics",
+      "percentage": "%"
     },
-    "severity": {
+    "categories": {
       "healthy": "Healthy",
       "low": "Low blight",
       "moderate": "Moderate blight",
       "severe": "Severe blight"
     },
     "comparative": {
-      "selectPlots": "Select two plots",
-      "plot1": "Plot 1",
-      "plot2": "Plot 2",
-      "compare": "Compare plots",
-      "selectTwoPlots": "Select two plots",
-      "selectDifferentPlots": "Select two different plots",
-      "selectOtherPlots": "Select other plots",
-      "needTwoPlots": "You need at least 2 plots to compare"
-    }
+      "title": "Compare plots",
+      "subtitle": "Select two plots to see a detailed comparison of their diagnostics",
+      "firstPlot": "First plot",
+      "secondPlot": "Second plot",
+      "selectPlot": "Select plot...",
+      "compareButton": "Compare plots",
+      "selectOthers": "Select other plots",
+      "comparisonTitle": "Plot comparison",
+      "totalDiagnostics": "Total diagnostics",
+      "healthyPercentage": "Healthy",
+      "averageSeverity": "Average severity",
+      "infected": "Infected",
+      "trend": "Trend",
+      "distribution": "Distribution",
+      "warningSelectTwo": "You must select both plots to compare",
+      "errorDuplicate": "You must select two different plots",
+      "errorDuplicateTitle": "Duplicate plots",
+      "warningTitle": "Select two plots",
+      "errorComparison": "Error comparing",
+      "errorComparisonMessage": "Error getting data"
+    },
+    "loading": "Loading dashboard...",
+    "error": "Error loading dashboard",
+    "errorMessage": "Error loading data",
+    "retry": "Retry"
   }
 }

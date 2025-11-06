@@ -1,11 +1,13 @@
 import { useStore } from '@nanostores/react';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { dashboardStore, setDashboardMode, plotsStore, setPlotsData, setPlotsLoading } from '@/stores';
 import { getAllPlots } from '@/services/plotService';
 import DashboardNormal from './DashboardNormal';
 import DashboardComparative from './DashboardComparative';
 
 export default function DashboardView() {
+  const { t } = useTranslation();
   const { mode } = useStore(dashboardStore);
   const { plots } = useStore(plotsStore);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -39,7 +41,7 @@ export default function DashboardView() {
   return (
     <div className="min-h-screen">
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-state-idle mb-4">Dashboards</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-state-idle mb-4">{t('dashboard.title')}</h1>
         
         <div className="relative bg-white rounded-lg border border-outline p-1.5 inline-flex gap-1">
           <div
@@ -61,7 +63,7 @@ export default function DashboardView() {
               disabled:cursor-not-allowed
             `}
           >
-            Normal
+            {t('dashboard.modes.normal')}
           </button>
           
           <button
@@ -76,7 +78,7 @@ export default function DashboardView() {
               disabled:cursor-not-allowed
             `}
           >
-            Comparativo
+            {t('dashboard.modes.comparative')}
           </button>
         </div>
       </div>
