@@ -32,6 +32,50 @@
     "description": "Monitoreo inteligente de cultivos de papa",
     "copyright": "Todos los derechos reservados"
   },
+  "home": {
+    "title": "Inicio",
+    "loadingData": "Cargando datos...",
+    "stats": {
+      "weeklyDiagnostics": "Diagnósticos esta semana",
+      "healthyLeaves": "Hojas sanas",
+      "averageSeverity": "Severidad promedio",
+      "totalDiagnostics": "Total diagnósticos"
+    },
+    "recentDiagnostics": {
+      "title": "Diagnósticos recientes",
+      "viewAll": "Ver todos",
+      "empty": "No hay diagnósticos recientes",
+      "infectedLeaf": "Hoja infectada",
+      "healthyLeaf": "Hoja no afectada",
+      "noPlotAssigned": "Sin parcela asignada",
+      "viewDetails": "Ver detalles",
+      "confidence": "confianza"
+    },
+    "summaryChart": {
+      "title": "Diagnósticos por categorías en los últimos 30 días",
+      "categories": {
+        "healthy": "Sin rancha",
+        "low": "Rancha leve",
+        "moderate": "Rancha moderada",
+        "severe": "Rancha severa"
+      },
+      "totalLabel": "Total de diagnósticos:"
+    },
+    "months": {
+      "january": "Enero",
+      "february": "Febrero",
+      "march": "Marzo",
+      "april": "Abril",
+      "may": "Mayo",
+      "june": "Junio",
+      "july": "Julio",
+      "august": "Agosto",
+      "september": "Septiembre",
+      "october": "October",
+      "november": "Noviembre",
+      "december": "Diciembre"
+    }
+  },
   "auth": {
     "login": "Iniciar sesión",
     "register": "Registrarse",

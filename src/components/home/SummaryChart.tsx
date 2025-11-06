@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { DiagnosticSummary } from '@/types';
 
 interface SummaryChartProps {
@@ -5,29 +6,30 @@ interface SummaryChartProps {
 }
 
 export default function SummaryChart({ summary }: SummaryChartProps) {
+  const { t } = useTranslation();
   const total = summary.healthy + summary.low + summary.moderate + summary.severe;
 
   const categories = [
     {
-      label: 'Sin rancha',
+      label: t('home.summaryChart.categories.healthy'),
       count: summary.healthy,
       color: 'bg-tag-healthy',
       percentage: total > 0 ? (summary.healthy / total) * 100 : 0,
     },
     {
-      label: 'Rancha leve',
+      label: t('home.summaryChart.categories.low'),
       count: summary.low,
       color: 'bg-tag-low',
       percentage: total > 0 ? (summary.low / total) * 100 : 0,
     },
     {
-      label: 'Rancha moderada',
+      label: t('home.summaryChart.categories.moderate'),
       count: summary.moderate,
       color: 'bg-tag-mid',
       percentage: total > 0 ? (summary.moderate / total) * 100 : 0,
     },
     {
-      label: 'Rancha severa',
+      label: t('home.summaryChart.categories.severe'),
       count: summary.severe,
       color: 'bg-tag-severe',
       percentage: total > 0 ? (summary.severe / total) * 100 : 0,
@@ -37,7 +39,7 @@ export default function SummaryChart({ summary }: SummaryChartProps) {
   return (
     <div className="bg-white rounded-lg shadow-sm border border-outline p-4 sm:p-6">
       <h3 className="text-lg font-semibold text-state-idle mb-6">
-        Diagnósticos por categorías en los últimos 30 días
+        {t('home.summaryChart.title')}
       </h3>
 
       <div className="space-y-4">
@@ -59,7 +61,7 @@ export default function SummaryChart({ summary }: SummaryChartProps) {
 
       <div className="mt-6 pt-4 border-t border-outline">
         <p className="text-sm text-state-disabled">
-          Total de diagnósticos: <span className="font-semibold text-state-idle">{total}</span>
+          {t('home.summaryChart.totalLabel')} <span className="font-semibold text-state-idle">{total}</span>
         </p>
       </div>
     </div>

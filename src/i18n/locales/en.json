@@ -32,6 +32,50 @@
     "description": "Smart monitoring for potato crops",
     "copyright": "All rights reserved"
   },
+  "home": {
+    "title": "Home",
+    "loadingData": "Loading data...",
+    "stats": {
+      "weeklyDiagnostics": "Diagnostics this week",
+      "healthyLeaves": "Healthy leaves",
+      "averageSeverity": "Average severity",
+      "totalDiagnostics": "Total diagnostics"
+    },
+    "recentDiagnostics": {
+      "title": "Recent diagnostics",
+      "viewAll": "View all",
+      "empty": "No recent diagnostics",
+      "infectedLeaf": "Infected leaf",
+      "healthyLeaf": "Healthy leaf",
+      "noPlotAssigned": "No plot assigned",
+      "viewDetails": "View details",
+      "confidence": "confidence"
+    },
+    "summaryChart": {
+      "title": "Diagnostics by category in the last 30 days",
+      "categories": {
+        "healthy": "No blight",
+        "low": "Low blight",
+        "moderate": "Moderate blight",
+        "severe": "Severe blight"
+      },
+      "totalLabel": "Total diagnostics:"
+    },
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    }
+  },
   "auth": {
     "login": "Login",
     "register": "Sign up",

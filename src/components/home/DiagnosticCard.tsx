@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { Diagnostic } from '@/types';
 
 interface DiagnosticCardProps {
@@ -5,6 +6,8 @@ interface DiagnosticCardProps {
 }
 
 export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
+  const { t, i18n } = useTranslation();
+  
   const statusColors = {
     healthy: 'bg-tag-healthy text-white',
     low: 'bg-tag-low text-state-idle',
@@ -15,11 +18,13 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
   const statusColor = statusColors[diagnostic.status];
 
   const formatDate = (date: Date): string => {
-    const months = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    const monthKeys = [
+      'january', 'february', 'march', 'april', 'may', 'june',
+      'july', 'august', 'september', 'october', 'november', 'december'
     ];
-    return `${date.getDate()} de ${months[date.getMonth()]}, ${date.getFullYear()}`;
+    const monthKey = monthKeys[date.getMonth()];
+    const monthName = t(`home.months.${monthKey}`);
+    return `${date.getDate()} de ${monthName}, ${date.getFullYear()}`;
   };
 
   const getConfidenceColor = (confidence: number) => {
@@ -41,7 +46,9 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
 
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-state-idle text-sm sm:text-base mb-2">
-            {diagnostic.statusLabel === 'Sin rancha' ? 'Hoja no afectada' : 'Hoja infectada'}
+            {diagnostic.statusLabel === 'Sin rancha' 
+              ? t('home.recentDiagnostics.healthyLeaf') 
+              : t('home.recentDiagnostics.infectedLeaf')}
           </h3>
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm text-state-disabled mb-2">
@@ -57,7 +64,7 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
             ) : (
               <span className="inline-flex items-center gap-1 italic">
                 <i className="fas fa-map-marker-alt"></i>
-                Sin parcela asignada
+                {t('home.recentDiagnostics.noPlotAssigned')}
               </span>
             )}
           </div>
@@ -67,7 +74,7 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
               {diagnostic.statusLabel}
             </span>
             <span className={`text-xs font-medium ${getConfidenceColor(diagnostic.confidence)}`}>
-              {(diagnostic.confidence * 100).toFixed(0)}% confianza
+              {(diagnostic.confidence * 100).toFixed(0)}% {t('home.recentDiagnostics.confidence')}
             </span>
           </div>
         </div>
@@ -76,7 +83,7 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
           href={`/diagnostico/${diagnostic.predictionId}`}
           className="text-state-idle text-sm font-normal hover:underline shrink-0 hidden sm:block"
         >
-          Ver detalles
+          {t('home.recentDiagnostics.viewDetails')}
         </a>
       </div>
 
@@ -84,7 +91,7 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
         href={`/diagnostico/${diagnostic.predictionId}`}
         className="text-state-idle text-sm font-normal hover:underline mt-3 block sm:hidden"
       >
-        Ver detalles
+        {t('home.recentDiagnostics.viewDetails')}
       </a>
     </div>
   );
