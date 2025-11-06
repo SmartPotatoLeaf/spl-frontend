@@ -81,23 +81,26 @@ export default function Problem() {
           </p>
         </div>
 
-        <div ref={cardsRef} className="grid md:grid-cols-3 gap-8">
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
           {/* Card 1 */}
-          <div className="bg-white rounded-xl overflow-hidden shadow-md cursor-pointer">
-            <div className="relative h-48">
-              <OptimizedImage
-                src="https://images.unsplash.com/photo-1593113598332-cd288d649433"
-                alt="Hojas de papa con tizón tardío"
-                className="w-full h-full"
-                width={400}
-                height={300}
-              />
+          <div className="bg-white rounded-xl overflow-hidden shadow-md cursor-pointer flex flex-col h-full">
+            <div className="relative h-48 sm:h-56 shrink-0 overflow-hidden">
+              <div className="absolute inset-0">
+                <OptimizedImage
+                  src="https://images.unsplash.com/photo-1593113598332-cd288d649433"
+                  alt="Hojas de papa con tizón tardío"
+                  className="w-full h-full object-cover"
+                  width={400}
+                  height={300}
+                  aspectRatio="4/3"
+                />
+              </div>
               <div className="absolute inset-0 bg-linear-to-t from-error/90 via-error/50 to-transparent"></div>
               <div className="absolute bottom-4 left-4 bg-white/20 backdrop-blur-md rounded-full p-3">
                 <i className="fas fa-exclamation-circle text-2xl text-white"></i>
               </div>
             </div>
-            <div className="p-6 sm:p-8">
+            <div className="p-6 sm:p-8 flex flex-col grow">
               <h3 className="text-xl sm:text-2xl font-bold text-state-idle mb-3">{t('landing.problem.card1Title')}</h3>
               <p className="text-state-idle/70 leading-relaxed">
                 {t('landing.problem.card1Description')}
@@ -106,21 +109,24 @@ export default function Problem() {
           </div>
 
           {/* Card 2 */}
-          <div className="bg-white rounded-xl overflow-hidden shadow-md cursor-pointer">
-            <div className="relative h-48">
-              <OptimizedImage
-                src="https://images.unsplash.com/photo-1464226184884-fa280b87c399"
-                alt="Campo de papa afectado"
-                className="w-full h-full"
-                width={400}
-                height={300}
-              />
+          <div className="bg-white rounded-xl overflow-hidden shadow-md cursor-pointer flex flex-col h-full">
+            <div className="relative h-48 sm:h-56 shrink-0 overflow-hidden">
+              <div className="absolute inset-0">
+                <OptimizedImage
+                  src="https://images.unsplash.com/photo-1464226184884-fa280b87c399"
+                  alt="Campo de papa afectado"
+                  className="w-full h-full object-cover"
+                  width={400}
+                  height={300}
+                  aspectRatio="4/3"
+                />
+              </div>
               <div className="absolute inset-0 bg-linear-to-t from-tag-mid/90 via-tag-mid/50 to-transparent"></div>
               <div className="absolute bottom-4 left-4 bg-white/20 backdrop-blur-md rounded-full p-3">
                 <i className="fas fa-clock text-2xl text-white"></i>
               </div>
             </div>
-            <div className="p-6 sm:p-8">
+            <div className="p-6 sm:p-8 flex flex-col grow">
               <h3 className="text-xl sm:text-2xl font-bold text-state-idle mb-3">{t('landing.problem.card2Title')}</h3>
               <p className="text-state-idle/70 leading-relaxed">
                 {t('landing.problem.card2Description')}
@@ -129,21 +135,24 @@ export default function Problem() {
           </div>
 
           {/* Card 3 */}
-          <div className="bg-white rounded-xl overflow-hidden shadow-md cursor-pointer">
-            <div className="relative h-48">
-              <OptimizedImage
-                src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449"
-                alt="Agricultor preocupado inspeccionando cultivo"
-                className="w-full h-full"
-                width={400}
-                height={300}
-              />
+          <div className="bg-white rounded-xl overflow-hidden shadow-md cursor-pointer flex flex-col h-full">
+            <div className="relative h-48 sm:h-56 shrink-0 overflow-hidden">
+              <div className="absolute inset-0">
+                <OptimizedImage
+                  src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449"
+                  alt="Agricultor preocupado inspeccionando cultivo"
+                  className="w-full h-full object-cover"
+                  width={400}
+                  height={300}
+                  aspectRatio="4/3"
+                />
+              </div>
               <div className="absolute inset-0 bg-linear-to-t from-tag-remote/90 via-tag-remote/50 to-transparent"></div>
               <div className="absolute bottom-4 left-4 bg-white/20 backdrop-blur-md rounded-full p-3">
                 <i className="fas fa-chart-line-down text-2xl text-white"></i>
               </div>
             </div>
-            <div className="p-6 sm:p-8">
+            <div className="p-6 sm:p-8 flex flex-col grow">
               <h3 className="text-xl sm:text-2xl font-bold text-state-idle mb-3">{t('landing.problem.card3Title')}</h3>
               <p className="text-state-idle/70 leading-relaxed">
                 {t('landing.problem.card3Description')}

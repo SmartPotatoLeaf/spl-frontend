@@ -169,9 +169,10 @@ export default function Stats() {
               <OptimizedImage
                 src="https://images.unsplash.com/photo-1589669896200-39e4852d8cc6"
                 alt="Agricultura en Perú con montañas"
-                className="w-full h-full"
+                className="w-full"
                 width={600}
                 height={800}
+                aspectRatio="3/4"
               />
             </div>
 

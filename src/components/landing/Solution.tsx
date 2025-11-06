@@ -154,24 +154,27 @@ export default function Solution() {
           <p className="text-lg sm:text-xl text-state-idle/70">{t('landing.solution.subtitle')}</p>
         </div>
 
-        <div ref={cardsRef} className="grid md:grid-cols-3 gap-8 mb-16">
+        <div ref={cardsRef} className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 mb-12 md:mb-16">
           {/* Solution 1 */}
-          <div className="group cursor-pointer">
-            <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-transparent">
-              <div className="relative h-48">
-                <OptimizedImage
-                  src="https://images.unsplash.com/photo-1556656793-08538906a9f8"
-                  alt="Smartphone capturando foto de cultivo"
-                  className="w-full h-full"
-                  width={400}
-                  height={300}
-                />
+          <div className="group cursor-pointer h-full">
+            <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-transparent flex flex-col h-full">
+              <div className="relative h-48 sm:h-56 shrink-0 overflow-hidden">
+                <div className="absolute inset-0">
+                  <OptimizedImage
+                    src="https://images.unsplash.com/photo-1556656793-08538906a9f8"
+                    alt="Smartphone capturando foto de cultivo"
+                    className="w-full h-full object-cover"
+                    width={400}
+                    height={300}
+                    aspectRatio="4/3"
+                  />
+                </div>
                 <div className="absolute inset-0 bg-linear-to-t from-primary/90 via-primary/50 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 bg-white/20 backdrop-blur-md rounded-full p-3">
                   <i className="fas fa-brain text-2xl text-white"></i>
                 </div>
               </div>
-              <div className="p-6 sm:p-8">
+              <div className="p-6 sm:p-8 flex flex-col grow">
                 <h3 className="text-xl sm:text-2xl font-bold text-state-idle mb-3">{t('landing.solution.card1Title')}</h3>
                 <p className="text-state-idle/70 leading-relaxed">
                   {t('landing.solution.card1Description')}
@@ -181,22 +184,25 @@ export default function Solution() {
           </div>
 
           {/* Solution 2 */}
-          <div className="group cursor-pointer">
-            <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-transparent">
-              <div className="relative h-48">
-                <OptimizedImage
-                  src="https://images.unsplash.com/photo-1677442136019-21780ecad995"
-                  alt="Inteligencia artificial analizando datos"
-                  className="w-full h-full"
-                  width={400}
-                  height={300}
-                />
+          <div className="group cursor-pointer h-full">
+            <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-transparent flex flex-col h-full">
+              <div className="relative h-48 sm:h-56 shrink-0 overflow-hidden">
+                <div className="absolute inset-0">
+                  <OptimizedImage
+                    src="https://images.unsplash.com/photo-1677442136019-21780ecad995"
+                    alt="Inteligencia artificial analizando datos"
+                    className="w-full h-full object-cover"
+                    width={400}
+                    height={300}
+                    aspectRatio="4/3"
+                  />
+                </div>
                 <div className="absolute inset-0 bg-linear-to-t from-primary/90 via-primary/50 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 bg-white/20 backdrop-blur-md rounded-full p-3">
                   <i className="fas fa-mobile-alt text-2xl text-white"></i>
                 </div>
               </div>
-              <div className="p-6 sm:p-8">
+              <div className="p-6 sm:p-8 flex flex-col grow">
                 <h3 className="text-xl sm:text-2xl font-bold text-state-idle mb-3">{t('landing.solution.card2Title')}</h3>
                 <p className="text-state-idle/70 leading-relaxed">
                   {t('landing.solution.card2Description')}
@@ -206,22 +212,25 @@ export default function Solution() {
           </div>
 
           {/* Solution 3 */}
-          <div className="group cursor-pointer">
-            <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-transparent">
-              <div className="relative h-48">
-                <OptimizedImage
-                  src="https://images.unsplash.com/photo-1460925895917-afdab827c52f"
-                  alt="Gráficos y análisis de datos agrícolas"
-                  className="w-full h-full"
-                  width={400}
-                  height={300}
-                />
+          <div className="group cursor-pointer h-full">
+            <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-transparent flex flex-col h-full">
+              <div className="relative h-48 sm:h-56 shrink-0 overflow-hidden">
+                <div className="absolute inset-0">
+                  <OptimizedImage
+                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f"
+                    alt="Gráficos y análisis de datos agrícolas"
+                    className="w-full h-full object-cover"
+                    width={400}
+                    height={300}
+                    aspectRatio="4/3"
+                  />
+                </div>
                 <div className="absolute inset-0 bg-linear-to-t from-primary/90 via-primary/50 to-transparent"></div>
                 <div className="absolute bottom-4 left-4 bg-white/20 backdrop-blur-md rounded-full p-3">
                   <i className="fas fa-bolt text-2xl text-white"></i>
                 </div>
               </div>
-              <div className="p-6 sm:p-8">
+              <div className="p-6 sm:p-8 flex flex-col grow">
                 <h3 className="text-xl sm:text-2xl font-bold text-state-idle mb-3">{t('landing.solution.card3Title')}</h3>
                 <p className="text-state-idle/70 leading-relaxed">
                   {t('landing.solution.card3Description')}

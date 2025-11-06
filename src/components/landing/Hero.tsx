@@ -139,9 +139,10 @@ export default function Hero() {
                   <OptimizedImage
                     src="https://images.unsplash.com/photo-1625246333195-78d9c38ad449"
                     alt="Agricultor inspeccionando hojas de papa"
-                    className="w-full h-full"
+                    className="w-full"
                     width={600}
                     height={400}
+                    aspectRatio="3/2"
                     priority
                   />
                   {/* Overlay gradient */}

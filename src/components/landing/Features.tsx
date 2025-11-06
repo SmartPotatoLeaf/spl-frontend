@@ -173,9 +173,10 @@ export default function Features() {
               <OptimizedImage
                 src="https://images.unsplash.com/photo-1530836369250-ef72a3f5cda8"
                 alt="Campo de papas verdes y saludables"
-                className="w-full h-full"
+                className="w-full"
                 width={600}
                 height={400}
+                aspectRatio="3/2"
               />
             </div>
           </div>
