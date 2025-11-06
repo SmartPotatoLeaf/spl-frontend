@@ -1,16 +1,20 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout>
-	<main class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-		<div class="text-center">
-			<h1 class="text-6xl font-bold text-gray-900 mb-4">
-				Hello <span class="text-primary">Astro</span> 🚀
-			</h1>
-			<p class="text-xl text-gray-600">
-				Ready to build something amazing
-			</p>
-		</div>
-	</main>
+<Layout title="Smart Potato Leaf">
+  <main class="min-h-screen flex items-center justify-center">
+    <div class="text-center">
+      <h1 class="text-4xl font-bold text-primary mb-4">Smart Potato Leaf</h1>
+      <p class="text-state-idle mb-8">
+        Sistema de detección de Phytophthora infestans
+      </p>
+      <a
+        href="/auth"
+        class="inline-block px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors"
+      >
+        Comenzar
+      </a>
+    </div>
+  </main>
 </Layout>

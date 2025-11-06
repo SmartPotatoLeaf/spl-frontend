@@ -1,0 +1,45 @@
+---
+import '@/styles/global.css';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
+import Toaster from '@/components/shared/Toaster';
+import I18nProvider from '@/i18n/I18nProvider';
+
+interface Props {
+  title?: string;
+  description?: string;
+  activeRoute?: string;
+}
+
+const { 
+  title = 'Dashboard - Smart Potato Leaf', 
+  description = 'Panel de control para monitoreo de cultivos de papa',
+  activeRoute = 'inicio'
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body class="flex flex-col min-h-screen bg-gray-50">
+    <I18nProvider client:load>
+      <Navbar activeRoute={activeRoute} client:load />
+      <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <slot />
+      </main>
+      <Footer client:load />
+    </I18nProvider>
+    <Toaster client:load />
+  </body>
+</html>

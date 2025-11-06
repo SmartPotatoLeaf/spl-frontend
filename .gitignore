@@ -16,9 +16,33 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+.env.local
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+# VSCode
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# GitHub Copilot instructions (privado)
+.github/instructions/
+
+# Temporary files
+*.tmp
+*.temp
+*.log
+
+# Testing
+coverage/
+.nyc_output/
+
+# Cache
+.cache/
+.turbo/
+.next/
+.nuxt/

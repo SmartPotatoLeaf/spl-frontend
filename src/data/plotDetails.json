@@ -1,0 +1,194 @@
+[
+  {
+    "id": "1",
+    "name": "Parcela A",
+    "description": "Parcela ubicada en el sector norte del predio, con una superficie aproximada de 1.2 hectáreas. Presenta un suelo franco arenoso, con buen drenaje y moderada profundidad. Es una zona de exposición directa al sol, ideal para el desarrollo temprano del cultivo de papa.",
+    "create_at": "2025-10-01T00:00:00Z",
+    "updated_at": "2025-11-04T00:00:00Z",
+    "diagnosticsCount": 156,
+    "healthyCount": 100,
+    "infectedCount": 56,
+    "lastDiagnosticDate": "2025-10-25T00:00:00Z",
+    "variety": "Canchan",
+    "sector": "Sector Norte",
+    "trendData": {
+      "labels": ["Ene", "Feb", "Mar", "Abr", "May"],
+      "datasets": [
+        {
+          "label": "Sin rancha",
+          "data": [10, 18, 12, 19, 11],
+          "borderColor": "#4CAF50",
+          "backgroundColor": "rgba(76, 175, 80, 0.1)"
+        },
+        {
+          "label": "Rancha leve",
+          "data": [3, 8, 5, 8, 4],
+          "borderColor": "#A4C400",
+          "backgroundColor": "rgba(164, 196, 0, 0.1)"
+        },
+        {
+          "label": "Rancha moderada",
+          "data": [1, 5, 3, 6, 2],
+          "borderColor": "#F4B400",
+          "backgroundColor": "rgba(244, 180, 0, 0.1)"
+        },
+        {
+          "label": "Rancha severa",
+          "data": [0, 1, 1, 1, 0],
+          "borderColor": "#D32F2F",
+          "backgroundColor": "rgba(211, 47, 47, 0.1)"
+        }
+      ]
+    },
+    "distributionData": {
+      "healthy": 100,
+      "low": 14,
+      "moderate": 42,
+      "severe": 0
+    }
+  },
+  {
+    "id": "2",
+    "name": "Parcela B",
+    "description": "Lote de 0.9 hectáreas situado en la parte central del campo. El suelo es franco limoso con buena retención de humedad. Zona parcialmente sombreada durante las mañanas, lo que favorece el control natural de plagas.",
+    "create_at": "2025-09-15T00:00:00Z",
+    "updated_at": "2025-11-02T00:00:00Z",
+    "diagnosticsCount": 86,
+    "healthyCount": 65,
+    "infectedCount": 21,
+    "lastDiagnosticDate": "2025-10-22T00:00:00Z",
+    "variety": "Perricholi",
+    "sector": "Sector Central",
+    "trendData": {
+      "labels": ["Ene", "Feb", "Mar", "Abr", "May"],
+      "datasets": [
+        {
+          "label": "Sin rancha",
+          "data": [8, 14, 10, 16, 9],
+          "borderColor": "#4CAF50",
+          "backgroundColor": "rgba(76, 175, 80, 0.1)"
+        },
+        {
+          "label": "Rancha leve",
+          "data": [2, 5, 3, 5, 2],
+          "borderColor": "#A4C400",
+          "backgroundColor": "rgba(164, 196, 0, 0.1)"
+        },
+        {
+          "label": "Rancha moderada",
+          "data": [1, 3, 2, 4, 1],
+          "borderColor": "#F4B400",
+          "backgroundColor": "rgba(244, 180, 0, 0.1)"
+        },
+        {
+          "label": "Rancha severa",
+          "data": [0, 0, 1, 0, 0],
+          "borderColor": "#D32F2F",
+          "backgroundColor": "rgba(211, 47, 47, 0.1)"
+        }
+      ]
+    },
+    "distributionData": {
+      "healthy": 65,
+      "low": 12,
+      "moderate": 8,
+      "severe": 1
+    }
+  },
+  {
+    "id": "3",
+    "name": "Parcela C",
+    "description": "Parcela ubicada al suroeste del terreno, con una superficie de 1.5 hectáreas. Suelo arcilloso con tendencia a compactarse, requiere labores frecuentes de aireación. Presenta una ligera pendiente que facilita el drenaje natural.",
+    "create_at": "2025-08-20T00:00:00Z",
+    "updated_at": "2025-10-28T00:00:00Z",
+    "diagnosticsCount": 42,
+    "healthyCount": 28,
+    "infectedCount": 14,
+    "lastDiagnosticDate": "2025-10-17T00:00:00Z",
+    "variety": "Yungay",
+    "sector": "Sector Suroeste",
+    "trendData": {
+      "labels": ["Ene", "Feb", "Mar", "Abr", "May"],
+      "datasets": [
+        {
+          "label": "Sin rancha",
+          "data": [5, 9, 6, 10, 5],
+          "borderColor": "#4CAF50",
+          "backgroundColor": "rgba(76, 175, 80, 0.1)"
+        },
+        {
+          "label": "Rancha leve",
+          "data": [1, 3, 2, 3, 1],
+          "borderColor": "#A4C400",
+          "backgroundColor": "rgba(164, 196, 0, 0.1)"
+        },
+        {
+          "label": "Rancha moderada",
+          "data": [0, 2, 1, 2, 1],
+          "borderColor": "#F4B400",
+          "backgroundColor": "rgba(244, 180, 0, 0.1)"
+        },
+        {
+          "label": "Rancha severa",
+          "data": [0, 0, 0, 1, 0],
+          "borderColor": "#D32F2F",
+          "backgroundColor": "rgba(211, 47, 47, 0.1)"
+        }
+      ]
+    },
+    "distributionData": {
+      "healthy": 28,
+      "low": 8,
+      "moderate": 5,
+      "severe": 1
+    }
+  },
+  {
+    "id": "4",
+    "name": "Parcela D",
+    "description": "Terreno de 0.8 hectáreas en la zona este del predio. Suelo franco con pH neutro y buena disponibilidad de nutrientes. Exposición este-oeste que permite aprovechamiento óptimo de luz solar durante todo el día.",
+    "create_at": "2025-09-01T00:00:00Z",
+    "updated_at": "2025-10-30T00:00:00Z",
+    "diagnosticsCount": 72,
+    "healthyCount": 55,
+    "infectedCount": 17,
+    "lastDiagnosticDate": "2025-10-24T00:00:00Z",
+    "variety": "Huayro",
+    "sector": "Sector Este",
+    "trendData": {
+      "labels": ["Ene", "Feb", "Mar", "Abr", "May"],
+      "datasets": [
+        {
+          "label": "Sin rancha",
+          "data": [7, 12, 9, 14, 8],
+          "borderColor": "#4CAF50",
+          "backgroundColor": "rgba(76, 175, 80, 0.1)"
+        },
+        {
+          "label": "Rancha leve",
+          "data": [2, 4, 3, 5, 2],
+          "borderColor": "#A4C400",
+          "backgroundColor": "rgba(164, 196, 0, 0.1)"
+        },
+        {
+          "label": "Rancha moderada",
+          "data": [1, 2, 1, 3, 1],
+          "borderColor": "#F4B400",
+          "backgroundColor": "rgba(244, 180, 0, 0.1)"
+        },
+        {
+          "label": "Rancha severa",
+          "data": [0, 0, 0, 1, 0],
+          "borderColor": "#D32F2F",
+          "backgroundColor": "rgba(211, 47, 47, 0.1)"
+        }
+      ]
+    },
+    "distributionData": {
+      "healthy": 55,
+      "low": 10,
+      "moderate": 6,
+      "severe": 1
+    }
+  }
+]

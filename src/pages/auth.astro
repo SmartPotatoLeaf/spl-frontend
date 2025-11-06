@@ -1,0 +1,20 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import Logo from '@/components/layout/Logo.astro';
+import AuthPage from '@/components/auth/AuthPage';
+---
+
+<Layout title="Autenticación - Smart Potato Leaf">
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 py-8 sm:py-12">
+    <div class="w-full max-w-md px-4 sm:px-6">
+      <div class="mb-6 sm:mb-8 text-center">
+        <div class="flex items-center justify-center mb-4 sm:mb-6">
+          <Logo width={48} height={48} class="sm:w-16 sm:h-16" />
+          <h1 class="text-2xl sm:text-3xl font-bold text-primary">SmartPotatoLeaf</h1>
+        </div>
+      </div>
+      
+      <AuthPage client:load />
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,95 @@
+export type SeverityLevel = 'healthy' | 'low' | 'moderate' | 'severe';
+export type DashboardMode = 'normal' | 'comparative';
+
+/**
+ * Diagnostic - Tipo de presentación para la UI
+ * Combina datos de Prediction + Image + Label de database.ts transformados
+ * para facilitar el renderizado en componentes
+ */
+export interface Diagnostic {
+  // IDs de referencia a database.ts
+  predictionId: bigint;
+  imageId: bigint;
+  labelId: bigint;
+  
+  // Datos transformados para presentación
+  imageUrl: string;
+  status: SeverityLevel;
+  statusLabel: string;
+  confidence: number;
+  predictedAt: Date;
+  uploadedAt: Date;
+  
+  // Información adicional
+  location?: string;
+  hasLocation: boolean;
+}
+
+export interface WeekStats {
+  currentWeek: number;
+  percentageChange: number;
+}
+
+export interface GeneralStats {
+  healthyPercentage: number;
+  percentageChange: number;
+}
+
+export interface SeverityAverage {
+  value: number;
+  change: number;
+}
+
+export interface DiagnosticSummary {
+  healthy: number;
+  low: number;
+  moderate: number;
+  severe: number;
+  total: number;
+}
+
+export interface DashboardStats {
+  weekStats: WeekStats;
+  generalStats: GeneralStats;
+  severityAverage: SeverityAverage;
+  summary: DiagnosticSummary;
+  totalPlots: number;
+}
+
+export interface TrendDataPoint {
+  month: string;
+  healthy: number;
+  low: number;
+  moderate: number;
+  severe: number;
+}
+
+export interface DashboardFilters {
+  dateFrom?: Date;
+  dateTo?: Date;
+  severity?: SeverityLevel | 'all';
+  plotId?: string | 'all';
+}
+
+export interface ComparativePlotData {
+  plotId: string;
+  plotName: string;
+  stats: DashboardStats;
+  trendData: TrendDataPoint[];
+  summary: DiagnosticSummary;
+}
+
+export interface ComparativeData {
+  plot1: ComparativePlotData;
+  plot2: ComparativePlotData;
+}
+
+export interface DashboardData {
+  mode: DashboardMode;
+  stats: DashboardStats;
+  trendData: TrendDataPoint[];
+  recentDiagnostics: Diagnostic[];
+  filters: DashboardFilters;
+  isLoading: boolean;
+  error: string | null;
+}

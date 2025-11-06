@@ -1,0 +1,14 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import NewPlotView from '@/components/plots/NewPlotView';
+
+export const prerender = false;
+---
+
+<DashboardLayout 
+  title="Nueva Parcela - Smart Potato Leaf" 
+  description="Agregar nueva parcela de cultivo"
+  activeRoute="parcelas"
+>
+  <NewPlotView client:load />
+</DashboardLayout>

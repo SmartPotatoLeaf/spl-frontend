@@ -1,0 +1,14 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import DashboardView from '@/components/dashboard/DashboardView';
+
+export const prerender = false;
+---
+
+<DashboardLayout 
+  title="Dashboard - Smart Potato Leaf"
+  description="Vista general de diagnósticos y análisis comparativo"
+  activeRoute="dashboard"
+>
+  <DashboardView client:load />
+</DashboardLayout>
