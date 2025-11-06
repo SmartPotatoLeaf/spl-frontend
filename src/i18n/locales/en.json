@@ -25,12 +25,17 @@
     "dashboard": "Dashboard",
     "plots": "My plots",
     "settings": "Settings",
-    "logout": "Logout",
     "searchPlaceholder": "Search diagnostic by severity or plot"
+  },
+  "footer": {
+    "appName": "SmartPotatoLeaf",
+    "description": "Smart monitoring for potato crops",
+    "copyright": "All rights reserved"
   },
   "auth": {
     "login": "Login",
     "register": "Sign up",
+    "subtitle": "Sign in or create an account to continue",
     "username": "Username",
     "email": "Email",
     "emailOrUsername": "Email or username",
@@ -167,6 +172,7 @@
       "darkDesc": "Dark mode to reduce eye strain",
       "system": "System",
       "systemDesc": "Use your operating system's settings",
+      "comingSoon": "Coming soon",
       "successTheme": "Theme updated successfully",
       "errorTheme": "Error updating theme"
     },
@@ -197,6 +203,14 @@
       "version": "Version",
       "updated": "Updated on",
       "whatsNew": "What's new",
+      "changelog": [
+        "Smart Potato Leaf initial release",
+        "RestNet 50 diagnostic system",
+        "Plot and crop management",
+        "Dashboard with real-time statistics",
+        "Plot comparison",
+        "Diagnostic history"
+      ],
       "support": "Support",
       "helpCenter": "Help center",
       "helpCenterDesc": "Documentation and guides",

@@ -77,7 +77,7 @@ export default function AppearanceSection() {
                   <p className="font-semibold text-state-idle">
                     {themeOption.label}
                     {themeOption.value !== 'light' && (
-                      <span className="ml-2 text-xs text-state-disabled">({t('settings.languageSection.comingSoon')})</span>
+                      <span className="ml-2 text-xs text-state-disabled">({t('settings.appearanceSection.comingSoon')})</span>
                     )}
                   </p>
                   <p className="text-sm text-state-disabled mt-1">{themeOption.description}</p>

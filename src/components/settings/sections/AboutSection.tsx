@@ -7,6 +7,8 @@ export default function AboutSection() {
   const { settings } = useStore(settingsStore);
   const { appInfo } = settings;
 
+  const changelog = t('settings.aboutSection.changelog', { returnObjects: true }) as string[];
+
   const formatDate = (date: Date): string => {
     return new Date(date).toLocaleDateString('es-PE', {
       day: '2-digit',
@@ -39,7 +41,7 @@ export default function AboutSection() {
         <div>
           <h4 className="font-semibold text-state-idle mb-3">{t('settings.aboutSection.whatsNew')}</h4>
           <ul className="space-y-2">
-            {appInfo.changelog.map((item, index) => (
+            {changelog.map((item, index) => (
               <li key={index} className="flex items-start gap-2 text-sm">
                 <i className="fas fa-check text-primary mt-0.5"></i>
                 <span className="text-state-idle">{item}</span>

@@ -25,12 +25,17 @@
     "dashboard": "Dashboard",
     "plots": "Mis parcelas",
     "settings": "Configuración",
-    "logout": "Salir",
-    "searchPlaceholder": "Buscar diagnóstico por severidad o parcela"
+    "searchPlaceholder": "Buscar diagnostico por severidad o parcela"
+  },
+  "footer": {
+    "appName": "SmartPotatoLeaf",
+    "description": "Monitoreo inteligente de cultivos de papa",
+    "copyright": "Todos los derechos reservados"
   },
   "auth": {
     "login": "Iniciar sesión",
     "register": "Registrarse",
+    "subtitle": "Inicia sesión o regístrate para continuar",
     "username": "Nombre de usuario",
     "email": "Correo electrónico",
     "emailOrUsername": "Email o usuario",
@@ -167,6 +172,7 @@
       "darkDesc": "Modo oscuro para reducir la fatiga visual",
       "system": "Sistema",
       "systemDesc": "Usa la configuración de tu sistema operativo",
+      "comingSoon": "Próximamente",
       "successTheme": "Tema actualizado correctamente",
       "errorTheme": "Error al actualizar tema"
     },
@@ -197,6 +203,14 @@
       "version": "Versión",
       "updated": "Actualizado el",
       "whatsNew": "Novedades",
+      "changelog": [
+        "Lanzamiento inicial de Smart Potato Leaf",
+        "Sistema de diagnóstico con RestNet 50",
+        "Gestión de parcelas y cultivos",
+        "Dashboard con estadísticas en tiempo real",
+        "Comparación de parcelas",
+        "Historial de diagnósticos"
+      ],
       "support": "Soporte",
       "helpCenter": "Centro de ayuda",
       "helpCenterDesc": "Documentación y guías",

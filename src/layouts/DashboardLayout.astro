@@ -1,8 +1,9 @@
 ---
 import '@/styles/global.css';
-import Navbar from '@/components/layout/Navbar.astro';
-import Footer from '@/components/layout/Footer.astro';
+import Navbar from '@/components/layout/Navbar';
+import Footer from '@/components/layout/Footer';
 import Toaster from '@/components/shared/Toaster';
+import I18nProvider from '@/i18n/I18nProvider';
 
 interface Props {
   title?: string;
@@ -32,11 +33,13 @@ const {
     <title>{title}</title>
   </head>
   <body class="flex flex-col min-h-screen bg-gray-50">
-    <Navbar activeRoute={activeRoute} />
-    <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-      <slot />
-    </main>
-    <Footer />
+    <I18nProvider client:load>
+      <Navbar activeRoute={activeRoute} client:load />
+      <main class="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <slot />
+      </main>
+      <Footer client:load />
+    </I18nProvider>
     <Toaster client:load />
   </body>
 </html>
