@@ -37,6 +37,15 @@ interface TrendChartProps {
 }
 
 export function TrendChart({ data }: TrendChartProps) {
+  const dataWithTension = {
+    ...data,
+    datasets: data.datasets.map(dataset => ({
+      ...dataset,
+      tension: 0.4,
+      fill: true,
+    })),
+  };
+
   const options = {
     responsive: true,
     maintainAspectRatio: false,
@@ -73,7 +82,7 @@ export function TrendChart({ data }: TrendChartProps) {
 
   return (
     <div className="h-80">
-      <Line options={options} data={data} />
+      <Line options={options} data={dataWithTension} />
     </div>
   );
 }

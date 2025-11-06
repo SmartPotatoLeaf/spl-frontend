@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Line, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -11,6 +12,7 @@ import {
   Legend,
   Filler,
 } from 'chart.js';
+import ChartModal from '@/components/shared/ChartModal';
 import type { TrendDataPoint, DiagnosticSummary } from '@/types';
 
 ChartJS.register(
@@ -30,7 +32,19 @@ interface DashboardChartsProps {
   summary: DiagnosticSummary;
 }
 
+type ChartType = 'trend' | 'distribution' | null;
+
 export default function DashboardCharts({ trendData, summary }: DashboardChartsProps) {
+  const [expandedChart, setExpandedChart] = useState<ChartType>(null);
+
+  const handleExpandChart = (chartType: ChartType) => {
+    setExpandedChart(chartType);
+  };
+
+  const handleCloseModal = () => {
+    setExpandedChart(null);
+  };
+
   const trendChartData = {
     labels: trendData.map(d => d.month),
     datasets: [
@@ -109,6 +123,7 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
   const distributionChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
+    cutout: '70%',
     plugins: {
       legend: {
         display: false,
@@ -126,6 +141,11 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
     },
   };
 
+  const distributionChartOptionsModal = {
+    ...distributionChartOptions,
+    cutout: '75%',
+  };
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <div className="bg-white rounded-lg border border-outline p-4 sm:p-6">
@@ -139,10 +159,11 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
               <i className="fas fa-download text-state-disabled"></i>
             </button>
             <button
+              onClick={() => handleExpandChart('trend')}
               className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors"
               title="Expandir"
             >
-              <i className="fas fa-expand text-state-disabled"></i>
+              <i className="fas fa-expand-alt text-state-disabled"></i>
             </button>
           </div>
         </div>
@@ -162,10 +183,11 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
               <i className="fas fa-download text-state-disabled"></i>
             </button>
             <button
+              onClick={() => handleExpandChart('distribution')}
               className="w-8 h-8 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors"
               title="Expandir"
             >
-              <i className="fas fa-expand text-state-disabled"></i>
+              <i className="fas fa-expand-alt text-state-disabled"></i>
             </button>
           </div>
         </div>
@@ -236,6 +258,90 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
           </div>
         </div>
       </div>
+
+      {/* Modal de Tendencia */}
+      <ChartModal
+        isOpen={expandedChart === 'trend'}
+        onClose={handleCloseModal}
+        title="Tendencia de diagnósticos"
+      >
+        <div className="h-[500px]">
+          <Line data={trendChartData} options={trendChartOptions} />
+        </div>
+      </ChartModal>
+
+      {/* Modal de Distribución */}
+      <ChartModal
+        isOpen={expandedChart === 'distribution'}
+        onClose={handleCloseModal}
+        title="Distribución de diagnósticos"
+      >
+        <div className="flex flex-col lg:flex-row items-center gap-8 p-4">
+          <div className="w-full lg:w-1/2 h-[400px] flex items-center justify-center">
+            <div className="relative w-[350px] h-[350px]">
+              <Doughnut data={distributionChartData} options={distributionChartOptionsModal} />
+              <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                <span className="text-sm text-state-disabled">Total</span>
+                <span className="text-4xl font-bold text-state-idle">{summary.total}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div className="w-full lg:w-1/2">
+            <table className="w-full text-base">
+              <thead>
+                <tr className="border-b border-outline">
+                  <th className="text-left py-3 font-medium text-state-disabled">Severidad</th>
+                  <th className="text-right py-3 font-medium text-state-disabled">Diagnósticos</th>
+                  <th className="text-right py-3 font-medium text-state-disabled">%</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr className="border-b border-outline">
+                  <td className="py-4 flex items-center gap-3">
+                    <div className="w-4 h-4 rounded-full bg-tag-healthy"></div>
+                    <span className="text-state-idle">Sin rancha</span>
+                  </td>
+                  <td className="text-right text-state-idle font-medium text-lg">{summary.healthy}</td>
+                  <td className="text-right text-state-disabled">
+                    {((summary.healthy / summary.total) * 100).toFixed(1)}%
+                  </td>
+                </tr>
+                <tr className="border-b border-outline">
+                  <td className="py-4 flex items-center gap-3">
+                    <div className="w-4 h-4 rounded-full bg-tag-low"></div>
+                    <span className="text-state-idle">Rancha leve</span>
+                  </td>
+                  <td className="text-right text-state-idle font-medium text-lg">{summary.low}</td>
+                  <td className="text-right text-state-disabled">
+                    {((summary.low / summary.total) * 100).toFixed(1)}%
+                  </td>
+                </tr>
+                <tr className="border-b border-outline">
+                  <td className="py-4 flex items-center gap-3">
+                    <div className="w-4 h-4 rounded-full bg-tag-mid"></div>
+                    <span className="text-state-idle">Rancha moderada</span>
+                  </td>
+                  <td className="text-right text-state-idle font-medium text-lg">{summary.moderate}</td>
+                  <td className="text-right text-state-disabled">
+                    {((summary.moderate / summary.total) * 100).toFixed(1)}%
+                  </td>
+                </tr>
+                <tr>
+                  <td className="py-4 flex items-center gap-3">
+                    <div className="w-4 h-4 rounded-full bg-tag-severe"></div>
+                    <span className="text-state-idle">Rancha severa</span>
+                  </td>
+                  <td className="text-right text-state-idle font-medium text-lg">{summary.severe}</td>
+                  <td className="text-right text-state-disabled">
+                    {((summary.severe / summary.total) * 100).toFixed(1)}%
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </ChartModal>
     </div>
   );
 }
