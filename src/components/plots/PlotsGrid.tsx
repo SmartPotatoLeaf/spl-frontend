@@ -1,18 +1,22 @@
 import { useStore } from '@nanostores/react';
+import { useTranslation } from 'react-i18next';
 import { plotsStore } from '@/stores';
 import { useState } from 'react';
 
 export default function PlotsGrid() {
+  const { t } = useTranslation();
   const { plots, isLoading } = useStore(plotsStore);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
   const formatDate = (date: Date): string => {
-    const months = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    const monthKeys = [
+      'january', 'february', 'march', 'april', 'may', 'june',
+      'july', 'august', 'september', 'october', 'november', 'december'
     ];
-    return `${date.getDate()} de ${months[date.getMonth()]}, ${date.getFullYear()}`;
+    const monthKey = monthKeys[date.getMonth()];
+    const monthName = t(`plots.months.${monthKey}`);
+    return `${date.getDate()} de ${monthName}, ${date.getFullYear()}`;
   };
 
   const totalPages = Math.ceil(plots.length / itemsPerPage);
@@ -63,8 +67,8 @@ export default function PlotsGrid() {
     return (
       <div className="text-center py-12">
         <i className="fas fa-map-marked-alt text-5xl text-state-disabled mb-4"></i>
-        <p className="text-state-disabled text-lg mb-2">No tienes parcelas registradas</p>
-        <p className="text-state-disabled text-sm">Agrega tu primera parcela para comenzar a monitorear tus cultivos</p>
+        <p className="text-state-disabled text-lg mb-2">{t('plots.empty.title')}</p>
+        <p className="text-state-disabled text-sm">{t('plots.empty.subtitle')}</p>
       </div>
     );
   }
@@ -77,19 +81,19 @@ export default function PlotsGrid() {
           <thead className="bg-gray-50 border-b border-outline">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium text-state-disabled uppercase tracking-wider">
-                Nombre
+                {t('plots.table.name')}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-state-disabled uppercase tracking-wider">
-                Diagnósticos
+                {t('plots.table.diagnostics')}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-state-disabled uppercase tracking-wider">
-                Descripción
+                {t('plots.table.description')}
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium text-state-disabled uppercase tracking-wider">
-                Último diagnóstico
+                {t('plots.table.lastDiagnostic')}
               </th>
               <th className="px-6 py-3 text-center text-xs font-medium text-state-disabled uppercase tracking-wider">
-                Acciones
+                {t('plots.table.actions')}
               </th>
             </tr>
           </thead>
@@ -117,22 +121,22 @@ export default function PlotsGrid() {
                     <a
                       href={`/plots/${plot.id}`}
                       className="text-primary hover:text-opacity-80 transition-colors"
-                      title="Ver detalles"
+                      title={t('plots.table.viewDetails')}
                     >
                       <i className="fas fa-eye"></i>
                     </a>
                     <a
                       href={`/plots/${plot.id}/edit`}
                       className="text-state-idle hover:text-primary transition-colors"
-                      title="Editar"
+                      title={t('plots.table.edit')}
                     >
                       <i className="fas fa-edit"></i>
                     </a>
                     <button
                       className="text-error hover:text-opacity-80 transition-colors"
-                      title="Eliminar"
+                      title={t('plots.table.delete')}
                       onClick={() => {
-                        if (confirm(`¿Estás seguro de eliminar "${plot.name}"?`)) {
+                        if (confirm(t('plots.deleteConfirm', { name: plot.name }))) {
                           // TODO: deletePlot(plot.id)
                         }
                       }}
@@ -154,7 +158,7 @@ export default function PlotsGrid() {
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
                 <h3 className="font-semibold text-state-idle mb-1">{plot.name}</h3>
-                <p className="text-xs text-state-disabled mb-2">{plot.diagnosticsCount} diagnósticos</p>
+                <p className="text-xs text-state-disabled mb-2">{plot.diagnosticsCount} {t('plots.table.diagnostics').toLowerCase()}</p>
               </div>
               <div className="relative">
                 <button 
@@ -172,25 +176,25 @@ export default function PlotsGrid() {
                     className="flex items-center gap-3 px-4 py-3 text-sm text-state-idle hover:bg-gray-50"
                   >
                     <i className="fas fa-eye text-primary w-4"></i>
-                    Ver detalles
+                    {t('plots.table.viewDetails')}
                   </a>
                   <a
                     href={`/plots/${plot.id}/edit`}
                     className="flex items-center gap-3 px-4 py-3 text-sm text-state-idle hover:bg-gray-50"
                   >
                     <i className="fas fa-edit w-4"></i>
-                    Editar
+                    {t('plots.table.edit')}
                   </a>
                   <button
                     className="flex items-center gap-3 px-4 py-3 text-sm text-error hover:bg-gray-50 w-full text-left"
                     onClick={() => {
-                      if (confirm(`¿Estás seguro de eliminar "${plot.name}"?`)) {
+                      if (confirm(t('plots.deleteConfirm', { name: plot.name }))) {
                         // TODO: deletePlot(plot.id)
                       }
                     }}
                   >
                     <i className="fas fa-trash w-4"></i>
-                    Eliminar
+                    {t('plots.table.delete')}
                   </button>
                 </div>
               </div>
@@ -198,9 +202,9 @@ export default function PlotsGrid() {
             <p className="text-sm text-state-disabled mb-3 line-clamp-2">{plot.description}</p>
             <div className="text-xs text-state-disabled">
               {plot.lastDiagnosticDate ? (
-                <span>Último: {formatDate(plot.lastDiagnosticDate)}</span>
+                <span>{t('plots.table.lastDiagnostic')}: {formatDate(plot.lastDiagnosticDate)}</span>
               ) : (
-                <span>Sin diagnósticos recientes</span>
+                <span>{t('plots.details.noDiagnostics')}</span>
               )}
             </div>
           </div>
@@ -211,7 +215,7 @@ export default function PlotsGrid() {
       {totalPages > 1 && (
         <div className="flex items-center justify-between pt-4 border-t border-outline mt-6">
           <p className="text-sm text-state-disabled">
-            Mostrando {startIndex + 1} - {Math.min(endIndex, plots.length)} de {plots.length} parcelas
+            {t('plots.pagination.showing')} {startIndex + 1} - {Math.min(endIndex, plots.length)} {t('plots.pagination.of')} {plots.length} {t('plots.pagination.plots')}
           </p>
 
           <div className="flex items-center gap-2">
@@ -219,7 +223,7 @@ export default function PlotsGrid() {
               onClick={() => handlePageChange(1)}
               disabled={currentPage === 1}
               className="px-3 py-1 rounded border border-outline text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              title="Primera página"
+              title={t('plots.pagination.firstPage')}
             >
               <i className="fas fa-angle-double-left text-xs"></i>
             </button>
@@ -228,7 +232,7 @@ export default function PlotsGrid() {
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
               className="px-3 py-1 rounded border border-outline text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              title="Página anterior"
+              title={t('plots.pagination.previousPage')}
             >
               <i className="fas fa-chevron-left text-xs"></i>
             </button>
@@ -257,7 +261,7 @@ export default function PlotsGrid() {
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
               className="px-3 py-1 rounded border border-outline text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              title="Página siguiente"
+              title={t('plots.pagination.nextPage')}
             >
               <i className="fas fa-chevron-right text-xs"></i>
             </button>
@@ -266,7 +270,7 @@ export default function PlotsGrid() {
               onClick={() => handlePageChange(totalPages)}
               disabled={currentPage === totalPages}
               className="px-3 py-1 rounded border border-outline text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              title="Última página"
+              title={t('plots.pagination.lastPage')}
             >
               <i className="fas fa-angle-double-right text-xs"></i>
             </button>

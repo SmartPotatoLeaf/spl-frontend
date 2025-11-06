@@ -1,6 +1,6 @@
 ---
 import DashboardLayout from '@/layouts/DashboardLayout.astro';
-import PlotFormWrapper from '@/components/plots/PlotFormWrapper';
+import NewPlotView from '@/components/plots/NewPlotView';
 
 export const prerender = false;
 ---
@@ -10,18 +10,5 @@ export const prerender = false;
   description="Agregar nueva parcela de cultivo"
   activeRoute="parcelas"
 >
-  <div class="max-w-3xl mx-auto">
-    <div class="mb-6">
-      <a href="/plots" class="inline-flex items-center gap-2 text-primary hover:underline mb-4">
-        <i class="fas fa-arrow-left"></i>
-        Volver a mis parcelas
-      </a>
-      <h1 class="text-2xl sm:text-3xl font-bold text-state-idle mb-2">Nueva parcela</h1>
-      <p class="text-state-disabled">Completa la información de tu nueva parcela</p>
-    </div>
-
-    <div class="bg-white rounded-lg border border-outline p-6">
-      <PlotFormWrapper mode="create" client:load />
-    </div>
-  </div>
+  <NewPlotView client:load />
 </DashboardLayout>

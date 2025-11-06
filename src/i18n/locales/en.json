@@ -129,6 +129,101 @@
       "december": "December"
     }
   },
+  "plots": {
+    "title": "My plots",
+    "subtitle": "Manage and monitor your crop plots",
+    "addPlot": "Add plot",
+    "newPlot": "New plot",
+    "newPlotSubtitle": "Fill in the information for your new plot",
+    "editPlot": "Edit plot",
+    "editPlotSubtitle": "Update plot information",
+    "plotDetails": "Plot details",
+    "backToPlots": "Back to my plots",
+    "backToDetails": "Back to details",
+    "loading": "Loading details...",
+    "notFound": "Plot not found",
+    "empty": {
+      "title": "You have no registered plots",
+      "subtitle": "Add your first plot to start monitoring your crops"
+    },
+    "table": {
+      "name": "Name",
+      "diagnostics": "Diagnostics",
+      "description": "Description",
+      "lastDiagnostic": "Last diagnostic",
+      "actions": "Actions",
+      "viewDetails": "View details",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "deleteConfirm": "Are you sure you want to delete \"{name}\"?",
+    "form": {
+      "nameLabel": "Plot name",
+      "namePlaceholder": "E.g.: Plot A",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Describe the location, soil characteristics, etc.",
+      "varietyLabel": "Potato variety",
+      "varietyPlaceholder": "E.g.: Russet, Yukon Gold, Red",
+      "sectorLabel": "Sector",
+      "sectorPlaceholder": "E.g.: North, South A, Block 3",
+      "characters": "characters",
+      "charactersCount": "{count}/500 characters",
+      "required": "Required field",
+      "save": "Save plot",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "errors": {
+        "nameRequired": "Name is required",
+        "nameMinLength": "Name must be at least 3 characters",
+        "nameMaxLength": "Name cannot exceed 100 characters",
+        "descriptionRequired": "Description is required",
+        "descriptionMinLength": "Description must be at least 10 characters",
+        "descriptionMaxLength": "Description cannot exceed 500 characters",
+        "varietyMaxLength": "Variety cannot exceed 50 characters",
+        "sectorMaxLength": "Sector cannot exceed 50 characters"
+      }
+    },
+    "details": {
+      "name": "Name",
+      "description": "Description",
+      "diagnosticsCount": "Number of diagnostics",
+      "healthyCount": "Diagnostics without blight",
+      "createdAt": "Creation date",
+      "lastDiagnostic": "Last diagnostic",
+      "noDiagnostics": "No diagnostics",
+      "analysis": "Diagnostic analysis",
+      "trendChart": "Diagnostic trend",
+      "distributionChart": "Distribution by categories",
+      "download": "Download",
+      "expand": "Expand",
+      "variety": "Variety",
+      "sector": "Sector",
+      "notSpecified": "Not specified"
+    },
+    "pagination": {
+      "showing": "Showing",
+      "of": "of",
+      "plots": "plots",
+      "firstPage": "First page",
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "lastPage": "Last page"
+    },
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    }
+  },
   "auth": {
     "login": "Login",
     "register": "Sign up",
@@ -369,32 +464,5 @@
       "selectOtherPlots": "Select other plots",
       "needTwoPlots": "You need at least 2 plots to compare"
     }
-  },
-  "plots": {
-    "title": "My plots",
-    "createNew": "New plot",
-    "searchPlaceholder": "Search plot...",
-    "noPlotsTitle": "No registered plots",
-    "noPlotsDesc": "Create your first plot to start monitoring your crops",
-    "diagnostics": "diagnostics",
-    "lastUpdate": "Last update",
-    "viewDetails": "View details",
-    "edit": "Edit",
-    "delete": "Delete",
-    "backToPlots": "Back to my plots",
-    "plotDetails": "Plot details",
-    "name": "Name",
-    "description": "Description",
-    "createdAt": "Creation date",
-    "diagnosticsCount": "Number of diagnostics",
-    "healthyDiagnostics": "Healthy diagnostics",
-    "lastDiagnostic": "Last diagnostic",
-    "trendAnalysis": "Diagnostics trend",
-    "distributionAnalysis": "Diagnostics distribution",
-    "createPlot": "Create plot",
-    "editPlot": "Edit plot",
-    "plotCreated": "Plot created successfully",
-    "plotUpdated": "Plot updated successfully",
-    "plotDeleted": "Plot deleted successfully"
   }
 }

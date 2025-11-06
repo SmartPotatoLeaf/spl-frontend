@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { PlotFormData } from '@/types';
 
 interface PlotFormProps {
@@ -9,6 +10,7 @@ interface PlotFormProps {
 }
 
 export default function PlotForm({ initialData, mode = 'create', onSubmit, onCancel }: PlotFormProps) {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState<PlotFormData>({
     name: initialData?.name || '',
     description: initialData?.description || '',
@@ -31,27 +33,27 @@ export default function PlotForm({ initialData, mode = 'create', onSubmit, onCan
     const newErrors: Partial<Record<keyof PlotFormData, string>> = {};
 
     if (!formData.name.trim()) {
-      newErrors.name = 'El nombre es requerido';
+      newErrors.name = t('plots.form.errors.nameRequired');
     } else if (formData.name.trim().length < 3) {
-      newErrors.name = 'El nombre debe tener al menos 3 caracteres';
+      newErrors.name = t('plots.form.errors.nameMinLength');
     } else if (formData.name.trim().length > 100) {
-      newErrors.name = 'El nombre no puede exceder 100 caracteres';
+      newErrors.name = t('plots.form.errors.nameMaxLength');
     }
 
     if (!formData.description.trim()) {
-      newErrors.description = 'La descripción es requerida';
+      newErrors.description = t('plots.form.errors.descriptionRequired');
     } else if (formData.description.trim().length < 10) {
-      newErrors.description = 'La descripción debe tener al menos 10 caracteres';
+      newErrors.description = t('plots.form.errors.descriptionMinLength');
     } else if (formData.description.trim().length > 500) {
-      newErrors.description = 'La descripción no puede exceder 500 caracteres';
+      newErrors.description = t('plots.form.errors.descriptionMaxLength');
     }
 
     if (formData.variety && formData.variety.length > 50) {
-      newErrors.variety = 'La variedad no puede exceder 50 caracteres';
+      newErrors.variety = t('plots.form.errors.varietyMaxLength');
     }
 
     if (formData.sector && formData.sector.length > 50) {
-      newErrors.sector = 'El sector no puede exceder 50 caracteres';
+      newErrors.sector = t('plots.form.errors.sectorMaxLength');
     }
 
     setErrors(newErrors);
@@ -80,7 +82,7 @@ export default function PlotForm({ initialData, mode = 'create', onSubmit, onCan
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
         <label htmlFor="name" className="block text-sm font-medium text-state-idle mb-2">
-          Nombre de la parcela <span className="text-error">*</span>
+          {t('plots.form.nameLabel')} <span className="text-error">*</span>
         </label>
         <input
           type="text"
@@ -92,7 +94,7 @@ export default function PlotForm({ initialData, mode = 'create', onSubmit, onCan
               ? 'border-error focus:ring-error/20'
               : 'border-outline focus:ring-primary/20 focus:border-primary'
           }`}
-          placeholder="Ej: Parcela A"
+          placeholder={t('plots.form.namePlaceholder')}
           disabled={isSubmitting}
         />
         {errors.name && (
@@ -105,7 +107,7 @@ export default function PlotForm({ initialData, mode = 'create', onSubmit, onCan
 
       <div>
         <label htmlFor="description" className="block text-sm font-medium text-state-idle mb-2">
-          Descripción <span className="text-error">*</span>
+          {t('plots.form.descriptionLabel')} <span className="text-error">*</span>
         </label>
         <textarea
           id="description"
@@ -117,7 +119,7 @@ export default function PlotForm({ initialData, mode = 'create', onSubmit, onCan
               ? 'border-error focus:ring-error/20'
               : 'border-outline focus:ring-primary/20 focus:border-primary'
           }`}
-          placeholder="Describe la ubicación, características del suelo, etc."
+          placeholder={t('plots.form.descriptionPlaceholder')}
           disabled={isSubmitting}
         />
         {errors.description && (
@@ -127,14 +129,14 @@ export default function PlotForm({ initialData, mode = 'create', onSubmit, onCan
           </p>
         )}
         <p className="mt-1 text-xs text-state-disabled">
-          {formData.description.length}/500 caracteres
+          {formData.description.length}/500 {t('plots.form.characters')}
         </p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <div>
           <label htmlFor="variety" className="block text-sm font-medium text-state-idle mb-2">
-            Variedad de papa
+            {t('plots.form.varietyLabel')}
           </label>
           <input
             type="text"
@@ -146,7 +148,7 @@ export default function PlotForm({ initialData, mode = 'create', onSubmit, onCan
                 ? 'border-error focus:ring-error/20'
                 : 'border-outline focus:ring-primary/20 focus:border-primary'
             }`}
-            placeholder="Ej: Canchan, Perricholi, Yungay"
+            placeholder={t('plots.form.varietyPlaceholder')}
             disabled={isSubmitting}
           />
           {errors.variety && (
@@ -159,7 +161,7 @@ export default function PlotForm({ initialData, mode = 'create', onSubmit, onCan
 
         <div>
           <label htmlFor="sector" className="block text-sm font-medium text-state-idle mb-2">
-            Sector
+            {t('plots.form.sectorLabel')}
           </label>
           <input
             type="text"
@@ -171,7 +173,7 @@ export default function PlotForm({ initialData, mode = 'create', onSubmit, onCan
                 ? 'border-error focus:ring-error/20'
                 : 'border-outline focus:ring-primary/20 focus:border-primary'
             }`}
-            placeholder="Ej: Sector Norte"
+            placeholder={t('plots.form.sectorPlaceholder')}
             disabled={isSubmitting}
           />
           {errors.sector && (
@@ -190,7 +192,7 @@ export default function PlotForm({ initialData, mode = 'create', onSubmit, onCan
           disabled={isSubmitting}
           className="px-6 py-2 text-state-idle hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Cancelar
+          {t('plots.form.cancel')}
         </button>
         <button
           type="submit"
@@ -198,7 +200,7 @@ export default function PlotForm({ initialData, mode = 'create', onSubmit, onCan
           className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
         >
           {isSubmitting && <i className="fas fa-spinner fa-spin"></i>}
-          {mode === 'edit' ? 'Guardar cambios' : 'Crear parcela'}
+          {isSubmitting ? t('plots.form.saving') : t('plots.form.save')}
         </button>
       </div>
     </form>

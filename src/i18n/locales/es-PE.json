@@ -129,6 +129,101 @@
       "december": "Diciembre"
     }
   },
+  "plots": {
+    "title": "Mis parcelas",
+    "subtitle": "Gestiona y monitorea tus parcelas de cultivo",
+    "addPlot": "Agregar parcela",
+    "newPlot": "Nueva parcela",
+    "newPlotSubtitle": "Completa la información de tu nueva parcela",
+    "editPlot": "Editar parcela",
+    "editPlotSubtitle": "Actualiza la información de la parcela",
+    "plotDetails": "Detalles de la parcela",
+    "backToPlots": "Volver a mis parcelas",
+    "backToDetails": "Volver a detalles",
+    "loading": "Cargando detalles...",
+    "notFound": "Parcela no encontrada",
+    "empty": {
+      "title": "No tienes parcelas registradas",
+      "subtitle": "Agrega tu primera parcela para comenzar a monitorear tus cultivos"
+    },
+    "table": {
+      "name": "Nombre",
+      "diagnostics": "Diagnósticos",
+      "description": "Descripción",
+      "lastDiagnostic": "Último diagnóstico",
+      "actions": "Acciones",
+      "viewDetails": "Ver detalles",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "deleteConfirm": "¿Estás seguro de eliminar \"{name}\"?",
+    "form": {
+      "nameLabel": "Nombre de la parcela",
+      "namePlaceholder": "Ej: Parcela A",
+      "descriptionLabel": "Descripción",
+      "descriptionPlaceholder": "Describe la ubicación, características del suelo, etc.",
+      "varietyLabel": "Variedad de papa",
+      "varietyPlaceholder": "Ej: Canchan, Perricholi, Yungay",
+      "sectorLabel": "Sector",
+      "sectorPlaceholder": "Ej: Norte, Sur A, Bloque 3",
+      "characters": "caracteres",
+      "charactersCount": "{count}/500 caracteres",
+      "required": "Campo requerido",
+      "save": "Guardar parcela",
+      "saving": "Guardando...",
+      "cancel": "Cancelar",
+      "errors": {
+        "nameRequired": "El nombre es requerido",
+        "nameMinLength": "El nombre debe tener al menos 3 caracteres",
+        "nameMaxLength": "El nombre no puede exceder 100 caracteres",
+        "descriptionRequired": "La descripción es requerida",
+        "descriptionMinLength": "La descripción debe tener al menos 10 caracteres",
+        "descriptionMaxLength": "La descripción no puede exceder 500 caracteres",
+        "varietyMaxLength": "La variedad no puede exceder 50 caracteres",
+        "sectorMaxLength": "El sector no puede exceder 50 caracteres"
+      }
+    },
+    "details": {
+      "name": "Nombre",
+      "description": "Descripción",
+      "diagnosticsCount": "Número de diagnósticos",
+      "healthyCount": "Diagnósticos sin rancha",
+      "createdAt": "Fecha de creación",
+      "lastDiagnostic": "Último diagnóstico",
+      "noDiagnostics": "Sin diagnósticos",
+      "analysis": "Análisis de diagnósticos",
+      "trendChart": "Tendencia de diagnósticos",
+      "distributionChart": "Distribución por categorías",
+      "download": "Descargar",
+      "expand": "Expandir",
+      "variety": "Variedad",
+      "sector": "Sector",
+      "notSpecified": "No especificado"
+    },
+    "pagination": {
+      "showing": "Mostrando",
+      "of": "de",
+      "plots": "parcelas",
+      "firstPage": "Primera página",
+      "previousPage": "Página anterior",
+      "nextPage": "Página siguiente",
+      "lastPage": "Última página"
+    },
+    "months": {
+      "january": "Enero",
+      "february": "Febrero",
+      "march": "Marzo",
+      "april": "Abril",
+      "may": "Mayo",
+      "june": "Junio",
+      "july": "Julio",
+      "august": "Agosto",
+      "september": "Septiembre",
+      "october": "Octubre",
+      "november": "Noviembre",
+      "december": "Diciembre"
+    }
+  },
   "auth": {
     "login": "Iniciar sesión",
     "register": "Registrarse",
@@ -369,32 +464,5 @@
       "selectOtherPlots": "Seleccionar otras parcelas",
       "needTwoPlots": "Necesitas al menos 2 parcelas para comparar"
     }
-  },
-  "plots": {
-    "title": "Mis parcelas",
-    "createNew": "Nueva parcela",
-    "searchPlaceholder": "Buscar parcela...",
-    "noPlotsTitle": "No tienes parcelas registradas",
-    "noPlotsDesc": "Crea tu primera parcela para comenzar a monitorear tus cultivos",
-    "diagnostics": "diagnósticos",
-    "lastUpdate": "Última actualización",
-    "viewDetails": "Ver detalles",
-    "edit": "Editar",
-    "delete": "Eliminar",
-    "backToPlots": "Volver a mis parcelas",
-    "plotDetails": "Detalles de la parcela",
-    "name": "Nombre",
-    "description": "Descripción",
-    "createdAt": "Fecha de creación",
-    "diagnosticsCount": "Número de diagnósticos",
-    "healthyDiagnostics": "Diagnósticos sin rancha",
-    "lastDiagnostic": "Último diagnóstico",
-    "trendAnalysis": "Análisis de diagnósticos",
-    "distributionAnalysis": "Distribución de diagnósticos",
-    "createPlot": "Crear parcela",
-    "editPlot": "Editar parcela",
-    "plotCreated": "Parcela creada correctamente",
-    "plotUpdated": "Parcela actualizada correctamente",
-    "plotDeleted": "Parcela eliminada correctamente"
   }
 }
