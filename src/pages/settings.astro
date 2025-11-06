@@ -1,0 +1,17 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import SettingsView from '@/components/settings/SettingsView';
+
+export const prerender = false;
+---
+
+<DashboardLayout title="Configuración - Smart Potato Leaf" activeRoute="settings">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-state-idle">Configuración</h1>
+      <p class="text-state-disabled mt-2">Personaliza tu experiencia en Smart Potato Leaf</p>
+    </div>
+    
+    <SettingsView client:load />
+  </div>
+</DashboardLayout>
