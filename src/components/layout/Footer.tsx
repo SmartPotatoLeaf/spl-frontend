@@ -5,11 +5,13 @@ export default function Footer() {
   const { t, i18n } = useTranslation();
   const currentYear = new Date().getFullYear();
 
-  // Sincronizar i18next con el locale almacenado al montar
+  // Sincronizar i18next con el locale almacenado al montar (solo en el cliente)
   useEffect(() => {
-    const storedLocale = localStorage.getItem('i18nextLng');
-    if (storedLocale && i18n.language !== storedLocale) {
-      i18n.changeLanguage(storedLocale);
+    if (typeof window !== 'undefined') {
+      const storedLocale = localStorage.getItem('i18nextLng');
+      if (storedLocale && i18n.language !== storedLocale) {
+        i18n.changeLanguage(storedLocale);
+      }
     }
   }, [i18n]);
 

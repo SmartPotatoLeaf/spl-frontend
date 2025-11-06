@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { atom } from 'nanostores';
 
@@ -13,18 +13,30 @@ const getInitialLanguage = (): string => {
   return 'es-PE';
 };
 
-export const languageStore = atom<string>(getInitialLanguage());
+// Inicializar con 'es-PE' en el servidor, se actualizará en el cliente
+export const languageStore = atom<string>('es-PE');
 export const isLanguageMenuOpen = atom<boolean>(false);
 
 export default function LanguageSwitcher() {
   const { i18n } = useTranslation();
   const currentLang = useStore(languageStore);
   const isOpen = useStore(isLanguageMenuOpen);
+  const [isInitialized, setIsInitialized] = useState(false);
 
+  // Inicializar solo una vez con el valor del localStorage
   useEffect(() => {
-    const lang = i18n.language === 'en' ? 'en' : 'es-PE';
-    languageStore.set(lang);
-  }, [i18n.language]);
+    if (!isInitialized && typeof window !== 'undefined') {
+      const initialLang = getInitialLanguage();
+      languageStore.set(initialLang);
+      
+      // Solo cambiar i18n si es diferente
+      if (i18n.language !== initialLang) {
+        i18n.changeLanguage(initialLang);
+      }
+      
+      setIsInitialized(true);
+    }
+  }, [isInitialized, i18n]);
 
   const handleLanguageChange = async (newLang: string) => {
     try {

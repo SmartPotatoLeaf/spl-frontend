@@ -12,9 +12,11 @@ export default function Navbar({ activeRoute = 'home' }: NavbarProps) {
 
   // Sincronizar i18next con el locale almacenado al montar
   useEffect(() => {
-    const storedLocale = localStorage.getItem('i18nextLng');
-    if (storedLocale && i18n.language !== storedLocale) {
-      i18n.changeLanguage(storedLocale);
+    if (typeof window !== 'undefined') {
+      const storedLocale = localStorage.getItem('i18nextLng');
+      if (storedLocale && i18n.language !== storedLocale) {
+        i18n.changeLanguage(storedLocale);
+      }
     }
   }, [i18n]);
 

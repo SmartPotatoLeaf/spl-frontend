@@ -61,7 +61,7 @@ const defaultSettings: AppSettings = {
     theme: 'light',
   },
   language: {
-    language: getInitialLanguage(), // Leer desde localStorage
+    language: 'es-PE', // Inicializar con default, se actualizará en el cliente
     dateFormat: 'dd/mm/yyyy',
     timezone: 'America/Lima',
     autoDetectTimezone: true,
@@ -85,6 +85,17 @@ export const settingsStore = map<SettingsState>({
   isSaving: false,
   hasUnsavedChanges: false,
 });
+
+// Inicializar idioma desde localStorage solo en el cliente
+export function initializeLanguageFromStorage() {
+  if (typeof window !== 'undefined') {
+    const savedLang = getInitialLanguage();
+    if (savedLang !== settingsStore.get().settings.language.language) {
+      setLanguage(savedLang);
+      settingsStore.setKey('hasUnsavedChanges', false); // No marcar como cambio no guardado
+    }
+  }
+}
 
 export function setCurrentSection(section: SettingsSection) {
   settingsStore.setKey('currentSection', section);
