@@ -9,7 +9,8 @@ export default defineConfig({
     adapter: vercel({
         webAnalytics: {
             enabled: false
-        }
+        },
+        edgeMiddleware: false
     }),
     integrations: [react()],
     vite: {
