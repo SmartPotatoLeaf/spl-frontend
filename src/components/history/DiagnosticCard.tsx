@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { Diagnostic } from '@/types';
 
 interface DiagnosticCardProps {
@@ -5,15 +6,21 @@ interface DiagnosticCardProps {
 }
 
 export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
+  const { t } = useTranslation();
+
   const formatDate = (date: Date): string => {
-    const months = [
-      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    const monthKeys = [
+      'january', 'february', 'march', 'april', 'may', 'june',
+      'july', 'august', 'september', 'october', 'november', 'december'
     ];
-    return `${date.getDate()} de ${months[date.getMonth()]}, ${date.getFullYear()}`;
+    const monthKey = monthKeys[date.getMonth()];
+    const monthName = t(`history.months.${monthKey}`);
+    return `${date.getDate()} de ${monthName}, ${date.getFullYear()}`;
   };
 
-  const title = diagnostic.statusLabel === 'Sin rancha' ? 'Hoja sana' : 'Hoja infectada';
+  const title = diagnostic.statusLabel === 'Sin rancha' 
+    ? t('history.card.healthyLeaf') 
+    : t('history.card.infectedLeaf');
 
   const getBadgeColor = (status: string) => {
     switch (status) {
@@ -58,7 +65,7 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
               {diagnostic.statusLabel}
             </span>
             <span className={`text-xs font-medium ${getConfidenceColor(diagnostic.confidence)}`}>
-              {(diagnostic.confidence * 100).toFixed(0)}% confianza
+              {(diagnostic.confidence * 100).toFixed(0)}% {t('history.card.confidence')}
             </span>
           </div>
         </div>
@@ -72,7 +79,7 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
           ) : (
             <div className="flex items-center gap-2 text-xs text-state-disabled">
               <i className="fas fa-map-marker-alt"></i>
-              <span className="italic">Sin parcela asignada</span>
+              <span className="italic">{t('history.card.noPlotAssigned')}</span>
             </div>
           )}
 
@@ -87,7 +94,7 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
             href={`/diagnostico/${diagnostic.predictionId}`}
             className="block w-full text-center py-2 rounded-lg bg-gray-50 text-state-idle text-sm font-medium hover:bg-gray-100 transition-colors"
           >
-            Ver detalles
+            {t('history.card.viewDetails')}
           </a>
         </div>
       </div>

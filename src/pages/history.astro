@@ -1,7 +1,6 @@
 ---
 import DashboardLayout from '@/layouts/DashboardLayout.astro';
-import HistoryFilters from '@/components/history/HistoryFilters';
-import HistoryGrid from '@/components/history/HistoryGrid';
+import HistoryView from '@/components/history/HistoryView';
 import { getAllDiagnostics } from '@/services/homeService';
 import { getAllPlots } from '@/services/plotService';
 
@@ -10,32 +9,7 @@ const allPlots = await getAllPlots();
 ---
 
 <DashboardLayout title="History - Smart Potato Leaf" activeRoute="history">
-  <div class="space-y-6 sm:space-y-8">
-    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-      <h1 class="text-2xl sm:text-3xl font-bold text-state-idle">Historial de diagnóstico</h1>
-      <div class="flex flex-col sm:flex-row gap-3">
-        <a 
-          href="#"
-          class="inline-flex items-center justify-center gap-2 bg-white text-state-idle border border-outline px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
-        >
-          <i class="far fa-file-pdf"></i>
-          Exportar a PDF
-        </a>
-        <a 
-          href="#"
-          class="inline-flex items-center justify-center gap-2 bg-white text-state-idle border border-outline px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
-        >
-          <i class="far fa-file-excel"></i>
-          Exportar a CSV
-        </a>
-      </div>
-    </div>
-
-    <div class="bg-white rounded-lg border border-outline p-4 sm:p-6">
-      <HistoryFilters client:load plots={allPlots} />
-      <HistoryGrid client:load />
-    </div>
-  </div>
+  <HistoryView client:load plots={allPlots} />
 </DashboardLayout>
 
 <script>

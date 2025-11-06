@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useStore } from '@nanostores/react';
 import { historyStore, setFilters, resetFilters } from '@/stores';
 import type { PlotSummary } from '@/types';
@@ -8,6 +9,7 @@ interface HistoryFiltersProps {
 }
 
 export default function HistoryFilters({ plots }: HistoryFiltersProps) {
+  const { t } = useTranslation();
   const { filters } = useStore(historyStore);
   
   const [dateFrom, setDateFrom] = useState(filters.dateFrom);
@@ -48,7 +50,7 @@ export default function HistoryFilters({ plots }: HistoryFiltersProps) {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
         <div className="flex flex-col gap-1">
           <label htmlFor="dateFrom" className="text-xs text-state-disabled font-medium">
-            De
+            {t('history.filters.dateFrom')}
           </label>
           <div className="relative">
             <input
@@ -64,7 +66,7 @@ export default function HistoryFilters({ plots }: HistoryFiltersProps) {
 
         <div className="flex flex-col gap-1">
           <label htmlFor="dateTo" className="text-xs text-state-disabled font-medium">
-            A
+            {t('history.filters.dateTo')}
           </label>
           <div className="relative">
             <input
@@ -81,7 +83,7 @@ export default function HistoryFilters({ plots }: HistoryFiltersProps) {
 
         <div className="flex flex-col gap-1">
           <label htmlFor="severity" className="text-xs text-state-disabled font-medium">
-            Severidad
+            {t('history.filters.severity')}
           </label>
           <div className="relative">
             <select
@@ -90,11 +92,11 @@ export default function HistoryFilters({ plots }: HistoryFiltersProps) {
               onChange={(e) => setSeverity(e.target.value as any)}
               className="w-full px-3 py-2 border border-outline rounded-lg text-sm text-state-idle focus:outline-none focus:ring-2 focus:ring-primary appearance-none"
             >
-              <option value="all">Todas</option>
-              <option value="healthy">Sin rancha</option>
-              <option value="low">Rancha leve</option>
-              <option value="moderate">Rancha moderada</option>
-              <option value="severe">Rancha severa</option>
+              <option value="all">{t('history.severityOptions.all')}</option>
+              <option value="healthy">{t('history.severityOptions.healthy')}</option>
+              <option value="low">{t('history.severityOptions.low')}</option>
+              <option value="moderate">{t('history.severityOptions.moderate')}</option>
+              <option value="severe">{t('history.severityOptions.severe')}</option>
             </select>
             <i className="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-state-disabled pointer-events-none text-xs"></i>
           </div>
@@ -102,7 +104,7 @@ export default function HistoryFilters({ plots }: HistoryFiltersProps) {
 
         <div className="flex flex-col gap-1">
           <label htmlFor="plot" className="text-xs text-state-disabled font-medium">
-            Parcela
+            {t('history.filters.plot')}
           </label>
           <div className="relative">
             <select
@@ -111,7 +113,7 @@ export default function HistoryFilters({ plots }: HistoryFiltersProps) {
               onChange={(e) => setPlot(e.target.value)}
               className="w-full px-3 py-2 border border-outline rounded-lg text-sm text-state-idle focus:outline-none focus:ring-2 focus:ring-primary appearance-none"
             >
-              <option value="all">Todas</option>
+              <option value="all">{t('history.filters.allPlots')}</option>
               {plots.map((p) => (
                 <option key={p.id.toString()} value={p.name}>
                   {p.name}
@@ -129,7 +131,7 @@ export default function HistoryFilters({ plots }: HistoryFiltersProps) {
           className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-opacity-90 transition-colors"
         >
           <i className="fas fa-filter text-xs"></i>
-          Aplicar filtros
+          {t('history.filters.applyFilters')}
         </button>
 
         <button
@@ -138,7 +140,7 @@ export default function HistoryFilters({ plots }: HistoryFiltersProps) {
           className="inline-flex items-center gap-2 text-state-idle text-sm hover:underline"
         >
           <i className="fas fa-redo text-xs"></i>
-          Restablecer filtros
+          {t('history.filters.resetFilters')}
         </button>
       </div>
     </form>

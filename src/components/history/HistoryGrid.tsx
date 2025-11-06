@@ -1,8 +1,10 @@
 import { useStore } from '@nanostores/react';
+import { useTranslation } from 'react-i18next';
 import { historyStore, setPage } from '@/stores';
 import DiagnosticCard from './DiagnosticCard';
 
 export default function HistoryGrid() {
+  const { t } = useTranslation();
   const { filteredDiagnostics, filters, itemsPerPage } = useStore(historyStore);
 
   const totalPages = Math.ceil(filteredDiagnostics.length / itemsPerPage);
@@ -46,7 +48,7 @@ export default function HistoryGrid() {
     return (
       <div className="text-center py-12">
         <i className="fas fa-inbox text-5xl text-state-disabled mb-4"></i>
-        <p className="text-state-disabled">No hay diagnósticos que coincidan con los filtros</p>
+        <p className="text-state-disabled">{t('history.grid.noResults')}</p>
       </div>
     );
   }
@@ -61,7 +63,7 @@ export default function HistoryGrid() {
 
       <div className="flex items-center justify-between pt-4 border-t border-outline">
         <p className="text-sm text-state-disabled">
-          Mostrando {startIndex + 1} - {Math.min(endIndex, filteredDiagnostics.length)} de {filteredDiagnostics.length} diagnósticos
+          {t('history.grid.showing')} {startIndex + 1} - {Math.min(endIndex, filteredDiagnostics.length)} {t('history.grid.of')} {filteredDiagnostics.length} {t('history.grid.diagnostics')}
         </p>
 
         {totalPages > 1 && (
@@ -70,7 +72,7 @@ export default function HistoryGrid() {
               onClick={() => handlePageChange(1)}
               disabled={filters.page === 1}
               className="px-3 py-1 rounded border border-outline text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              title="Primera página"
+              title={t('history.grid.firstPage')}
             >
               <i className="fas fa-angle-double-left text-xs"></i>
             </button>
@@ -79,7 +81,7 @@ export default function HistoryGrid() {
               onClick={() => handlePageChange(filters.page - 1)}
               disabled={filters.page === 1}
               className="px-3 py-1 rounded border border-outline text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              title="Página anterior"
+              title={t('history.grid.previousPage')}
             >
               <i className="fas fa-chevron-left text-xs"></i>
             </button>
@@ -108,7 +110,7 @@ export default function HistoryGrid() {
               onClick={() => handlePageChange(filters.page + 1)}
               disabled={filters.page === totalPages}
               className="px-3 py-1 rounded border border-outline text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              title="Página siguiente"
+              title={t('history.grid.nextPage')}
             >
               <i className="fas fa-chevron-right text-xs"></i>
             </button>
@@ -117,7 +119,7 @@ export default function HistoryGrid() {
               onClick={() => handlePageChange(totalPages)}
               disabled={filters.page === totalPages}
               className="px-3 py-1 rounded border border-outline text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              title="Última página"
+              title={t('history.grid.lastPage')}
             >
               <i className="fas fa-angle-double-right text-xs"></i>
             </button>

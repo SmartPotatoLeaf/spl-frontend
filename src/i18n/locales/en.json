@@ -76,6 +76,59 @@
       "december": "December"
     }
   },
+  "history": {
+    "title": "Diagnostic history",
+    "exportPDF": "Export to PDF",
+    "exportCSV": "Export to CSV",
+    "filters": {
+      "dateFrom": "From",
+      "dateTo": "To",
+      "severity": "Severity",
+      "plot": "Plot",
+      "all": "All",
+      "allPlots": "All plots",
+      "applyFilters": "Apply filters",
+      "resetFilters": "Clear filters"
+    },
+    "severityOptions": {
+      "all": "All",
+      "healthy": "No blight",
+      "low": "Low blight",
+      "moderate": "Moderate blight",
+      "severe": "Severe blight"
+    },
+    "grid": {
+      "noResults": "No diagnostics match the filters",
+      "showing": "Showing",
+      "of": "of",
+      "diagnostics": "diagnostics",
+      "firstPage": "First page",
+      "previousPage": "Previous page",
+      "nextPage": "Next page",
+      "lastPage": "Last page"
+    },
+    "card": {
+      "healthyLeaf": "Healthy leaf",
+      "infectedLeaf": "Infected leaf",
+      "noPlotAssigned": "No plot assigned",
+      "viewDetails": "View details",
+      "confidence": "confidence"
+    },
+    "months": {
+      "january": "January",
+      "february": "February",
+      "march": "March",
+      "april": "April",
+      "may": "May",
+      "june": "June",
+      "july": "July",
+      "august": "August",
+      "september": "September",
+      "october": "October",
+      "november": "November",
+      "december": "December"
+    }
+  },
   "auth": {
     "login": "Login",
     "register": "Sign up",

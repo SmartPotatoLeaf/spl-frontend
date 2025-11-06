@@ -76,6 +76,59 @@
       "december": "Diciembre"
     }
   },
+  "history": {
+    "title": "Historial de diagnóstico",
+    "exportPDF": "Exportar a PDF",
+    "exportCSV": "Exportar a CSV",
+    "filters": {
+      "dateFrom": "De",
+      "dateTo": "A",
+      "severity": "Severidad",
+      "plot": "Parcela",
+      "all": "Todas",
+      "allPlots": "Todas las parcelas",
+      "applyFilters": "Aplicar filtros",
+      "resetFilters": "Limpiar filtros"
+    },
+    "severityOptions": {
+      "all": "Todas",
+      "healthy": "Sin rancha",
+      "low": "Rancha leve",
+      "moderate": "Rancha moderada",
+      "severe": "Rancha severa"
+    },
+    "grid": {
+      "noResults": "No hay diagnósticos que coincidan con los filtros",
+      "showing": "Mostrando",
+      "of": "de",
+      "diagnostics": "diagnósticos",
+      "firstPage": "Primera página",
+      "previousPage": "Página anterior",
+      "nextPage": "Página siguiente",
+      "lastPage": "Última página"
+    },
+    "card": {
+      "healthyLeaf": "Hoja sana",
+      "infectedLeaf": "Hoja infectada",
+      "noPlotAssigned": "Sin parcela asignada",
+      "viewDetails": "Ver detalles",
+      "confidence": "confianza"
+    },
+    "months": {
+      "january": "Enero",
+      "february": "Febrero",
+      "march": "Marzo",
+      "april": "Abril",
+      "may": "Mayo",
+      "june": "Junio",
+      "july": "Julio",
+      "august": "Agosto",
+      "september": "Septiembre",
+      "october": "Octubre",
+      "november": "Noviembre",
+      "december": "Diciembre"
+    }
+  },
   "auth": {
     "login": "Iniciar sesión",
     "register": "Registrarse",
