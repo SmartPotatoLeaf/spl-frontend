@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import I18nProvider from '@/i18n/I18nProvider';
 import AuthForm from './AuthForm';
 
 export default function AuthPage() {
@@ -9,6 +10,8 @@ export default function AuthPage() {
   };
 
   return (
-    <AuthForm mode={mode} onToggleMode={toggleMode} />
+    <I18nProvider>
+      <AuthForm mode={mode} onToggleMode={toggleMode} />
+    </I18nProvider>
   );
 }
