@@ -4,3 +4,15 @@ export { historyStore, setDiagnostics, setFilters, setPage, resetFilters, setLoa
 export { homeStore, setHomeData, setHomeLoading } from './homeStore';
 export { plotsStore, setPlotsData, setSelectedPlot, addPlot, updatePlot, deletePlot, setLoading as setPlotsLoading } from './plotsStore';
 export { toastsStore, showToast, removeToast, toast } from './toastStore';
+export { 
+  dashboardStore, 
+  setDashboardMode, 
+  setDashboardData, 
+  setDashboardLoading, 
+  setDashboardError,
+  setDashboardFilters,
+  setSelectedPlots,
+  setComparativeData,
+  setComparativeLoading,
+  resetDashboard
+} from './dashboardStore';

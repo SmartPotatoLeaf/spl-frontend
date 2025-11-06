@@ -1,4 +1,5 @@
 export type SeverityLevel = 'healthy' | 'low' | 'moderate' | 'severe';
+export type DashboardMode = 'normal' | 'comparative';
 
 /**
  * Diagnostic - Tipo de presentación para la UI
@@ -44,6 +45,7 @@ export interface DiagnosticSummary {
   low: number;
   moderate: number;
   severe: number;
+  total: number;
 }
 
 export interface DashboardStats {
@@ -51,4 +53,43 @@ export interface DashboardStats {
   generalStats: GeneralStats;
   severityAverage: SeverityAverage;
   summary: DiagnosticSummary;
+  totalPlots: number;
+}
+
+export interface TrendDataPoint {
+  month: string;
+  healthy: number;
+  low: number;
+  moderate: number;
+  severe: number;
+}
+
+export interface DashboardFilters {
+  dateFrom?: Date;
+  dateTo?: Date;
+  severity?: SeverityLevel | 'all';
+  plotId?: string | 'all';
+}
+
+export interface ComparativePlotData {
+  plotId: string;
+  plotName: string;
+  stats: DashboardStats;
+  trendData: TrendDataPoint[];
+  summary: DiagnosticSummary;
+}
+
+export interface ComparativeData {
+  plot1: ComparativePlotData;
+  plot2: ComparativePlotData;
+}
+
+export interface DashboardData {
+  mode: DashboardMode;
+  stats: DashboardStats;
+  trendData: TrendDataPoint[];
+  recentDiagnostics: Diagnostic[];
+  filters: DashboardFilters;
+  isLoading: boolean;
+  error: string | null;
 }

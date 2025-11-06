@@ -35,8 +35,10 @@ function mockGetDashboardStats(): Promise<DashboardStats> {
           healthy: 45,
           low: 18,
           moderate: 8,
-          severe: 3
-        }
+          severe: 3,
+          total: 74
+        },
+        totalPlots: 4
       });
     }, 300);
   });
