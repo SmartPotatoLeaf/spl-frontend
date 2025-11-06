@@ -1,23 +1,25 @@
 import { useStore } from '@nanostores/react';
+import { useTranslation } from 'react-i18next';
 import { settingsStore, setCurrentSection } from '@/stores/settingsStore';
 import type { SettingsSection } from '@/types/settings';
 
 interface MenuItem {
   section: SettingsSection;
-  label: string;
+  labelKey: string;
   icon: string;
 }
 
 const menuItems: MenuItem[] = [
-  { section: 'account', label: 'Cuenta', icon: 'fa-user' },
-  { section: 'security', label: 'Seguridad', icon: 'fa-shield-halved' },
-  { section: 'notifications', label: 'Notificaciones', icon: 'fa-bell' },
-  { section: 'appearance', label: 'Apariencia', icon: 'fa-palette' },
-  { section: 'language', label: 'Idioma y región', icon: 'fa-globe' },
-  { section: 'about', label: 'Acerca de', icon: 'fa-circle-info' },
+  { section: 'account', labelKey: 'settings.accountSection.title', icon: 'fa-user' },
+  { section: 'security', labelKey: 'settings.securitySection.title', icon: 'fa-shield-halved' },
+  { section: 'notifications', labelKey: 'settings.notificationsSection.title', icon: 'fa-bell' },
+  { section: 'appearance', labelKey: 'settings.appearanceSection.title', icon: 'fa-palette' },
+  { section: 'language', labelKey: 'settings.languageSection.title', icon: 'fa-globe' },
+  { section: 'about', labelKey: 'settings.aboutSection.title', icon: 'fa-circle-info' },
 ];
 
 export default function SettingsSidebar() {
+  const { t } = useTranslation();
   const { currentSection } = useStore(settingsStore);
 
   return (
@@ -34,7 +36,7 @@ export default function SettingsSidebar() {
             }`}
           >
             <i className={`fas ${item.icon} w-5 text-center`}></i>
-            <span>{item.label}</span>
+            <span>{t(item.labelKey)}</span>
           </button>
         ))}
       </nav>
@@ -45,7 +47,7 @@ export default function SettingsSidebar() {
           className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-error hover:bg-error/5 transition-colors"
         >
           <i className="fas fa-arrow-right-from-bracket w-5 text-center"></i>
-          <span>Salir</span>
+          <span>{t('common.logout')}</span>
         </a>
       </div>
     </div>

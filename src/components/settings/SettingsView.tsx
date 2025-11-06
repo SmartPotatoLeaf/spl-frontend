@@ -1,7 +1,9 @@
 import { useStore } from '@nanostores/react';
+import { useTranslation } from 'react-i18next';
 import { useState, useEffect } from 'react';
 import { settingsStore, loadAllSettings, setSettingsLoading } from '@/stores/settingsStore';
 import { getUserSettings } from '@/services/settingsService';
+import I18nProvider from '@/i18n/I18nProvider';
 import SettingsSidebar from './SettingsSidebar';
 import AccountSection from './sections/AccountSection';
 import SecuritySection from './sections/SecuritySection';
@@ -10,7 +12,8 @@ import AppearanceSection from './sections/AppearanceSection';
 import LanguageSection from './sections/LanguageSection';
 import AboutSection from './sections/AboutSection';
 
-export default function SettingsView() {
+function SettingsContent() {
+  const { t } = useTranslation();
   const { currentSection, isLoading } = useStore(settingsStore);
   const [error, setError] = useState<string | null>(null);
 
@@ -21,21 +24,21 @@ export default function SettingsView() {
         const data = await getUserSettings();
         loadAllSettings(data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Error al cargar configuración');
+        setError(err instanceof Error ? err.message : t('common.error'));
       } finally {
         setSettingsLoading(false);
       }
     }
 
     loadSettings();
-  }, []);
+  }, [t]);
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
           <i className="fas fa-spinner fa-spin text-4xl text-primary mb-4"></i>
-          <p className="text-state-disabled">Cargando configuración...</p>
+          <p className="text-state-disabled">{t('common.loading')}</p>
         </div>
       </div>
     );
@@ -50,7 +53,7 @@ export default function SettingsView() {
           onClick={() => window.location.reload()}
           className="mt-4 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90"
         >
-          Reintentar
+          {t('common.retry')}
         </button>
       </div>
     );
@@ -69,5 +72,13 @@ export default function SettingsView() {
         {currentSection === 'about' && <AboutSection />}
       </div>
     </div>
+  );
+}
+
+export default function SettingsView() {
+  return (
+    <I18nProvider>
+      <SettingsContent />
+    </I18nProvider>
   );
 }

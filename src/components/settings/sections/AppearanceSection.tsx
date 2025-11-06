@@ -1,10 +1,12 @@
 import { useStore } from '@nanostores/react';
+import { useTranslation } from 'react-i18next';
 import { settingsStore, setTheme, setSettingsSaving, markSettingsSaved } from '@/stores/settingsStore';
 import { updateAppearance } from '@/services/settingsService';
 import { toast } from '@/stores/toastStore';
 import type { Theme } from '@/types/settings';
 
 export default function AppearanceSection() {
+  const { t } = useTranslation();
   const { settings, isSaving } = useStore(settingsStore);
   const { theme } = settings.appearance;
 
@@ -14,9 +16,9 @@ export default function AppearanceSection() {
       setTheme(newTheme);
       await updateAppearance(newTheme);
       markSettingsSaved();
-      toast.success('Tema actualizado correctamente');
+      toast.success(t('settings.appearanceSection.successTheme'));
     } catch (error) {
-      toast.error('Error al actualizar tema');
+      toast.error(t('settings.appearanceSection.errorTheme'));
     } finally {
       setSettingsSaving(false);
     }
@@ -25,32 +27,32 @@ export default function AppearanceSection() {
   const themes: { value: Theme; label: string; icon: string; description: string }[] = [
     {
       value: 'light',
-      label: 'Claro',
+      label: t('settings.appearanceSection.light'),
       icon: 'fa-sun',
-      description: 'Modo claro para mejor visibilidad durante el día',
+      description: t('settings.appearanceSection.lightDesc'),
     },
     {
       value: 'dark',
-      label: 'Oscuro',
+      label: t('settings.appearanceSection.dark'),
       icon: 'fa-moon',
-      description: 'Modo oscuro para reducir la fatiga visual',
+      description: t('settings.appearanceSection.darkDesc'),
     },
     {
       value: 'system',
-      label: 'Sistema',
+      label: t('settings.appearanceSection.system'),
       icon: 'fa-circle-half-stroke',
-      description: 'Usa la configuración de tu sistema operativo',
+      description: t('settings.appearanceSection.systemDesc'),
     },
   ];
 
   return (
     <div className="bg-white rounded-lg border border-outline p-6">
-      <h2 className="text-2xl font-bold text-state-idle mb-6">Apariencia</h2>
+      <h2 className="text-2xl font-bold text-state-idle mb-6">{t('settings.appearanceSection.title')}</h2>
 
       <div>
-        <h3 className="text-lg font-semibold text-state-idle mb-4">Tema</h3>
+        <h3 className="text-lg font-semibold text-state-idle mb-4">{t('settings.appearanceSection.theme')}</h3>
         <p className="text-sm text-state-disabled mb-6">
-          Selecciona el tema de la interfaz. El modo oscuro estará disponible en la próxima versión.
+          {t('settings.appearanceSection.themeDesc')}
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -75,7 +77,7 @@ export default function AppearanceSection() {
                   <p className="font-semibold text-state-idle">
                     {themeOption.label}
                     {themeOption.value !== 'light' && (
-                      <span className="ml-2 text-xs text-state-disabled">(Próximamente)</span>
+                      <span className="ml-2 text-xs text-state-disabled">({t('settings.languageSection.comingSoon')})</span>
                     )}
                   </p>
                   <p className="text-sm text-state-disabled mt-1">{themeOption.description}</p>

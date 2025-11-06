@@ -1,9 +1,11 @@
 import { useStore } from '@nanostores/react';
+import { useTranslation } from 'react-i18next';
 import { settingsStore, setNotifications, setSettingsSaving, markSettingsSaved } from '@/stores/settingsStore';
 import { updateNotifications } from '@/services/settingsService';
 import { toast } from '@/stores/toastStore';
 
 export default function NotificationsSection() {
+  const { t } = useTranslation();
   const { settings, isSaving } = useStore(settingsStore);
   const { notifications } = settings;
 
@@ -21,9 +23,9 @@ export default function NotificationsSection() {
       setNotifications(updated);
       await updateNotifications(updated);
       markSettingsSaved();
-      toast.success('Notificaciones actualizadas');
+      toast.success(t('settings.notificationsSection.successUpdate'));
     } catch (error) {
-      toast.error('Error al actualizar notificaciones');
+      toast.error(t('settings.notificationsSection.errorUpdate'));
     } finally {
       setSettingsSaving(false);
     }
@@ -37,9 +39,9 @@ export default function NotificationsSection() {
       setNotifications(updated);
       await updateNotifications(updated);
       markSettingsSaved();
-      toast.success('Frecuencia actualizada');
+      toast.success(t('settings.notificationsSection.successFrequency'));
     } catch (error) {
-      toast.error('Error al actualizar frecuencia');
+      toast.error(t('settings.notificationsSection.errorFrequency'));
     } finally {
       setSettingsSaving(false);
     }
@@ -63,16 +65,16 @@ export default function NotificationsSection() {
 
   return (
     <div className="bg-white rounded-lg border border-outline p-6 space-y-8">
-      <h2 className="text-2xl font-bold text-state-idle">Notificaciones</h2>
+      <h2 className="text-2xl font-bold text-state-idle">{t('settings.notificationsSection.title')}</h2>
 
       {/* Notificaciones por email */}
       <div className="pb-8 border-b border-outline">
-        <h3 className="text-lg font-semibold text-state-idle mb-4">Notificaciones por email</h3>
+        <h3 className="text-lg font-semibold text-state-idle mb-4">{t('settings.notificationsSection.emailNotifications')}</h3>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-state-idle font-medium">Resumen semanal de diagnósticos</p>
-              <p className="text-sm text-state-disabled">Recibe un resumen cada semana</p>
+              <p className="text-state-idle font-medium">{t('settings.notificationsSection.weeklyReport')}</p>
+              <p className="text-sm text-state-disabled">{t('settings.notificationsSection.weeklyReportDesc')}</p>
             </div>
             <Toggle
               checked={notifications.email.weeklyReport}
@@ -83,8 +85,8 @@ export default function NotificationsSection() {
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-state-idle font-medium">Alertas críticas</p>
-              <p className="text-sm text-state-disabled">Notificaciones de severidad alta</p>
+              <p className="text-state-idle font-medium">{t('settings.notificationsSection.criticalAlerts')}</p>
+              <p className="text-sm text-state-disabled">{t('settings.notificationsSection.criticalAlertsDesc')}</p>
             </div>
             <Toggle
               checked={notifications.email.criticalAlerts}
@@ -95,8 +97,8 @@ export default function NotificationsSection() {
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-state-idle font-medium">Recordatorios de parcelas</p>
-              <p className="text-sm text-state-disabled">Recordatorios de parcelas sin revisar</p>
+              <p className="text-state-idle font-medium">{t('settings.notificationsSection.plotReminders')}</p>
+              <p className="text-sm text-state-disabled">{t('settings.notificationsSection.plotRemindersDesc')}</p>
             </div>
             <Toggle
               checked={notifications.email.plotReminders}
@@ -109,12 +111,12 @@ export default function NotificationsSection() {
 
       {/* Notificaciones en la app */}
       <div className="pb-8 border-b border-outline">
-        <h3 className="text-lg font-semibold text-state-idle mb-4">Notificaciones en la app</h3>
+        <h3 className="text-lg font-semibold text-state-idle mb-4">{t('settings.notificationsSection.inAppNotifications')}</h3>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-state-idle font-medium">Sonido activado</p>
-              <p className="text-sm text-state-disabled">Reproducir sonido al recibir notificación</p>
+              <p className="text-state-idle font-medium">{t('settings.notificationsSection.sound')}</p>
+              <p className="text-sm text-state-disabled">{t('settings.notificationsSection.soundDesc')}</p>
             </div>
             <Toggle
               checked={notifications.inApp.sound}
@@ -125,8 +127,8 @@ export default function NotificationsSection() {
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-state-idle font-medium">Mostrar en badge</p>
-              <p className="text-sm text-state-disabled">Mostrar contador de notificaciones</p>
+              <p className="text-state-idle font-medium">{t('settings.notificationsSection.badge')}</p>
+              <p className="text-sm text-state-disabled">{t('settings.notificationsSection.badgeDesc')}</p>
             </div>
             <Toggle
               checked={notifications.inApp.badge}
@@ -137,8 +139,8 @@ export default function NotificationsSection() {
 
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-state-idle font-medium">Notificaciones de sistema</p>
-              <p className="text-sm text-state-disabled">Mostrar notificaciones del sistema operativo</p>
+              <p className="text-state-idle font-medium">{t('settings.notificationsSection.systemNotifications')}</p>
+              <p className="text-sm text-state-disabled">{t('settings.notificationsSection.systemNotificationsDesc')}</p>
             </div>
             <Toggle
               checked={notifications.inApp.system}
@@ -151,12 +153,12 @@ export default function NotificationsSection() {
 
       {/* Frecuencia */}
       <div>
-        <h3 className="text-lg font-semibold text-state-idle mb-4">Frecuencia</h3>
+        <h3 className="text-lg font-semibold text-state-idle mb-4">{t('settings.notificationsSection.frequency')}</h3>
         <div className="space-y-3">
           {[
-            { value: 'realtime', label: 'Tiempo real', description: 'Recibe notificaciones inmediatamente' },
-            { value: 'daily', label: 'Resumen diario', description: 'Una notificación por día' },
-            { value: 'weekly', label: 'Resumen semanal', description: 'Una notificación por semana' },
+            { value: 'realtime', label: t('settings.notificationsSection.realtime'), description: t('settings.notificationsSection.realtimeDesc') },
+            { value: 'daily', label: t('settings.notificationsSection.daily'), description: t('settings.notificationsSection.dailyDesc') },
+            { value: 'weekly', label: t('settings.notificationsSection.weekly'), description: t('settings.notificationsSection.weeklyDesc') },
           ].map(option => (
             <label
               key={option.value}

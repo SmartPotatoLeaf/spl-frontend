@@ -1,4 +1,5 @@
 import { useStore } from '@nanostores/react';
+import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { settingsStore, updateSecuritySettings, setSettingsSaving, markSettingsSaved } from '@/stores/settingsStore';
 import { changePassword, calculatePasswordStrength } from '@/services/settingsService';
@@ -6,6 +7,7 @@ import { toast } from '@/stores/toastStore';
 import type { ChangePasswordData } from '@/types/settings';
 
 export default function SecuritySection() {
+  const { t } = useTranslation();
   const { settings, isSaving } = useStore(settingsStore);
   const { security } = settings;
   
@@ -54,12 +56,12 @@ export default function SecuritySection() {
 
   const handleChangePassword = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      toast.error('Las contraseñas no coinciden');
+      toast.error(t('settings.securitySection.errorPasswordsMatch'));
       return;
     }
 
     if (passwordData.newPassword.length < 8) {
-      toast.error('La contraseña debe tener al menos 8 caracteres');
+      toast.error(t('settings.securitySection.errorPasswordLength'));
       return;
     }
 
@@ -76,9 +78,9 @@ export default function SecuritySection() {
       markSettingsSaved();
       setShowChangePassword(false);
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
-      toast.success('Contraseña cambiada correctamente');
+      toast.success(t('settings.securitySection.successPassword'));
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'Error al cambiar contraseña');
+      toast.error(error instanceof Error ? error.message : t('settings.securitySection.errorPassword'));
     } finally {
       setSettingsSaving(false);
     }
@@ -96,15 +98,15 @@ export default function SecuritySection() {
 
   return (
     <div className="bg-white rounded-lg border border-outline p-6 space-y-8">
-      <h2 className="text-2xl font-bold text-state-idle">Seguridad</h2>
+      <h2 className="text-2xl font-bold text-state-idle">{t('settings.securitySection.title')}</h2>
 
       {/* Contraseña */}
       <div className="pb-8 border-b border-outline">
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h3 className="text-lg font-semibold text-state-idle">Contraseña</h3>
+            <h3 className="text-lg font-semibold text-state-idle">{t('settings.securitySection.password')}</h3>
             <p className="text-sm text-state-disabled mt-1">
-              Cambie su contraseña regularmente para mantener su cuenta segura
+              {t('settings.securitySection.passwordDesc')}
             </p>
           </div>
           {!showChangePassword && (
@@ -112,18 +114,18 @@ export default function SecuritySection() {
               onClick={() => setShowChangePassword(true)}
               className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90"
             >
-              Cambiar contraseña
+              {t('settings.securitySection.changePassword')}
             </button>
           )}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
           <div>
-            <label className="text-sm text-state-disabled">Última modificación</label>
+            <label className="text-sm text-state-disabled">{t('settings.securitySection.lastChange')}</label>
             <p className="text-state-idle font-medium">{formatDate(security.lastPasswordChange)}</p>
           </div>
           <div>
-            <label className="text-sm text-state-disabled">Fuerza de contraseña</label>
+            <label className="text-sm text-state-disabled">{t('settings.securitySection.strength')}</label>
             <p className={`font-medium ${getStrengthColor(security.passwordStrength)}`}>
               {getStrengthLabel(security.passwordStrength)}
             </p>
@@ -134,7 +136,7 @@ export default function SecuritySection() {
           <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
             <div>
               <label htmlFor="currentPassword" className="block text-sm font-medium text-state-idle mb-2">
-                Contraseña actual
+                {t('settings.securitySection.currentPassword')}
               </label>
               <div className="relative">
                 <input
@@ -143,7 +145,7 @@ export default function SecuritySection() {
                   value={passwordData.currentPassword}
                   onChange={e => setPasswordData({ ...passwordData, currentPassword: e.target.value })}
                   className="w-full px-4 py-2 pr-10 border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Introduce tu contraseña actual"
+                  placeholder={t('settings.securitySection.placeholderCurrent')}
                 />
                 <button
                   type="button"
@@ -157,7 +159,7 @@ export default function SecuritySection() {
 
             <div>
               <label htmlFor="newPassword" className="block text-sm font-medium text-state-idle mb-2">
-                Nueva contraseña
+                {t('settings.securitySection.newPassword')}
               </label>
               <div className="relative">
                 <input
@@ -166,7 +168,7 @@ export default function SecuritySection() {
                   value={passwordData.newPassword}
                   onChange={e => setPasswordData({ ...passwordData, newPassword: e.target.value })}
                   className="w-full px-4 py-2 pr-10 border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Introduce la nueva contraseña"
+                  placeholder={t('settings.securitySection.placeholderNew')}
                 />
                 <button
                   type="button"
@@ -180,7 +182,7 @@ export default function SecuritySection() {
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-state-idle mb-2">
-                Confirmar nueva contraseña
+                {t('settings.securitySection.confirmPassword')}
               </label>
               <div className="relative">
                 <input
@@ -189,7 +191,7 @@ export default function SecuritySection() {
                   value={passwordData.confirmPassword}
                   onChange={e => setPasswordData({ ...passwordData, confirmPassword: e.target.value })}
                   className="w-full px-4 py-2 pr-10 border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
-                  placeholder="Confirma la nueva contraseña"
+                  placeholder={t('settings.securitySection.placeholderConfirm')}
                 />
                 <button
                   type="button"
@@ -208,7 +210,7 @@ export default function SecuritySection() {
                 className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
               >
                 {isSaving && <i className="fas fa-spinner fa-spin"></i>}
-                Guardar cambios
+                {t('common.save')}
               </button>
               <button
                 onClick={() => {
@@ -218,7 +220,7 @@ export default function SecuritySection() {
                 disabled={isSaving}
                 className="px-6 py-2 border border-outline text-state-idle rounded-lg hover:bg-gray-50 disabled:opacity-50"
               >
-                Cancelar
+                {t('common.cancel')}
               </button>
             </div>
           </div>
@@ -227,7 +229,7 @@ export default function SecuritySection() {
 
       {/* Registro de actividad */}
       <div>
-        <h3 className="text-lg font-semibold text-state-idle mb-4">Registro de actividad</h3>
+        <h3 className="text-lg font-semibold text-state-idle mb-4">{t('settings.securitySection.activityLog')}</h3>
         <div className="space-y-3">
           {security.recentActivity.map(activity => (
             <div key={activity.id} className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
