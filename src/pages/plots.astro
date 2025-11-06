@@ -1,0 +1,18 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import PlotsListView from '@/components/plots/PlotsListView';
+import { getAllPlots } from '@/services/plotService';
+
+const plots = await getAllPlots();
+const plotsJson = JSON.stringify(plots, (key, value) => 
+  typeof value === 'bigint' ? value.toString() : value
+);
+---
+
+<DashboardLayout 
+  title="Mis Parcelas - Smart Potato Leaf" 
+  description="Gestión de parcelas de cultivo"
+  activeRoute="parcelas"
+>
+  <PlotsListView client:load initialPlots={plotsJson} />
+</DashboardLayout>

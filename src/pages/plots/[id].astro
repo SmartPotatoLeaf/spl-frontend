@@ -1,0 +1,24 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import PlotDetailView from '@/components/plots/PlotDetailView';
+
+export const prerender = false;
+
+// @ts-ignore - Astro.params works correctly in .astro files
+const id = Astro.params.id;
+
+if (!id) {
+  return new Response(null, {
+    status: 302,
+    headers: { Location: '/plots' }
+  });
+}
+---
+
+<DashboardLayout 
+  title="Detalles de Parcela - Smart Potato Leaf"
+  description="Análisis detallado de la parcela"
+  activeRoute="parcelas"
+>
+  <PlotDetailView plotId={id} client:load />
+</DashboardLayout>

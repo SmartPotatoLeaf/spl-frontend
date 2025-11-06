@@ -1,0 +1,24 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import EditPlotView from '@/components/plots/EditPlotView';
+
+export const prerender = false;
+
+// @ts-ignore - Astro.params works correctly in .astro files
+const id = Astro.params.id;
+
+if (!id) {
+  return new Response(null, {
+    status: 302,
+    headers: { Location: '/plots' }
+  });
+}
+---
+
+<DashboardLayout 
+  title="Editar Parcela - Smart Potato Leaf"
+  description="Editar información de la parcela"
+  activeRoute="parcelas"
+>
+  <EditPlotView plotId={id} client:load />
+</DashboardLayout>
