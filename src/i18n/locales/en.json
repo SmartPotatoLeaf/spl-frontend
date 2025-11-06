@@ -489,5 +489,95 @@
     "error": "Error loading dashboard",
     "errorMessage": "Error loading data",
     "retry": "Retry"
+  },
+  "landing": {
+    "header": {
+      "appName": "SmartPotatoLeaf",
+      "login": "Log In",
+      "register": "Sign Up"
+    },
+    "hero": {
+      "title": "Detect Late Blight",
+      "titleHighlight": "Early",
+      "description": "SmartPotatoLeaf uses artificial intelligence and Deep Learning to diagnose Phytophthora infestans in your potato crops before it's too late.",
+      "ctaLogin": "Log In",
+      "ctaDemo": "Watch Demo",
+      "stat1Value": "98%",
+      "stat1Label": "Diagnostic Accuracy",
+      "stat2Value": "24hrs",
+      "stat2Label": "Early Detection",
+      "cardTitle": "Crop Analysis",
+      "cardStatus": "Healthy Leaf",
+      "cardConfidence": "96% Confidence",
+      "cardLocation": "Plot C - Ayacucho Region",
+      "cardStatusLabel": "Status",
+      "cardLocationLabel": "Location"
+    },
+    "problem": {
+      "title": "Late Blight is a",
+      "titleHighlight": "Real Crisis",
+      "subtitle": "Phytophthora infestans causes devastating losses in potato crops",
+      "card1Title": "Destroys Harvests",
+      "card1Description": "Late blight, caused by the fungus Phytophthora infestans, is one of the most destructive diseases affecting potato crops in Peru. This disease can rapidly devastate harvests.",
+      "card2Title": "Late Diagnosis",
+      "card2Description": "Late and inaccurate diagnosis of late blight, caused by inexperience or incorrect visual diagnosis by the farmer, causes the disease to spread excessively until it is too late to control it.",
+      "card3Title": "Economic Impact",
+      "card3Description": "Significant economic losses for small and medium farmers in Peru and Latin America, affecting their livelihood and food security."
+    },
+    "solution": {
+      "title": "The",
+      "titleHighlight": "Smart Solution",
+      "subtitle": "Deep Learning technology at the service of the farmer",
+      "card1Title": "Advanced AI",
+      "card1Description": "Deep Learning algorithm trained with thousands of real crop images for maximum detection accuracy.",
+      "card2Title": "Easy to Use",
+      "card2Description": "Just take a photo with your phone. Get instant results in seconds from the app.",
+      "card3Title": "Immediate Action",
+      "card3Description": "Get personalized recommendations to act quickly and save your harvest.",
+      "ctaTitle": "Start Now for Free",
+      "ctaSubtitle": "Register on SmartPotatoLeaf and protect your crops today",
+      "ctaButton": "Create Account"
+    },
+    "features": {
+      "title": "Key Features",
+      "subtitle": "Everything you need to protect your crops",
+      "feature1Title": "Early Detection",
+      "feature1Description": "Identify late blight in early stages before it spreads",
+      "feature2Title": "Detailed History",
+      "feature2Description": "Save all your diagnostics for continuous tracking",
+      "feature3Title": "Personalized Recommendations",
+      "feature3Description": "Get recommended actions based on the diagnostic result",
+      "stat1Value": "98%",
+      "stat1Label": "Accuracy",
+      "stat2Value": "100%",
+      "stat2Label": "Secure",
+      "stat3Value": "24/7",
+      "stat3Label": "Available",
+      "stat4Value": "2s",
+      "stat4Label": "Diagnosis"
+    },
+    "stats": {
+      "title": "Used by Farmers Across",
+      "titleHighlight": "All Peru",
+      "subtitle": "Hundreds of farmers are already using SmartPotatoLeaf to protect their crops from late blight. Join the community of smart farmers.",
+      "benefit1": "Free for the first diagnosis",
+      "benefit2": "No special software needed",
+      "benefit3": "Spanish support",
+      "stat1Value": "500+",
+      "stat1Label": "Active Farmers",
+      "stat2Value": "50K+",
+      "stat2Label": "Diagnostics Performed",
+      "stat3Value": "5M+",
+      "stat3Label": "Protected Plants",
+      "stat4Value": "98%",
+      "stat4Label": "Satisfaction"
+    },
+    "cta": {
+      "title": "Ready to Protect Your Crops?",
+      "subtitle": "Join hundreds of farmers who are already detecting late blight early and saving their harvests.",
+      "buttonRegister": "Sign Up Now",
+      "buttonContact": "Contact Support",
+      "note": "No credit card required · Available on iOS and Android · Spanish support"
+    }
   }
 }
