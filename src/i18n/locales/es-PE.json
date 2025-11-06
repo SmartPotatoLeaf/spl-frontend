@@ -489,5 +489,95 @@
     "error": "Error al cargar el dashboard",
     "errorMessage": "Error al cargar datos",
     "retry": "Reintentar"
+  },
+  "landing": {
+    "header": {
+      "appName": "SmartPotatoLeaf",
+      "login": "Ingresar",
+      "register": "Registrarse"
+    },
+    "hero": {
+      "title": "Detecta la Rancha",
+      "titleHighlight": "Tempranamente",
+      "description": "SmartPotatoLeaf utiliza inteligencia artificial y Deep Learning para diagnosticar la Phytophthora infestans en tus cultivos de papa antes de que sea demasiado tarde.",
+      "ctaLogin": "Iniciar sesión",
+      "ctaDemo": "Ver demo",
+      "stat1Value": "98%",
+      "stat1Label": "Precisión en diagnóstico",
+      "stat2Value": "24hrs",
+      "stat2Label": "Detección temprana",
+      "cardTitle": "Análisis de cultivo",
+      "cardStatus": "Hoja Sana",
+      "cardConfidence": "96% Confianza",
+      "cardLocation": "Parcela C - Región Ayacucho",
+      "cardStatusLabel": "Estado",
+      "cardLocationLabel": "Ubicación"
+    },
+    "problem": {
+      "title": "La Rancha es una",
+      "titleHighlight": "Crisis Real",
+      "subtitle": "La Phytophthora infestans causa pérdidas devastadoras en cultivos de papa",
+      "card1Title": "Destruye Cosechas",
+      "card1Description": "La rancha, causada por el hongo Phytophthora infestans, es una de las enfermedades más destructivas que afectan los cultivos de papa en el Perú. Esta enfermedad puede devastar rápidamente las cosechas.",
+      "card2Title": "Diagnóstico Tardío",
+      "card2Description": "El diagnóstico tardío e impreciso de la rancha, causado por la inexperiencia o un diagnóstico visual erróneo por parte del agricultor, provoca que la enfermedad se propague en exceso hasta que ya es demasiado tarde para controlarla.",
+      "card3Title": "Impacto Económico",
+      "card3Description": "Pérdidas económicas significativas para pequeños y medianos agricultores en Perú y América Latina, afectando su sustento y seguridad alimentaria."
+    },
+    "solution": {
+      "title": "La Solución",
+      "titleHighlight": "Inteligente",
+      "subtitle": "Tecnología de Deep Learning al servicio del agricultor",
+      "card1Title": "IA Avanzada",
+      "card1Description": "Algoritmo de Deep Learning entrenado con miles de imágenes de cultivos reales para máxima precisión en la detección.",
+      "card2Title": "Fácil de Usar",
+      "card2Description": "Solo toma una foto con tu teléfono. Obtén resultados instantáneos en segundos desde la app.",
+      "card3Title": "Acción Inmediata",
+      "card3Description": "Recibe recomendaciones personalizadas para actuar rápidamente y salvar tu cosecha.",
+      "ctaTitle": "Comienza Ahora Gratis",
+      "ctaSubtitle": "Regístrate en SmartPotatoLeaf y protege tus cultivos hoy mismo",
+      "ctaButton": "Crear Cuenta"
+    },
+    "features": {
+      "title": "Características Principales",
+      "subtitle": "Todo lo que necesitas para proteger tus cultivos",
+      "feature1Title": "Detección Temprana",
+      "feature1Description": "Identifica la rancha en estadios iniciales antes de que se propague",
+      "feature2Title": "Historial Detallado",
+      "feature2Description": "Guarda todos tus diagnósticos para hacer seguimiento continuo",
+      "feature3Title": "Recomendaciones Personalizadas",
+      "feature3Description": "Obtén acciones recomendadas según el resultado del diagnóstico",
+      "stat1Value": "98%",
+      "stat1Label": "Precisión",
+      "stat2Value": "100%",
+      "stat2Label": "Seguro",
+      "stat3Value": "24/7",
+      "stat3Label": "Disponible",
+      "stat4Value": "2s",
+      "stat4Label": "Diagnóstico"
+    },
+    "stats": {
+      "title": "Utilizado por Agricultores en",
+      "titleHighlight": "Todo Perú",
+      "subtitle": "Cientos de agricultores ya están utilizando SmartPotatoLeaf para proteger sus cultivos de la rancha. Únete a la comunidad de agricultores inteligentes.",
+      "benefit1": "Gratis para el primer diagnóstico",
+      "benefit2": "Sin necesidad de software especial",
+      "benefit3": "Soporte en español",
+      "stat1Value": "500+",
+      "stat1Label": "Agricultores Activos",
+      "stat2Value": "50K+",
+      "stat2Label": "Diagnósticos Realizados",
+      "stat3Value": "5M+",
+      "stat3Label": "Plantas Protegidas",
+      "stat4Value": "98%",
+      "stat4Label": "Satisfacción"
+    },
+    "cta": {
+      "title": "¿Listo para Proteger tus Cultivos?",
+      "subtitle": "Únete a cientos de agricultores que ya están detectando la rancha tempranamente y salvando sus cosechas.",
+      "buttonRegister": "Registrarse Ahora",
+      "buttonContact": "Contactar Soporte",
+      "note": "No requiere tarjeta de crédito · Disponible en iOS y Android · Soporte en español"
+    }
   }
 }

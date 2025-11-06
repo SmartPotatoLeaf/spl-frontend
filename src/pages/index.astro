@@ -1,20 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import HeaderWrapper from "../components/landing/HeaderWrapper";
+import LandingPage from "../components/landing/LandingPage";
+import FooterWrapper from "../components/layout/FooterWrapper";
+import SmoothScroll from "../components/shared/SmoothScroll";
+import MicroInteractions from "../components/shared/MicroInteractions";
 ---
 
-<Layout title="Smart Potato Leaf">
-  <main class="min-h-screen flex items-center justify-center">
-    <div class="text-center">
-      <h1 class="text-4xl font-bold text-primary mb-4">Smart Potato Leaf</h1>
-      <p class="text-state-idle mb-8">
-        Sistema de detección de Phytophthora infestans
-      </p>
-      <a
-        href="/auth"
-        class="inline-block px-6 py-3 bg-primary text-white font-medium rounded-lg hover:bg-primary/90 transition-colors"
-      >
-        Comenzar
-      </a>
-    </div>
-  </main>
+<Layout title="Smart Potato Leaf - Detección de Rancha con IA">
+  <SmoothScroll client:load />
+  <MicroInteractions client:load />
+  <HeaderWrapper client:load />
+  <LandingPage client:load />
+  <FooterWrapper client:load />
 </Layout>
