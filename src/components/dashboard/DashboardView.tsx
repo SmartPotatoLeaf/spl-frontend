@@ -38,10 +38,25 @@ export default function DashboardView() {
     }, 300);
   };
 
+  const handleExportPDF = () => {
+    console.log('Exporting dashboard to PDF...');
+  };
+
   return (
     <div className="min-h-screen">
       <div className="mb-6 sm:mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-state-idle mb-4">{t('dashboard.title')}</h1>
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 mb-4">
+          <h1 className="text-2xl sm:text-3xl font-bold text-state-idle">
+            {t('dashboard.title')}
+          </h1>
+          <button
+            onClick={handleExportPDF}
+            className="inline-flex items-center justify-center gap-2 bg-white text-state-idle border border-outline px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors"
+          >
+            <i className="far fa-file-pdf"></i>
+            {t('history.exportPDF')}
+          </button>
+        </div>
         
         <div className="relative bg-white rounded-lg border border-outline p-1.5 inline-flex gap-1">
           <div
