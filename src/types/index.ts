@@ -3,3 +3,4 @@ export * from './app';
 export * from './auth';
 export * from './dashboard';
 export * from './plot';
+export * from './upload';

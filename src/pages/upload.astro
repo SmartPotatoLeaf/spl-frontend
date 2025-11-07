@@ -1,0 +1,8 @@
+---
+import DashboardLayout from '@/layouts/DashboardLayout.astro';
+import UploadImage from '@/components/upload/UploadImage';
+---
+
+<DashboardLayout title="Subir imagen - Smart Potato Leaf" activeRoute="upload">
+  <UploadImage client:load />
+</DashboardLayout>
