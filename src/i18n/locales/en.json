@@ -684,11 +684,11 @@
     },
     "assignPlotModal": {
       "title": "Assign plot",
-      "description": "Select an existing plot or create a new one",
+      "description": "Select an existing plot for this diagnosis",
       "selectPlot": "Select plot",
       "selectPlaceholder": "Choose a plot...",
       "noPlots": "No plots available",
-      "orCreateNew": "Or create new plot",
+      "orCreateNew": "Go to My plots to create a new one",
       "plotName": "Plot name",
       "plotNamePlaceholder": "E.g: Plot A",
       "plotDescription": "Description",

@@ -684,11 +684,11 @@
     },
     "assignPlotModal": {
       "title": "Asignar parcela",
-      "description": "Seleccione una parcela existente o cree una nueva",
+      "description": "Seleccione una parcela existente para este diagnóstico",
       "selectPlot": "Seleccionar parcela",
       "selectPlaceholder": "Elija una parcela...",
       "noPlots": "No hay parcelas disponibles",
-      "orCreateNew": "O crear nueva parcela",
+      "orCreateNew": "Ir a Mis parcelas para crear una nueva",
       "plotName": "Nombre de la parcela",
       "plotNamePlaceholder": "Ej: Parcela A",
       "plotDescription": "Descripción",
