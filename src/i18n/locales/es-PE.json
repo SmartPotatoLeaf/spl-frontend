@@ -574,10 +574,8 @@
     },
     "cta": {
       "title": "¿Listo para Proteger tus Cultivos?",
-      "subtitle": "Únete a cientos de agricultores que ya están detectando la rancha tempranamente y salvando sus cosechas.",
-      "buttonRegister": "Registrarse Ahora",
-      "buttonContact": "Contactar Soporte",
-      "note": "No requiere tarjeta de crédito · Disponible en iOS y Android · Soporte en español"
+      "subtitle": "Descarga la app y únete a cientos de agricultores que ya están detectando la rancha tempranamente y salvando sus cosechas.",
+      "note": "Disponible en iOS y Android · Diagnóstico instantáneo · Soporte en español"
     }
   }
 }

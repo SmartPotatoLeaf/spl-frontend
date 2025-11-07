@@ -574,10 +574,8 @@
     },
     "cta": {
       "title": "Ready to Protect Your Crops?",
-      "subtitle": "Join hundreds of farmers who are already detecting late blight early and saving their harvests.",
-      "buttonRegister": "Sign Up Now",
-      "buttonContact": "Contact Support",
-      "note": "No credit card required · Available on iOS and Android · Spanish support"
+      "subtitle": "Download the app and join hundreds of farmers who are already detecting late blight early and saving their harvests.",
+      "note": "Available on iOS and Android · Instant diagnosis · Spanish support"
     }
   }
 }

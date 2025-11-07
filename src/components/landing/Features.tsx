@@ -177,6 +177,7 @@ export default function Features() {
                 width={600}
                 height={400}
                 aspectRatio="3/2"
+                priority={true}
               />
             </div>
           </div>

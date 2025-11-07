@@ -3,6 +3,8 @@ import { useTranslation } from 'react-i18next';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import AppStore from '../layout/AppStore';
+import GooglePlay from '../layout/GooglePlay';
 
 export default function CTA() {
   const { t } = useTranslation();
@@ -78,21 +80,28 @@ export default function CTA() {
 
   return (
     <section ref={sectionRef} id="contacto" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
-      <div className="max-w-4xl mx-auto text-center">
-        <h2 ref={titleRef} className="text-4xl sm:text-5xl md:text-6xl font-bold text-state-idle mb-6">
+      <div className="max-w-4xl mx-auto flex flex-col items-center text-center gap-12">
+        <h2 ref={titleRef} className="text-4xl sm:text-5xl md:text-6xl font-bold text-state-idle">
           {t('landing.cta.title')}
         </h2>
-        <p ref={subtitleRef} className="text-lg sm:text-xl text-state-idle/70 mb-12 leading-relaxed">
+        <p ref={subtitleRef} className="text-lg sm:text-xl text-state-idle/70 leading-relaxed">
           {t('landing.cta.subtitle')}
         </p>
 
-        <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8 max-w-2xl mx-auto">
+        <div ref={buttonsRef} className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <a
-            href="mailto:soporte@smartpotatoleaf.com"
-            style={{ borderColor: 'var(--color-primary)', color: 'var(--color-primary)' }}
-            className="px-8 sm:px-10 py-3 sm:py-4 border-2 font-bold text-base sm:text-lg rounded-lg hover:bg-gray-100 transition-colors w-full sm:w-auto"
+            href="#"
+            className="transition-transform hover:scale-105 w-44 sm:w-48"
+            aria-label="Descargar en Google Play"
           >
-            {t('landing.cta.buttonContact')}
+            <GooglePlay className="w-full h-auto" />
+          </a>
+          <a
+            href="#"
+            className="transition-transform hover:scale-105 w-44 sm:w-48"
+            aria-label="Descargar en App Store"
+          >
+            <AppStore className="w-full h-auto" />
           </a>
         </div>
 
