@@ -19,6 +19,7 @@ export interface DashboardState {
   
   comparativeData: ComparativeData | null;
   selectedPlots: [string | null, string | null];
+  comparativeFilters: DashboardFilters;
   isLoadingComparative: boolean;
 }
 
@@ -28,6 +29,8 @@ export const dashboardStore = map<DashboardState>({
   trendData: [],
   recentDiagnostics: [],
   filters: {
+    dateFrom: undefined,
+    dateTo: undefined,
     severity: 'all',
     plotId: 'all',
   },
@@ -36,6 +39,11 @@ export const dashboardStore = map<DashboardState>({
   
   comparativeData: null,
   selectedPlots: [null, null],
+  comparativeFilters: {
+    dateFrom: undefined,
+    dateTo: undefined,
+    severity: 'all',
+  },
   isLoadingComparative: false,
 });
 
@@ -74,6 +82,11 @@ export function setDashboardFilters(filters: Partial<DashboardFilters>) {
   dashboardStore.setKey('filters', { ...currentFilters, ...filters });
 }
 
+export function setComparativeFilters(filters: Partial<DashboardFilters>) {
+  const currentFilters = dashboardStore.get().comparativeFilters;
+  dashboardStore.setKey('comparativeFilters', { ...currentFilters, ...filters });
+}
+
 export function setSelectedPlots(plot1Id: string | null, plot2Id: string | null) {
   dashboardStore.setKey('selectedPlots', [plot1Id, plot2Id]);
 }
@@ -94,6 +107,8 @@ export function resetDashboard() {
     trendData: [],
     recentDiagnostics: [],
     filters: {
+      dateFrom: undefined,
+      dateTo: undefined,
       severity: 'all',
       plotId: 'all',
     },
@@ -101,6 +116,11 @@ export function resetDashboard() {
     error: null,
     comparativeData: null,
     selectedPlots: [null, null],
+    comparativeFilters: {
+      dateFrom: undefined,
+      dateTo: undefined,
+      severity: 'all',
+    },
     isLoadingComparative: false,
   });
 }

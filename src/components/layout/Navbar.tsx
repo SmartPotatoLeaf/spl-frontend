@@ -53,23 +53,8 @@ export default function Navbar({ activeRoute = 'home' }: NavbarProps) {
             ))}
           </div>
 
-          {/* Buscador y Acciones */}
+          {/* Acciones */}
           <div className="flex items-center gap-3 sm:gap-4">
-            {/* Buscador (Desktop) */}
-            <div className="hidden md:flex items-center relative">
-              <i className="fas fa-search absolute left-3 text-state-idle text-sm"></i>
-              <input
-                type="search"
-                placeholder={t('nav.searchPlaceholder')}
-                className="pl-10 pr-4 py-2 text-sm border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-primary w-64 lg:w-80"
-              />
-            </div>
-
-            {/* Botón buscar móvil */}
-            <button className="md:hidden p-2 text-state-idle hover:text-primary transition-colors">
-              <i className="fas fa-search text-lg"></i>
-            </button>
-
             {/* Settings */}
             <a href="/settings" className="p-2 text-state-idle hover:text-primary transition-colors">
               <i className="fas fa-cog text-lg"></i>

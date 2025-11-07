@@ -7,8 +7,21 @@ export default function DashboardFilters() {
   const { filters } = useStore(dashboardStore);
   const { plots } = useStore(plotsStore);
 
-  const handleFilterChange = (key: string, value: string) => {
+  const handleDateChange = (key: 'dateFrom' | 'dateTo', value: string) => {
+    setDashboardFilters({ [key]: value ? new Date(value) : undefined });
+  };
+
+  const handleSelectChange = (key: 'severity' | 'plotId', value: string) => {
     setDashboardFilters({ [key]: value === 'all' ? 'all' : value });
+  };
+
+  const handleReset = () => {
+    setDashboardFilters({ 
+      dateFrom: undefined, 
+      dateTo: undefined, 
+      severity: 'all', 
+      plotId: 'all' 
+    });
   };
 
   return (
@@ -30,7 +43,7 @@ export default function DashboardFilters() {
               id="filter-date-from"
               className="px-3 py-2 border border-outline rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-full sm:w-auto"
               value={filters.dateFrom ? filters.dateFrom.toISOString().split('T')[0] : ''}
-              onChange={(e) => handleFilterChange('dateFrom', e.target.value)}
+              onChange={(e) => handleDateChange('dateFrom', e.target.value)}
             />
           </div>
 
@@ -43,7 +56,7 @@ export default function DashboardFilters() {
               id="filter-date-to"
               className="px-3 py-2 border border-outline rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-full sm:w-auto"
               value={filters.dateTo ? filters.dateTo.toISOString().split('T')[0] : ''}
-              onChange={(e) => handleFilterChange('dateTo', e.target.value)}
+              onChange={(e) => handleDateChange('dateTo', e.target.value)}
             />
           </div>
 
@@ -55,7 +68,7 @@ export default function DashboardFilters() {
               id="filter-severity"
               className="px-3 py-2 border border-outline rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-full sm:w-auto"
               value={filters.severity || 'all'}
-              onChange={(e) => handleFilterChange('severity', e.target.value)}
+              onChange={(e) => handleSelectChange('severity', e.target.value)}
             >
               <option value="all">{t('dashboard.filters.allSeverities')}</option>
               <option value="healthy">{t('dashboard.categories.healthy')}</option>
@@ -73,7 +86,7 @@ export default function DashboardFilters() {
               id="filter-plot"
               className="px-3 py-2 border border-outline rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-full sm:w-auto"
               value={filters.plotId || 'all'}
-              onChange={(e) => handleFilterChange('plotId', e.target.value)}
+              onChange={(e) => handleSelectChange('plotId', e.target.value)}
             >
               <option value="all">{t('dashboard.filters.allPlots')}</option>
               {plots.map(plot => (
@@ -85,14 +98,7 @@ export default function DashboardFilters() {
           </div>
 
           <button
-            onClick={() => {
-              setDashboardFilters({ 
-                dateFrom: undefined, 
-                dateTo: undefined, 
-                severity: 'all', 
-                plotId: 'all' 
-              });
-            }}
+            onClick={handleReset}
             className="px-4 py-2 text-sm text-primary hover:bg-primary/10 rounded-lg transition-colors whitespace-nowrap"
           >
             <i className="fas fa-redo mr-2"></i>

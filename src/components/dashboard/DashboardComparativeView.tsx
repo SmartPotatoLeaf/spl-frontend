@@ -1,7 +1,8 @@
 import { Line, Doughnut } from 'react-chartjs-2';
 import { useTranslation } from 'react-i18next';
+import { useStore } from '@nanostores/react';
 import type { ComparativeData } from '@/types';
-import { setComparativeData, setSelectedPlots } from '@/stores';
+import { dashboardStore, setComparativeData, setSelectedPlots, setComparativeFilters } from '@/stores';
 
 interface DashboardComparativeViewProps {
   data: ComparativeData;
@@ -9,11 +10,28 @@ interface DashboardComparativeViewProps {
 
 export default function DashboardComparativeView({ data }: DashboardComparativeViewProps) {
   const { t } = useTranslation();
+  const { comparativeFilters } = useStore(dashboardStore);
   const { plot1, plot2 } = data;
 
   const handleReset = () => {
     setSelectedPlots(null, null);
     setComparativeData(null);
+  };
+
+  const handleDateChange = (key: 'dateFrom' | 'dateTo', value: string) => {
+    setComparativeFilters({ [key]: value ? new Date(value) : undefined });
+  };
+
+  const handleSelectChange = (key: 'severity', value: string) => {
+    setComparativeFilters({ [key]: value as any });
+  };
+
+  const handleResetFilters = () => {
+    setComparativeFilters({ 
+      dateFrom: undefined, 
+      dateTo: undefined, 
+      severity: 'all'
+    });
   };
 
   const createTrendChartData = (plotData: typeof plot1) => ({
@@ -110,6 +128,71 @@ export default function DashboardComparativeView({ data }: DashboardComparativeV
           <i className="fas fa-arrow-left"></i>
           {t('dashboard.comparative.selectOthers')}
         </button>
+      </div>
+
+      {/* Filtros comparativos */}
+      <div className="bg-white rounded-lg border border-outline p-4 sm:p-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+          <div className="flex items-center gap-2 text-state-idle">
+            <i className="fas fa-filter"></i>
+            <span className="font-medium">{t('dashboard.filters.title')}</span>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 w-full sm:w-auto">
+            <div className="flex items-center gap-2">
+              <label htmlFor="comp-filter-date-from" className="text-sm text-state-disabled whitespace-nowrap">
+                <i className="fas fa-calendar mr-1"></i>
+                {t('dashboard.filters.dateFrom')}
+              </label>
+              <input
+                type="date"
+                id="comp-filter-date-from"
+                className="px-3 py-2 border border-outline rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-full sm:w-auto"
+                value={comparativeFilters.dateFrom ? comparativeFilters.dateFrom.toISOString().split('T')[0] : ''}
+                onChange={(e) => handleDateChange('dateFrom', e.target.value)}
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <label htmlFor="comp-filter-date-to" className="text-sm text-state-disabled whitespace-nowrap">
+                {t('dashboard.filters.dateTo')}
+              </label>
+              <input
+                type="date"
+                id="comp-filter-date-to"
+                className="px-3 py-2 border border-outline rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-full sm:w-auto"
+                value={comparativeFilters.dateTo ? comparativeFilters.dateTo.toISOString().split('T')[0] : ''}
+                onChange={(e) => handleDateChange('dateTo', e.target.value)}
+              />
+            </div>
+
+            <div className="flex items-center gap-2">
+              <label htmlFor="comp-filter-severity" className="text-sm text-state-disabled">
+                {t('dashboard.filters.severity')}
+              </label>
+              <select
+                id="comp-filter-severity"
+                className="px-3 py-2 border border-outline rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary w-full sm:w-auto"
+                value={comparativeFilters.severity || 'all'}
+                onChange={(e) => handleSelectChange('severity', e.target.value)}
+              >
+                <option value="all">{t('dashboard.filters.allSeverities')}</option>
+                <option value="healthy">{t('dashboard.categories.healthy')}</option>
+                <option value="low">{t('dashboard.categories.low')}</option>
+                <option value="moderate">{t('dashboard.categories.moderate')}</option>
+                <option value="severe">{t('dashboard.categories.severe')}</option>
+              </select>
+            </div>
+
+            <button
+              onClick={handleResetFilters}
+              className="px-4 py-2 text-sm text-primary hover:bg-primary/10 rounded-lg transition-colors whitespace-nowrap"
+            >
+              <i className="fas fa-redo mr-2"></i>
+              {t('dashboard.filters.resetFilters')}
+            </button>
+          </div>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

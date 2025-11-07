@@ -11,6 +11,7 @@ export {
   setDashboardLoading, 
   setDashboardError,
   setDashboardFilters,
+  setComparativeFilters,
   setSelectedPlots,
   setComparativeData,
   setComparativeLoading,
