@@ -577,5 +577,79 @@
       "subtitle": "Descarga la app y únete a cientos de agricultores que ya están detectando la rancha tempranamente y salvando sus cosechas.",
       "note": "Disponible en iOS y Android · Diagnóstico instantáneo · Soporte en español"
     }
+  },
+  "upload": {
+    "guide": {
+      "title": "Guía fotográfica para móviles para obtener los mejores resultados",
+      "closeUp": {
+        "title": "Primer plano",
+        "description": "Asegúrese de tomar imágenes claras y en primer plano de las zonas afectadas o de una sola hoja."
+      },
+      "goodLight": {
+        "title": "Buena iluminación",
+        "description": "Utiliza luz natural, evita las sombras fuertes y asegúrate de que el enfoque sea nítido."
+      },
+      "isolated": {
+        "title": "Hoja aislada",
+        "description": "Enmarca una sola hoja o un pequeño racimo sobre un fondo neutro."
+      }
+    },
+    "section": {
+      "title": "Sube una imagen de hoja de papa",
+      "description": "Arrastre y suelte aquí la foto de su hoja, o haga clic para seleccionar un archivo de su ordenador. Asegúrese de que la imagen es clara, está bien iluminada y muestra toda la hoja para un diagnóstico preciso."
+    },
+    "zone": {
+      "dragDrop": "Arrastre y suelte la imagen aquí o",
+      "orClick": "o haga clic para buscar en su dispositivo",
+      "browse": "Buscar imagen",
+      "formats": "Formatos soportados: JPEG, PNG · Tamaño máximo: 10MB · Dimensiones mínimas: 224x224px",
+      "dropHere": "Suelte la imagen aquí",
+      "validating": "Validando imagen..."
+    },
+    "processing": {
+      "optimizing": "Optimizando imagen",
+      "analyzing": "Analizando imagen",
+      "loading": "Procesando",
+      "resizing": "Ajustando dimensiones para el modelo ResNet50...",
+      "wait": "Por favor espere mientras procesamos su imagen..."
+    },
+    "preview": {
+      "status": "Estado",
+      "ready": "Lista",
+      "size": "Dimensiones",
+      "fileSize": "Peso",
+      "format": "Formato",
+      "optimized": "Imagen optimizada.",
+      "optimizedDesc": "La imagen ha sido redimensionada a 224×224px y optimizada para obtener los mejores resultados con nuestro modelo de IA.",
+      "analyze": "Analizar ahora",
+      "uploadAnother": "Subir otra imagen"
+    },
+    "crop": {
+      "title": "Ajustar área de análisis",
+      "description": "Mueve y ajusta el recuadro para seleccionar la parte de la imagen que deseas analizar.",
+      "cropArea": "Área de recorte",
+      "zoomIn": "Acercar",
+      "zoomOut": "Alejar",
+      "apply": "Aplicar recorte",
+      "instructions": {
+        "title": "Cómo usar el editor:",
+        "drag": "Arrastra el recuadro para mover el área de recorte",
+        "zoom": "Usa los botones + y - para acercar o alejar la imagen",
+        "center": "Asegúrate de que la hoja esté centrada en el recuadro verde"
+      }
+    },
+    "errors": {
+      "noFile": "No se seleccionó ningún archivo",
+      "invalidFormat": "Formato no soportado. Use JPEG o PNG",
+      "fileTooLarge": "La imagen es muy grande. Máximo {{max}}MB",
+      "imageTooSmall": "La imagen es muy pequeña. Mínimo {{minWidth}}x{{minHeight}}px",
+      "cannotReadImage": "No se pudo leer la imagen",
+      "canvasError": "No se pudo crear el contexto del canvas",
+      "processingError": "No se pudo procesar la imagen",
+      "loadImageError": "No se pudo cargar la imagen",
+      "validationError": "Error de validación",
+      "dimensionsError": "Error de dimensiones",
+      "analyzeError": "Error al analizar la imagen"
+    }
   }
 }

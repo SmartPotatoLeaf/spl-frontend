@@ -577,5 +577,79 @@
       "subtitle": "Download the app and join hundreds of farmers who are already detecting late blight early and saving their harvests.",
       "note": "Available on iOS and Android · Instant diagnosis · Spanish support"
     }
+  },
+  "upload": {
+    "guide": {
+      "title": "Mobile photographic guide for best results",
+      "closeUp": {
+        "title": "Close-up",
+        "description": "Be sure to take clear, close-up images of affected areas or a single leaf."
+      },
+      "goodLight": {
+        "title": "Good lighting",
+        "description": "Use natural light, avoid harsh shadows, and make sure the focus is sharp."
+      },
+      "isolated": {
+        "title": "Isolated leaf",
+        "description": "Frame a single leaf or small cluster against a neutral background."
+      }
+    },
+    "section": {
+      "title": "Upload a potato leaf image",
+      "description": "Drag and drop your leaf photo here, or click to select a file from your computer. Make sure the image is clear, well-lit, and shows the entire leaf for an accurate diagnosis."
+    },
+    "zone": {
+      "dragDrop": "Drag and drop image here or",
+      "orClick": "or click to browse your device",
+      "browse": "Browse image",
+      "formats": "Supported formats: JPEG, PNG · Max size: 10MB · Min dimensions: 224x224px",
+      "dropHere": "Drop image here",
+      "validating": "Validating image..."
+    },
+    "processing": {
+      "optimizing": "Optimizing image",
+      "analyzing": "Analyzing image",
+      "loading": "Processing",
+      "resizing": "Adjusting dimensions for ResNet50 model...",
+      "wait": "Please wait while we process your image..."
+    },
+    "preview": {
+      "status": "Status",
+      "ready": "Ready",
+      "size": "Dimensions",
+      "fileSize": "Size",
+      "format": "Format",
+      "optimized": "Image optimized.",
+      "optimizedDesc": "The image has been resized to 224×224px and optimized for best results with our AI model.",
+      "analyze": "Analyze now",
+      "uploadAnother": "Upload another image"
+    },
+    "crop": {
+      "title": "Adjust analysis area",
+      "description": "Move and adjust the box to select the part of the image you want to analyze.",
+      "cropArea": "Crop area",
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "apply": "Apply crop",
+      "instructions": {
+        "title": "How to use the editor:",
+        "drag": "Drag the box to move the crop area",
+        "zoom": "Use the + and - buttons to zoom in or out",
+        "center": "Make sure the leaf is centered in the green box"
+      }
+    },
+    "errors": {
+      "noFile": "No file selected",
+      "invalidFormat": "Unsupported format. Use JPEG or PNG",
+      "fileTooLarge": "Image is too large. Maximum {{max}}MB",
+      "imageTooSmall": "Image is too small. Minimum {{minWidth}}x{{minHeight}}px",
+      "cannotReadImage": "Could not read image",
+      "canvasError": "Could not create canvas context",
+      "processingError": "Could not process image",
+      "loadImageError": "Could not load image",
+      "validationError": "Validation error",
+      "dimensionsError": "Dimensions error",
+      "analyzeError": "Error analyzing image"
+    }
   }
 }
