@@ -1,5 +1,5 @@
 import { useStore } from '@nanostores/react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { dashboardStore, plotsStore, setSelectedPlots, setComparativeData, setComparativeLoading } from '@/stores';
 import { getComparativeData } from '@/services/dashboardService';
@@ -8,11 +8,29 @@ import DashboardComparativeView from './DashboardComparativeView';
 
 export default function DashboardComparative() {
   const { t } = useTranslation();
-  const { selectedPlots, comparativeData, isLoadingComparative } = useStore(dashboardStore);
+  const { selectedPlots, comparativeData, comparativeFilters, isLoadingComparative } = useStore(dashboardStore);
   const { plots } = useStore(plotsStore);
   
   const [localPlot1, setLocalPlot1] = useState<string>('');
   const [localPlot2, setLocalPlot2] = useState<string>('');
+
+  useEffect(() => {
+    if (comparativeData && selectedPlots[0] && selectedPlots[1]) {
+      loadComparativeData();
+    }
+  }, [comparativeFilters]);
+
+  const loadComparativeData = async () => {
+    if (!selectedPlots[0] || !selectedPlots[1]) return;
+    
+    try {
+      setComparativeLoading(true);
+      const data = await getComparativeData(selectedPlots[0], selectedPlots[1], comparativeFilters);
+      setComparativeData(data);
+    } catch (err) {
+      toast.error(t('dashboard.comparative.errorComparison'), err instanceof Error ? err.message : t('dashboard.comparative.errorComparisonMessage'));
+    }
+  };
 
   const handleCompare = async () => {
     if (!localPlot1 || !localPlot2) {
@@ -29,7 +47,7 @@ export default function DashboardComparative() {
       setComparativeLoading(true);
       setSelectedPlots(localPlot1, localPlot2);
       
-      const data = await getComparativeData(localPlot1, localPlot2);
+      const data = await getComparativeData(localPlot1, localPlot2, comparativeFilters);
       setComparativeData(data);
     } catch (err) {
       toast.error(t('dashboard.comparative.errorComparison'), err instanceof Error ? err.message : t('dashboard.comparative.errorComparisonMessage'));

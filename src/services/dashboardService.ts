@@ -51,12 +51,16 @@ export async function getRecentDiagnostics(limit: number = 10): Promise<Diagnost
   return response.json();
 }
 
-export async function getComparativeData(plot1Id: string, plot2Id: string): Promise<ComparativeData> {
+export async function getComparativeData(plot1Id: string, plot2Id: string, filters?: DashboardFilters): Promise<ComparativeData> {
   if (USE_MOCK) {
-    return mockGetComparativeData(plot1Id, plot2Id);
+    return mockGetComparativeData(plot1Id, plot2Id, filters);
   }
   
-  const response = await fetch(`/api/dashboard/compare?plot1=${plot1Id}&plot2=${plot2Id}`);
+  const response = await fetch(`/api/dashboard/compare?plot1=${plot1Id}&plot2=${plot2Id}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(filters),
+  });
   
   if (!response.ok) throw new Error('Error al obtener datos comparativos');
   return response.json();
@@ -67,10 +71,31 @@ function mockGetDashboardStats(filters?: DashboardFilters): Promise<DashboardSta
     setTimeout(() => {
       let diagnostics = [...diagnosticsData];
       
-      if (filters?.plotId && filters.plotId !== 'all') {
-        diagnostics = diagnostics.filter(d => d.location?.includes(filters.plotId!));
+      // Filtrar por fecha
+      if (filters?.dateFrom) {
+        diagnostics = diagnostics.filter(d => {
+          const diagDate = new Date(d.predictedAt);
+          return diagDate >= filters.dateFrom!;
+        });
       }
       
+      if (filters?.dateTo) {
+        diagnostics = diagnostics.filter(d => {
+          const diagDate = new Date(d.predictedAt);
+          return diagDate <= filters.dateTo!;
+        });
+      }
+      
+      // Filtrar por parcela
+      if (filters?.plotId && filters.plotId !== 'all') {
+        // Buscar el nombre de la parcela por ID
+        const plot = plotsData.find(p => p.id === filters.plotId);
+        if (plot) {
+          diagnostics = diagnostics.filter(d => d.location === plot.name);
+        }
+      }
+      
+      // Filtrar por severidad
       if (filters?.severity && filters.severity !== 'all') {
         diagnostics = diagnostics.filter(d => d.status === filters.severity);
       }
@@ -112,13 +137,60 @@ function mockGetDashboardStats(filters?: DashboardFilters): Promise<DashboardSta
 function mockGetTrendData(filters?: DashboardFilters): Promise<TrendDataPoint[]> {
   return new Promise((resolve) => {
     setTimeout(() => {
-      const trendData: TrendDataPoint[] = [
-        { month: 'Ene', healthy: 45, low: 12, moderate: 8, severe: 5 },
-        { month: 'Feb', healthy: 52, low: 15, moderate: 10, severe: 8 },
-        { month: 'Mar', healthy: 48, low: 18, moderate: 12, severe: 7 },
-        { month: 'Abr', healthy: 55, low: 20, moderate: 15, severe: 10 },
-        { month: 'May', healthy: 60, low: 18, moderate: 12, severe: 8 },
-      ];
+      let diagnostics = [...diagnosticsData];
+      
+      // Aplicar los mismos filtros que en las stats
+      if (filters?.dateFrom) {
+        diagnostics = diagnostics.filter(d => {
+          const diagDate = new Date(d.predictedAt);
+          return diagDate >= filters.dateFrom!;
+        });
+      }
+      
+      if (filters?.dateTo) {
+        diagnostics = diagnostics.filter(d => {
+          const diagDate = new Date(d.predictedAt);
+          return diagDate <= filters.dateTo!;
+        });
+      }
+      
+      if (filters?.plotId && filters.plotId !== 'all') {
+        const plot = plotsData.find(p => p.id === filters.plotId);
+        if (plot) {
+          diagnostics = diagnostics.filter(d => d.location === plot.name);
+        }
+      }
+      
+      if (filters?.severity && filters.severity !== 'all') {
+        diagnostics = diagnostics.filter(d => d.status === filters.severity);
+      }
+      
+      // Agrupar diagnósticos reales por mes
+      const monthMap = new Map<string, { healthy: number; low: number; moderate: number; severe: number }>();
+      const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+      
+      diagnostics.forEach(d => {
+        const date = new Date(d.predictedAt);
+        const monthKey = monthNames[date.getMonth()];
+        
+        if (!monthMap.has(monthKey)) {
+          monthMap.set(monthKey, { healthy: 0, low: 0, moderate: 0, severe: 0 });
+        }
+        
+        const monthData = monthMap.get(monthKey)!;
+        monthData[d.status as keyof typeof monthData]++;
+      });
+      
+      // Convertir a array de TrendDataPoint, ordenado por meses
+      const trendData: TrendDataPoint[] = monthNames
+        .map(month => ({
+          month,
+          healthy: monthMap.get(month)?.healthy || 0,
+          low: monthMap.get(month)?.low || 0,
+          moderate: monthMap.get(month)?.moderate || 0,
+          severe: monthMap.get(month)?.severe || 0,
+        }))
+        .filter(point => point.healthy + point.low + point.moderate + point.severe > 0); // Solo meses con data
       
       resolve(trendData);
     }, 500);
@@ -145,7 +217,7 @@ function mockGetRecentDiagnostics(limit: number): Promise<Diagnostic[]> {
   });
 }
 
-function mockGetComparativeData(plot1Id: string, plot2Id: string): Promise<ComparativeData> {
+function mockGetComparativeData(plot1Id: string, plot2Id: string, filters?: DashboardFilters): Promise<ComparativeData> {
   return new Promise((resolve) => {
     setTimeout(() => {
       const plot1 = plotsData.find(p => p.id === plot1Id);
@@ -155,46 +227,98 @@ function mockGetComparativeData(plot1Id: string, plot2Id: string): Promise<Compa
         throw new Error('Parcelas no encontradas');
       }
       
-      const createPlotData = (plot: typeof plot1) => ({
-        plotId: plot.id,
-        plotName: plot.name,
-        stats: {
-          weekStats: {
-            currentWeek: plot.diagnosticsCount,
-            percentageChange: Math.random() * 20 - 10,
+      const createPlotData = (plot: typeof plot1) => {
+        // Filtrar diagnósticos de esta parcela
+        let plotDiagnostics = diagnosticsData.filter(d => d.location === plot.name);
+        
+        // Aplicar filtros de fecha
+        if (filters?.dateFrom) {
+          plotDiagnostics = plotDiagnostics.filter(d => {
+            const diagDate = new Date(d.predictedAt);
+            return diagDate >= filters.dateFrom!;
+          });
+        }
+        
+        if (filters?.dateTo) {
+          plotDiagnostics = plotDiagnostics.filter(d => {
+            const diagDate = new Date(d.predictedAt);
+            return diagDate <= filters.dateTo!;
+          });
+        }
+        
+        // Aplicar filtro de severidad
+        if (filters?.severity && filters.severity !== 'all') {
+          plotDiagnostics = plotDiagnostics.filter(d => d.status === filters.severity);
+        }
+        
+        const healthyCount = plotDiagnostics.filter(d => d.status === 'healthy').length;
+        const lowCount = plotDiagnostics.filter(d => d.status === 'low').length;
+        const moderateCount = plotDiagnostics.filter(d => d.status === 'moderate').length;
+        const severeCount = plotDiagnostics.filter(d => d.status === 'severe').length;
+        const totalCount = plotDiagnostics.length;
+        
+        // Agrupar diagnósticos reales por mes para esta parcela
+        const monthMap = new Map<string, { healthy: number; low: number; moderate: number; severe: number }>();
+        const monthNames = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        
+        plotDiagnostics.forEach(d => {
+          const date = new Date(d.predictedAt);
+          const monthKey = monthNames[date.getMonth()];
+          
+          if (!monthMap.has(monthKey)) {
+            monthMap.set(monthKey, { healthy: 0, low: 0, moderate: 0, severe: 0 });
+          }
+          
+          const monthData = monthMap.get(monthKey)!;
+          monthData[d.status as keyof typeof monthData]++;
+        });
+        
+        // Convertir a array de TrendDataPoint
+        const trendData: TrendDataPoint[] = monthNames
+          .map(month => ({
+            month,
+            healthy: monthMap.get(month)?.healthy || 0,
+            low: monthMap.get(month)?.low || 0,
+            moderate: monthMap.get(month)?.moderate || 0,
+            severe: monthMap.get(month)?.severe || 0,
+          }))
+          .filter(point => point.healthy + point.low + point.moderate + point.severe > 0);
+        
+        return {
+          plotId: plot.id,
+          plotName: plot.name,
+          stats: {
+            weekStats: {
+              currentWeek: totalCount,
+              percentageChange: Math.random() * 20 - 10,
+            },
+            generalStats: {
+              healthyPercentage: totalCount > 0 ? (healthyCount / totalCount) * 100 : 0,
+              percentageChange: Math.random() * 10 - 5,
+            },
+            severityAverage: {
+              value: 1.2 + Math.random() * 1.5,
+              change: Math.random() * 0.4 - 0.2,
+            },
+            summary: {
+              healthy: healthyCount,
+              low: lowCount,
+              moderate: moderateCount,
+              severe: severeCount,
+              total: totalCount,
+            },
+            totalPlots: 1,
           },
-          generalStats: {
-            healthyPercentage: (plot.healthyCount / plot.diagnosticsCount) * 100,
-            percentageChange: Math.random() * 10 - 5,
-          },
-          severityAverage: {
-            value: 1.2 + Math.random() * 1.5,
-            change: Math.random() * 0.4 - 0.2,
-          },
+          trendData,
           summary: {
-            healthy: plot.healthyCount,
-            low: Math.floor(plot.infectedCount * 0.3),
-            moderate: Math.floor(plot.infectedCount * 0.4),
-            severe: Math.floor(plot.infectedCount * 0.3),
-            total: plot.diagnosticsCount,
+            healthy: healthyCount,
+            low: lowCount,
+            moderate: moderateCount,
+            severe: severeCount,
+            total: totalCount,
           },
-          totalPlots: 1,
-        },
-        trendData: [
-          { month: 'Ene', healthy: 20, low: 5, moderate: 3, severe: 2 },
-          { month: 'Feb', healthy: 25, low: 6, moderate: 4, severe: 3 },
-          { month: 'Mar', healthy: 22, low: 7, moderate: 5, severe: 3 },
-          { month: 'Abr', healthy: 28, low: 8, moderate: 6, severe: 4 },
-          { month: 'May', healthy: 30, low: 7, moderate: 5, severe: 3 },
-        ],
-        summary: {
-          healthy: plot.healthyCount,
-          low: Math.floor(plot.infectedCount * 0.3),
-          moderate: Math.floor(plot.infectedCount * 0.4),
-          severe: Math.floor(plot.infectedCount * 0.3),
-          total: plot.diagnosticsCount,
-        },
-      });
+        };
+      };
       
       const data: ComparativeData = {
         plot1: createPlotData(plot1),
