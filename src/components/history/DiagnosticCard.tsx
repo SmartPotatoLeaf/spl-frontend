@@ -91,7 +91,7 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
 
         <div className="pt-3 border-t border-outline">
           <a
-            href={`/diagnostico/${diagnostic.predictionId}`}
+            href={`/leaf/${diagnostic.predictionId}`}
             className="block w-full text-center py-2 rounded-lg bg-gray-50 text-state-idle text-sm font-medium hover:bg-gray-100 transition-colors"
           >
             {t('history.card.viewDetails')}

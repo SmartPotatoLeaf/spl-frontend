@@ -95,16 +95,10 @@ export default function UploadImage() {
         setUploadState((prev) => ({ ...prev, progress: i }));
       }
 
-      // TODO: Redirigir al resultado cuando se conecte la API
-      // window.location.href = '/result/' + predictionId;
-      
-      // Por ahora, resetear el estado
-      setUploadState({
-        status: 'idle',
-        progress: 0,
-        error: null,
-        processedImage: null,
-      });
+      // TODO: Cuando se conecte la API, obtener el predictionId real
+      // Por ahora, simulamos redirección a resultado con ID de ejemplo
+      const predictionId = '1';
+      window.location.href = `/leaf/${predictionId}`;
     } catch (error) {
       setUploadState((prev) => ({
         ...prev,

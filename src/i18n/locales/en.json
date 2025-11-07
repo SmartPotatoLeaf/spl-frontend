@@ -651,5 +651,72 @@
       "dimensionsError": "Dimensions error",
       "analyzeError": "Error analyzing image"
     }
+  },
+  "leaf": {
+    "title": "Analyzed image",
+    "backToHistory": "Back to history",
+    "actions": {
+      "title": "Actions",
+      "assignPlot": "Assign plot",
+      "exportReport": "Export report",
+      "incorrectDiagnosis": "Incorrect diagnosis",
+      "deleteDiagnosis": "Delete diagnosis"
+    },
+    "details": {
+      "title": "Diagnosis details",
+      "confidenceLevel": "Confidence level",
+      "estimatedSeverity": "Estimated severity",
+      "infectedArea": "Infected area",
+      "analysisTime": "Analysis time",
+      "plot": "Plot",
+      "noPlot": "No plot",
+      "severity": {
+        "healthy": "Healthy",
+        "low": "Low severity",
+        "moderate": "Moderate severity",
+        "severe": "Severe severity"
+      }
+    },
+    "recommendations": {
+      "title": "Recommendations for {{severity}} level",
+      "treatment": "Treatment",
+      "nextSteps": "Next steps"
+    },
+    "assignPlotModal": {
+      "title": "Assign plot",
+      "description": "Select an existing plot or create a new one",
+      "selectPlot": "Select plot",
+      "selectPlaceholder": "Choose a plot...",
+      "noPlots": "No plots available",
+      "orCreateNew": "Or create new plot",
+      "plotName": "Plot name",
+      "plotNamePlaceholder": "E.g: Plot A",
+      "plotDescription": "Description",
+      "plotDescriptionPlaceholder": "E.g: Plot located in the north sector...",
+      "assign": "Assign",
+      "create": "Create and assign",
+      "assignSuccess": "Plot assigned successfully",
+      "createSuccess": "Plot created and assigned successfully",
+      "assignError": "Error assigning plot",
+      "createError": "Error creating plot"
+    },
+    "deleteModal": {
+      "title": "Delete diagnosis",
+      "description": "Are you sure you want to delete this diagnosis? This action cannot be undone.",
+      "confirm": "Yes, delete",
+      "deleteSuccess": "Diagnosis deleted successfully",
+      "deleteError": "Error deleting diagnosis"
+    },
+    "incorrectModal": {
+      "title": "Report incorrect diagnosis",
+      "description": "Help us improve our model. What is the correct diagnosis?",
+      "correctLabel": "Correct diagnosis",
+      "selectLabel": "Select the correct diagnosis...",
+      "comments": "Additional comments (optional)",
+      "commentsPlaceholder": "Describe what you observed on the leaf...",
+      "submit": "Submit report",
+      "submitSuccess": "Report submitted. Thank you for your help",
+      "submitError": "Error submitting report"
+    }
   }
 }

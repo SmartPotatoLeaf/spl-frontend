@@ -651,5 +651,72 @@
       "dimensionsError": "Error de dimensiones",
       "analyzeError": "Error al analizar la imagen"
     }
+  },
+  "leaf": {
+    "title": "Imagen analizada",
+    "backToHistory": "Volver al historial",
+    "actions": {
+      "title": "Acciones",
+      "assignPlot": "Asignar parcela",
+      "exportReport": "Exportar reporte",
+      "incorrectDiagnosis": "Diagnóstico incorrecto",
+      "deleteDiagnosis": "Eliminar diagnóstico"
+    },
+    "details": {
+      "title": "Detalles del diagnóstico",
+      "confidenceLevel": "Nivel de confianza",
+      "estimatedSeverity": "Severidad estimada",
+      "infectedArea": "Área infectada",
+      "analysisTime": "Hora de análisis",
+      "plot": "Parcela",
+      "noPlot": "Sin parcela",
+      "severity": {
+        "healthy": "Sin rancha",
+        "low": "Rancha leve",
+        "moderate": "Rancha moderada",
+        "severe": "Rancha severa"
+      }
+    },
+    "recommendations": {
+      "title": "Recomendaciones para un nivel {{severity}}",
+      "treatment": "Tratamiento",
+      "nextSteps": "Próximos pasos"
+    },
+    "assignPlotModal": {
+      "title": "Asignar parcela",
+      "description": "Seleccione una parcela existente o cree una nueva",
+      "selectPlot": "Seleccionar parcela",
+      "selectPlaceholder": "Elija una parcela...",
+      "noPlots": "No hay parcelas disponibles",
+      "orCreateNew": "O crear nueva parcela",
+      "plotName": "Nombre de la parcela",
+      "plotNamePlaceholder": "Ej: Parcela A",
+      "plotDescription": "Descripción",
+      "plotDescriptionPlaceholder": "Ej: Parcela ubicada en el sector norte...",
+      "assign": "Asignar",
+      "create": "Crear y asignar",
+      "assignSuccess": "Parcela asignada correctamente",
+      "createSuccess": "Parcela creada y asignada correctamente",
+      "assignError": "Error al asignar parcela",
+      "createError": "Error al crear parcela"
+    },
+    "deleteModal": {
+      "title": "Eliminar diagnóstico",
+      "description": "¿Está seguro de que desea eliminar este diagnóstico? Esta acción no se puede deshacer.",
+      "confirm": "Sí, eliminar",
+      "deleteSuccess": "Diagnóstico eliminado correctamente",
+      "deleteError": "Error al eliminar diagnóstico"
+    },
+    "incorrectModal": {
+      "title": "Reportar diagnóstico incorrecto",
+      "description": "Ayúdanos a mejorar nuestro modelo. ¿Cuál es el diagnóstico correcto?",
+      "correctLabel": "Diagnóstico correcto",
+      "selectLabel": "Seleccione el diagnóstico correcto...",
+      "comments": "Comentarios adicionales (opcional)",
+      "commentsPlaceholder": "Describe qué observaste en la hoja...",
+      "submit": "Enviar reporte",
+      "submitSuccess": "Reporte enviado. Gracias por tu ayuda",
+      "submitError": "Error al enviar reporte"
+    }
   }
 }
