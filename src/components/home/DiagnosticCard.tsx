@@ -80,7 +80,7 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
         </div>
 
         <a
-          href={`/diagnostico/${diagnostic.predictionId}`}
+          href={`/leaf/${diagnostic.predictionId}`}
           className="text-state-idle text-sm font-normal hover:underline shrink-0 hidden sm:block"
         >
           {t('home.recentDiagnostics.viewDetails')}
@@ -88,7 +88,7 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
       </div>
 
       <a
-        href={`/diagnostico/${diagnostic.predictionId}`}
+        href={`/leaf/${diagnostic.predictionId}`}
         className="text-state-idle text-sm font-normal hover:underline mt-3 block sm:hidden"
       >
         {t('home.recentDiagnostics.viewDetails')}
