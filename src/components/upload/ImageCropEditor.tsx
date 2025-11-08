@@ -35,6 +35,7 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const cropBoxRef = useRef<HTMLDivElement>(null);
+  const cropContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const url = URL.createObjectURL(file);
@@ -43,43 +44,7 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
     const img = new Image();
     img.onload = () => {
       setImageSize({ width: img.width, height: img.height });
-
-      if (containerRef.current) {
-        const containerWidth = containerRef.current.clientWidth;
-        const containerHeight = 500;
-        setContainerSize({ width: containerWidth, height: containerHeight });
-
-        // Calcular escala inicial para que la imagen quepa
-        const scaleX = containerWidth / img.width;
-        const scaleY = containerHeight / img.height;
-        const initialScale = Math.min(scaleX, scaleY, 1);
-        setScale(initialScale);
-
-        // Calcular escala mínima (el crop area de 224px debe caber)
-        const minScaleForCrop = 224 / Math.min(img.width, img.height);
-        setMinScale(Math.max(minScaleForCrop, 0.1));
-
-        // Calcular dimensiones y posición de la imagen escalada
-        const displayWidth = img.width * initialScale;
-        const displayHeight = img.height * initialScale;
-
-        // CENTRAR la imagen en el contenedor
-        const imageX = (containerWidth - displayWidth) / 2;
-        const imageY = (containerHeight - displayHeight) / 2;
-        setImagePosition({ x: imageX, y: imageY });
-
-        // Área de crop inicial (centrada sobre la imagen)
-        const cropSize = 224;
-        const cropX = imageX + (displayWidth - cropSize) / 2;
-        const cropY = imageY + (displayHeight - cropSize) / 2;
-
-        setCropArea({
-          x: cropX,
-          y: cropY,
-          width: cropSize,
-          height: cropSize,
-        });
-      }
+      initializeCropEditor(img.width, img.height);
     };
     img.src = url;
 
@@ -93,6 +58,63 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
 
     return () => URL.revokeObjectURL(url);
   }, [file]);
+
+  const initializeCropEditor = (imgWidth: number, imgHeight: number) => {
+    if (!cropContainerRef.current) return;
+
+    const containerWidth = cropContainerRef.current.clientWidth;
+    // Altura: en mobile usa aspect ratio, en desktop usa altura fija
+    const isMobile = window.innerWidth < 640;
+    const containerHeight = isMobile ? containerWidth : Math.min(containerWidth, 500);
+    
+    setContainerSize({ width: containerWidth, height: containerHeight });
+
+    // Calcular escala inicial para que la imagen quepa
+    const scaleX = containerWidth / imgWidth;
+    const scaleY = containerHeight / imgHeight;
+    const initialScale = Math.min(scaleX, scaleY, 1);
+    setScale(initialScale);
+
+    // Calcular escala mínima (el crop area de 224px debe caber)
+    const minScaleForCrop = 224 / Math.min(imgWidth, imgHeight);
+    setMinScale(Math.max(minScaleForCrop, 0.1));
+
+    // Calcular dimensiones y posición de la imagen escalada
+    const displayWidth = imgWidth * initialScale;
+    const displayHeight = imgHeight * initialScale;
+
+    // CENTRAR la imagen en el contenedor
+    const imageX = (containerWidth - displayWidth) / 2;
+    const imageY = (containerHeight - displayHeight) / 2;
+    setImagePosition({ x: imageX, y: imageY });
+
+    // Área de crop inicial (centrada sobre la imagen)
+    const cropSize = 224;
+    const cropX = imageX + (displayWidth - cropSize) / 2;
+    const cropY = imageY + (displayHeight - cropSize) / 2;
+
+    setCropArea({
+      x: cropX,
+      y: cropY,
+      width: cropSize,
+      height: cropSize,
+    });
+  };
+
+  // Observar cambios de tamaño del contenedor
+  useEffect(() => {
+    if (!cropContainerRef.current || !imageSize.width) return;
+
+    const observer = new ResizeObserver(() => {
+      if (imageSize.width && imageSize.height) {
+        initializeCropEditor(imageSize.width, imageSize.height);
+      }
+    });
+
+    observer.observe(cropContainerRef.current);
+
+    return () => observer.disconnect();
+  }, [imageSize]);
 
   const handleMouseDown = (e: React.MouseEvent, handle?: ResizeHandle) => {
     e.preventDefault();
@@ -314,23 +336,31 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
   };
 
   return (
-    <div ref={containerRef} className="max-w-4xl mx-auto px-4">
-      <div className="bg-white rounded-xl border border-outline overflow-hidden">
-        {/* Header */}
-        <div className="p-6 border-b border-outline">
-          <h3 className="text-xl font-bold text-state-idle mb-2">
+    <div ref={containerRef} className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Header móvil optimizado */}
+      <div className="bg-white border-b border-outline px-4 py-4 sm:px-6">
+        <div className="max-w-4xl mx-auto">
+          <h3 className="text-lg sm:text-xl font-bold text-state-idle mb-1">
             {t('upload.crop.title')}
           </h3>
-          <p className="text-sm text-state-disabled">
+          <p className="text-xs sm:text-sm text-state-disabled">
             {t('upload.crop.description')}
           </p>
         </div>
+      </div>
 
-        {/* Editor */}
-        <div className="p-6 bg-outline/10">
+      {/* Editor - Ocupa todo el espacio disponible */}
+      <div className="flex-1 flex flex-col p-4 sm:p-6 max-w-4xl mx-auto w-full">
+        <div className="bg-white rounded-lg sm:rounded-xl border border-outline overflow-hidden shadow-sm flex-1 flex flex-col">
           <div
-            className="relative mx-auto bg-state-disabled/20 rounded-lg overflow-hidden"
-            style={{ width: containerSize.width, height: 500 }}
+            ref={cropContainerRef}
+            className="relative mx-auto bg-state-disabled/20 flex-1"
+            style={{ 
+              width: '100%',
+              maxWidth: '800px',
+              height: containerSize.height > 0 ? `${containerSize.height}px` : '500px',
+              touchAction: 'none',
+            }}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
@@ -365,80 +395,99 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
               }}
               onMouseDown={(e) => handleMouseDown(e)}
             >
-              {/* Guías de regla de tercios */}
               <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 pointer-events-none">
                 {[...Array(9)].map((_, i) => (
                   <div key={i} className="border border-white/20" />
                 ))}
               </div>
 
-              {/* Esquinas para resize - CLICKEABLES */}
               <div
-                className="absolute -top-2 -left-2 w-4 h-4 bg-primary rounded-full cursor-nwse-resize z-10 border-2 border-white"
+                className="absolute -top-3 -left-3 w-8 h-8 sm:w-6 sm:h-6 bg-primary rounded-full cursor-nwse-resize z-10 border-3 sm:border-2 border-white shadow-lg"
                 onMouseDown={(e) => {
                   e.stopPropagation();
                   handleMouseDown(e, 'tl');
                 }}
+                onTouchStart={(e) => {
+                  e.stopPropagation();
+                  const touch = e.touches[0];
+                  handleMouseDown({ clientX: touch.clientX, clientY: touch.clientY, preventDefault: () => {}, stopPropagation: () => {} } as any, 'tl');
+                }}
               />
               <div
-                className="absolute -top-2 -right-2 w-4 h-4 bg-primary rounded-full cursor-nesw-resize z-10 border-2 border-white"
+                className="absolute -top-3 -right-3 w-8 h-8 sm:w-6 sm:h-6 bg-primary rounded-full cursor-nesw-resize z-10 border-3 sm:border-2 border-white shadow-lg"
                 onMouseDown={(e) => {
                   e.stopPropagation();
                   handleMouseDown(e, 'tr');
                 }}
+                onTouchStart={(e) => {
+                  e.stopPropagation();
+                  const touch = e.touches[0];
+                  handleMouseDown({ clientX: touch.clientX, clientY: touch.clientY, preventDefault: () => {}, stopPropagation: () => {} } as any, 'tr');
+                }}
               />
               <div
-                className="absolute -bottom-2 -left-2 w-4 h-4 bg-primary rounded-full cursor-nesw-resize z-10 border-2 border-white"
+                className="absolute -bottom-3 -left-3 w-8 h-8 sm:w-6 sm:h-6 bg-primary rounded-full cursor-nesw-resize z-10 border-3 sm:border-2 border-white shadow-lg"
                 onMouseDown={(e) => {
                   e.stopPropagation();
                   handleMouseDown(e, 'bl');
                 }}
+                onTouchStart={(e) => {
+                  e.stopPropagation();
+                  const touch = e.touches[0];
+                  handleMouseDown({ clientX: touch.clientX, clientY: touch.clientY, preventDefault: () => {}, stopPropagation: () => {} } as any, 'bl');
+                }}
               />
               <div
-                className="absolute -bottom-2 -right-2 w-4 h-4 bg-primary rounded-full cursor-nwse-resize z-10 border-2 border-white"
+                className="absolute -bottom-3 -right-3 w-8 h-8 sm:w-6 sm:h-6 bg-primary rounded-full cursor-nwse-resize z-10 border-3 sm:border-2 border-white shadow-lg"
                 onMouseDown={(e) => {
                   e.stopPropagation();
                   handleMouseDown(e, 'br');
                 }}
+                onTouchStart={(e) => {
+                  e.stopPropagation();
+                  const touch = e.touches[0];
+                  handleMouseDown({ clientX: touch.clientX, clientY: touch.clientY, preventDefault: () => {}, stopPropagation: () => {} } as any, 'br');
+                }}
               />
             </div>
 
-            {/* Info del crop */}
-            <div className="absolute top-4 left-4 bg-black/70 backdrop-blur-sm text-white text-xs px-3 py-2 rounded-lg">
-              <p className="font-bold mb-1">{t('upload.crop.cropArea')}</p>
-              <p>{Math.round(cropArea.width)} × {Math.round(cropArea.height)} px</p>
-              <p className="text-white/70 mt-1">→ 224 × 224 px</p>
+            <div className="absolute top-2 left-2 sm:top-4 sm:left-4 bg-black/80 backdrop-blur-sm text-white text-xs px-2 py-1.5 sm:px-3 sm:py-2 rounded-md sm:rounded-lg shadow-lg">
+              <p className="font-bold mb-0.5 sm:mb-1 text-[10px] sm:text-xs">{t('upload.crop.cropArea')}</p>
+              <p className="text-xs sm:text-sm">{Math.round(cropArea.width)} × {Math.round(cropArea.height)} px</p>
+              <p className="text-white/70 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">→ 224 × 224 px</p>
             </div>
           </div>
+        </div>
 
-          {/* Controles de zoom */}
-          <div className="flex items-center justify-center gap-4 mt-6">
+        <div className="px-4 py-3 sm:px-6 sm:py-4 bg-white border-t border-outline">
+          <div className="flex items-center justify-center gap-3 sm:gap-4">
             <button
               onClick={handleZoomOut}
-              className="w-10 h-10 flex items-center justify-center bg-white border border-outline rounded-lg hover:border-primary hover:text-primary transition-colors"
+              className="w-12 h-12 sm:w-10 sm:h-10 flex items-center justify-center bg-white border-2 border-outline rounded-lg hover:border-primary hover:text-primary transition-colors active:scale-95 touch-manipulation"
               title={t('upload.crop.zoomOut')}
             >
-              <i className="fas fa-minus"></i>
+              <i className="fas fa-minus text-lg sm:text-base"></i>
             </button>
 
-            <div className="flex items-center gap-2 px-4 py-2 bg-white border border-outline rounded-lg">
-              <i className="fas fa-search text-state-disabled"></i>
-              <span className="text-sm font-bold text-state-idle min-w-12 text-center">
+            <div className="flex items-center gap-2 px-4 py-2.5 sm:py-2 bg-outline/10 border border-outline rounded-lg">
+              <i className="fas fa-search text-state-disabled text-sm"></i>
+              <span className="text-base sm:text-sm font-bold text-state-idle min-w-14 sm:min-w-12 text-center">
                 {Math.round(scale * 100)}%
               </span>
             </div>
 
             <button
               onClick={handleZoomIn}
-              className="w-10 h-10 flex items-center justify-center bg-white border border-outline rounded-lg hover:border-primary hover:text-primary transition-colors"
+              className="w-12 h-12 sm:w-10 sm:h-10 flex items-center justify-center bg-white border-2 border-outline rounded-lg hover:border-primary hover:text-primary transition-colors active:scale-95 touch-manipulation"
               title={t('upload.crop.zoomIn')}
             >
-              <i className="fas fa-plus"></i>
+              <i className="fas fa-plus text-lg sm:text-base"></i>
             </button>
           </div>
+        </div>
 
-          {/* Instrucciones */}
-          <div className="mt-4 bg-primary/5 border border-primary/20 rounded-lg p-4">
+        <div className="hidden sm:block px-6 pb-4">
+          <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
             <div className="flex items-start gap-3">
               <i className="fas fa-info-circle text-primary mt-0.5"></i>
               <div className="flex-1 text-sm text-state-idle">
@@ -452,33 +501,36 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Botones de acción */}
-        <div className="p-6 border-t border-outline flex flex-col sm:flex-row gap-3">
+      <div className="bg-white border-t border-outline p-4 sm:p-6 mt-auto">
+        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3">
           <button
             onClick={handleCrop}
             className="
-              flex-1 px-6 py-3.5 bg-primary text-white rounded-lg
-              font-bold transition-all duration-300
-              hover:bg-primary/90 hover:shadow-lg hover:scale-[1.02]
+              flex-1 px-6 py-4 sm:py-3.5 bg-primary text-white rounded-lg
+              font-bold text-base sm:text-sm transition-all duration-300
+              hover:bg-primary/90 hover:shadow-lg
               active:scale-[0.98]
               flex items-center justify-center gap-2
+              touch-manipulation
             "
           >
-            <i className="fas fa-check"></i>
+            <i className="fas fa-check text-lg sm:text-base"></i>
             {t('upload.crop.apply')}
           </button>
 
           <button
             onClick={onCancel}
             className="
-              px-6 py-3.5 bg-white border-2 border-outline text-state-idle
-              rounded-lg font-medium transition-all duration-300
+              px-6 py-4 sm:py-3.5 bg-white border-2 border-outline text-state-idle
+              rounded-lg font-medium text-base sm:text-sm transition-all duration-300
               hover:border-error hover:text-error hover:bg-error/5
               flex items-center justify-center gap-2
+              touch-manipulation
             "
           >
-            <i className="fas fa-times"></i>
+            <i className="fas fa-times text-lg sm:text-base"></i>
             {t('common.cancel')}
           </button>
         </div>
