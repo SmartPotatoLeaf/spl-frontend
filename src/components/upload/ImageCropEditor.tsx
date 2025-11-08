@@ -350,7 +350,7 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
       </div>
 
       {/* Editor - Ocupa todo el espacio disponible */}
-      <div className="flex-1 flex flex-col p-4 sm:p-6 max-w-4xl mx-auto w-full">
+      <div className="flex flex-col px-4 pt-4 pb-3 sm:px-6 sm:pt-6 sm:pb-4 max-w-4xl mx-auto w-full">
         <div
           ref={cropContainerRef}
           className="relative mx-auto bg-gray-800 rounded-lg sm:rounded-xl overflow-hidden shadow-lg"
@@ -456,7 +456,7 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
         </div>
 
         {/* Controles de zoom - Mejorados para mobile */}
-        <div className="my-4 px-4 py-3 sm:px-6 sm:py-4 bg-white rounded-lg sm:rounded-xl shadow-sm border border-outline">
+        <div className="mt-4 px-4 py-3 sm:px-6 sm:py-4 bg-white rounded-lg sm:rounded-xl shadow-sm border border-outline max-w-[800px] mx-auto w-full">
           <div className="flex items-center justify-center gap-3 sm:gap-4">
             <button
               onClick={handleZoomOut}
@@ -483,7 +483,8 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
           </div>
         </div>
 
-        <div className="hidden sm:block px-6 pb-4">
+        {/* Instrucciones - Ocultas en mobile */}
+        <div className="hidden sm:block mt-4 max-w-[800px] mx-auto w-full">
           <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
             <div className="flex items-start gap-3">
               <i className="fas fa-info-circle text-primary mt-0.5"></i>
@@ -500,34 +501,35 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
         </div>
       </div>
 
-      <div className=" border-tp-4 sm:p-6 mt-auto">
-        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3">
+      {/* Botones de acción - Compactos y del mismo ancho que el editor */}
+      <div className="px-4 py-3 sm:px-6 sm:py-4">
+        <div className="max-w-[800px] mx-auto flex flex-col sm:flex-row gap-3">
           <button
             onClick={handleCrop}
             className="
-              flex-1 px-6 py-4 sm:py-3.5 bg-primary text-white rounded-lg
-              font-bold text-base sm:text-sm transition-all duration-300
-              hover:bg-primary/90 hover:shadow-lg
+              sm:flex-1 px-6 py-3 sm:py-2.5 bg-primary text-white rounded-lg
+              font-semibold text-sm transition-all duration-300
+              hover:bg-primary/90 hover:shadow-md
               active:scale-[0.98]
               flex items-center justify-center gap-2
               touch-manipulation
             "
           >
-            <i className="fas fa-check text-lg sm:text-base"></i>
+            <i className="fas fa-check"></i>
             {t('upload.crop.apply')}
           </button>
 
           <button
             onClick={onCancel}
             className="
-              px-6 py-4 sm:py-3.5 bg-white border-2 border-outline text-state-idle
-              rounded-lg font-medium text-base sm:text-sm transition-all duration-300
+              sm:flex-1 px-6 py-3 sm:py-2.5 bg-white border-2 border-outline text-state-idle
+              rounded-lg font-medium text-sm transition-all duration-300
               hover:border-error hover:text-error hover:bg-error/5
               flex items-center justify-center gap-2
               touch-manipulation
             "
           >
-            <i className="fas fa-times text-lg sm:text-base"></i>
+            <i className="fas fa-times"></i>
             {t('common.cancel')}
           </button>
         </div>
