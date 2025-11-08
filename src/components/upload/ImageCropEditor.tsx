@@ -351,47 +351,43 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
 
       {/* Editor - Ocupa todo el espacio disponible */}
       <div className="flex-1 flex flex-col p-4 sm:p-6 max-w-4xl mx-auto w-full">
-        <div className="bg-white rounded-lg sm:rounded-xl border border-outline overflow-hidden shadow-sm flex-1 flex flex-col">
-          <div
-            ref={cropContainerRef}
-            className="relative mx-auto bg-state-disabled/20 flex-1"
-            style={{ 
-              width: '100%',
-              maxWidth: '800px',
-              height: containerSize.height > 0 ? `${containerSize.height}px` : '500px',
-              touchAction: 'none',
+        <div
+          ref={cropContainerRef}
+          className="relative mx-auto bg-gray-800 rounded-lg sm:rounded-xl overflow-hidden shadow-lg"
+          style={{ 
+            width: '100%',
+            maxWidth: '800px',
+            height: containerSize.height > 0 ? `${containerSize.height}px` : '500px',
+            touchAction: 'none',
+          }}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseUp}
+        >
+          {/* Imagen */}
+          <img
+            ref={imageRef}
+            src={imageSrc}
+            alt="Crop preview"
+            className="absolute pointer-events-none select-none"
+            style={{
+              left: `${imagePosition.x}px`,
+              top: `${imagePosition.y}px`,
+              width: `${imageSize.width * scale}px`,
+              height: `${imageSize.height * scale}px`,
             }}
-            onMouseMove={handleMouseMove}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-          >
-            {/* Imagen */}
-            <img
-              ref={imageRef}
-              src={imageSrc}
-              alt="Crop preview"
-              className="absolute pointer-events-none select-none"
-              style={{
-                left: `${imagePosition.x}px`,
-                top: `${imagePosition.y}px`,
-                width: `${imageSize.width * scale}px`,
-                height: `${imageSize.height * scale}px`,
-              }}
-            />
+          />
 
-            {/* Overlay oscuro */}
-            <div className="absolute inset-0 bg-black/50 pointer-events-none" />
-
-            {/* Área de crop */}
+            {/* Área de crop - con boxShadow que oscurece el resto */}
             <div
               ref={cropBoxRef}
-              className="absolute border-2 border-primary bg-transparent cursor-move"
+              className="absolute border-3 border-primary bg-transparent cursor-move"
               style={{
                 left: `${cropArea.x}px`,
                 top: `${cropArea.y}px`,
                 width: `${cropArea.width}px`,
                 height: `${cropArea.height}px`,
-                boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.5)',
+                boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.6)',
               }}
               onMouseDown={(e) => handleMouseDown(e)}
             >
@@ -451,15 +447,16 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
               />
             </div>
 
-            <div className="absolute top-2 left-2 sm:top-4 sm:left-4 bg-black/80 backdrop-blur-sm text-white text-xs px-2 py-1.5 sm:px-3 sm:py-2 rounded-md sm:rounded-lg shadow-lg">
+            {/* Info del crop - Reposicionado arriba a la derecha para evitar esquinas */}
+            <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-black/90 backdrop-blur-sm text-white px-2 py-1.5 sm:px-3 sm:py-2 rounded-md sm:rounded-lg shadow-lg z-20">
               <p className="font-bold mb-0.5 sm:mb-1 text-[10px] sm:text-xs">{t('upload.crop.cropArea')}</p>
               <p className="text-xs sm:text-sm">{Math.round(cropArea.width)} × {Math.round(cropArea.height)} px</p>
               <p className="text-white/70 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">→ 224 × 224 px</p>
             </div>
-          </div>
         </div>
 
-        <div className="px-4 py-3 sm:px-6 sm:py-4 bg-white border-t border-outline">
+        {/* Controles de zoom - Mejorados para mobile */}
+        <div className="my-4 px-4 py-3 sm:px-6 sm:py-4 bg-white rounded-lg sm:rounded-xl shadow-sm border border-outline">
           <div className="flex items-center justify-center gap-3 sm:gap-4">
             <button
               onClick={handleZoomOut}
@@ -503,7 +500,7 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
         </div>
       </div>
 
-      <div className="bg-white border-t border-outline p-4 sm:p-6 mt-auto">
+      <div className=" border-tp-4 sm:p-6 mt-auto">
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row gap-3">
           <button
             onClick={handleCrop}

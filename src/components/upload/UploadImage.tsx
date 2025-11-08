@@ -207,11 +207,6 @@ export default function UploadImage() {
           onReset={handleReset}
         />
       ) : null}
-
-      {/* Footer info */}
-      <div className="text-center text-xs sm:text-sm text-state-disabled px-4">
-        <p>© 2025 SmartPotatoLeaf</p>
-      </div>
     </div>
   );
 }
