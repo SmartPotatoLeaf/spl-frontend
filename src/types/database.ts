@@ -54,8 +54,7 @@ export interface Image {
 }
 
 export interface Plot {
-  id: bigint;
-  user_id: bigint;
+  id: number;
   name: string;
   description: string;
   create_at: Date;

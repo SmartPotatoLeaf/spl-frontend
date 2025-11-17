@@ -7,7 +7,7 @@ const USE_MOCK = true;
 function parseDiagnostic(data: any): Diagnostic {
   return {
     ...data,
-    predictionId: BigInt(data.predictionId),
+    id: BigInt(data.predictionId),
     imageId: BigInt(data.imageId),
     labelId: BigInt(data.labelId),
     predictedAt: new Date(data.predictedAt),
@@ -49,7 +49,7 @@ function mockGetRecentDiagnostics(): Promise<Diagnostic[]> {
     setTimeout(() => {
       // Tomar los 5 más recientes del JSON
       const allDiagnostics = diagnosticsData.map(parseDiagnostic);
-      const sorted = allDiagnostics.sort((a, b) => 
+      const sorted = allDiagnostics.sort((a, b) =>
         b.predictedAt.getTime() - a.predictedAt.getTime()
       );
       resolve(sorted.slice(0, 5));
@@ -61,7 +61,7 @@ function mockGetAllDiagnostics(): Promise<Diagnostic[]> {
   return new Promise((resolve) => {
     setTimeout(() => {
       const allDiagnostics = diagnosticsData.map(parseDiagnostic);
-      const sorted = allDiagnostics.sort((a, b) => 
+      const sorted = allDiagnostics.sort((a, b) =>
         b.predictedAt.getTime() - a.predictedAt.getTime()
       );
       resolve(sorted);

@@ -75,7 +75,7 @@ export default function HomeDashboard() {
           {recentDiagnostics.length > 0 ? (
             <div className="space-y-3">
               {recentDiagnostics.map((diagnostic) => (
-                <DiagnosticCard key={diagnostic.predictionId.toString()} diagnostic={diagnostic} />
+                <DiagnosticCard key={diagnostic.id.toString()} diagnostic={diagnostic} />
               ))}
             </div>
           ) : (

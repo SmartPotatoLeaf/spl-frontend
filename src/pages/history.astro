@@ -11,31 +11,3 @@ const allPlots = await getAllPlots();
 <DashboardLayout title="History - Smart Potato Leaf" activeRoute="history">
   <HistoryView client:load plots={allPlots} />
 </DashboardLayout>
-
-<script>
-  import { setDiagnostics } from '@/stores';
-
-  const diagnosticsData = document.getElementById('diagnostics-data');
-  if (diagnosticsData) {
-    const diagnostics = JSON.parse(diagnosticsData.textContent || '[]', (key, value) => {
-      if (key === 'predictionId' || key === 'imageId' || key === 'labelId') {
-        return BigInt(value);
-      }
-      if (key === 'predictedAt' || key === 'uploadedAt') {
-        return new Date(value);
-      }
-      return value;
-    });
-    setDiagnostics(diagnostics);
-  }
-</script>
-
-<script id="diagnostics-data" type="application/json" set:html={JSON.stringify(allDiagnostics, (key, value) => {
-  if (typeof value === 'bigint') {
-    return value.toString();
-  }
-  if (value instanceof Date) {
-    return value.toISOString();
-  }
-  return value;
-})} />

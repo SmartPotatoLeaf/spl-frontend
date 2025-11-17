@@ -5,13 +5,13 @@ import { historyStore, setFilters, resetFilters } from '@/stores';
 import type { PlotSummary } from '@/types';
 
 interface HistoryFiltersProps {
-  plots: PlotSummary[];
+  plots: { id: number, name: string }[];
 }
 
-export default function HistoryFilters({ plots }: HistoryFiltersProps) {
+export default function HistoryFilters() {
   const { t } = useTranslation();
-  const { filters } = useStore(historyStore);
-  
+  const { filters, plots } = useStore(historyStore);
+
   const [dateFrom, setDateFrom] = useState(filters.dateFrom);
   const [dateTo, setDateTo] = useState(filters.dateTo);
   const [severity, setSeverity] = useState(filters.severity);
@@ -115,7 +115,7 @@ export default function HistoryFilters({ plots }: HistoryFiltersProps) {
             >
               <option value="all">{t('history.filters.allPlots')}</option>
               {plots.map((p) => (
-                <option key={p.id.toString()} value={p.name}>
+                <option key={p.id.toString()} value={p.id}>
                   {p.name}
                 </option>
               ))}

@@ -1,5 +1,5 @@
-import { map } from 'nanostores';
-import type { Diagnostic } from '@/types';
+import {map} from 'nanostores';
+import type {Diagnostic} from '@/types';
 
 export interface HistoryFilters {
   dateFrom: string;
@@ -10,16 +10,16 @@ export interface HistoryFilters {
 }
 
 export interface HistoryState {
-  allDiagnostics: Diagnostic[];
-  filteredDiagnostics: Diagnostic[];
+  diagnostics: Diagnostic[];
+  plots: { id: number; name: string }[];
   filters: HistoryFilters;
   isLoading: boolean;
   itemsPerPage: number;
+  total: number;
 }
 
 export const historyStore = map<HistoryState>({
-  allDiagnostics: [],
-  filteredDiagnostics: [],
+  diagnostics: [],
   filters: {
     dateFrom: '',
     dateTo: '',
@@ -29,22 +29,30 @@ export const historyStore = map<HistoryState>({
   },
   isLoading: false,
   itemsPerPage: 8,
+  total: 0,
+  plots: []
 });
 
+export function setTotal(total: number) {
+  historyStore.setKey('total', total);
+}
+
+export function setPlots(plots: { id: number; name: string }[]) {
+  historyStore.setKey('plots', plots);
+}
+
 export function setDiagnostics(diagnostics: Diagnostic[]) {
-  historyStore.setKey('allDiagnostics', diagnostics);
-  applyFilters();
+  historyStore.setKey('diagnostics', diagnostics);
 }
 
 export function setFilters(filters: Partial<HistoryFilters>) {
   const currentFilters = historyStore.get().filters;
-  historyStore.setKey('filters', { ...currentFilters, ...filters, page: 1 });
-  applyFilters();
+  historyStore.setKey('filters', {...currentFilters, ...filters, page: 1});
 }
 
 export function setPage(page: number) {
   const currentFilters = historyStore.get().filters;
-  historyStore.setKey('filters', { ...currentFilters, page });
+  historyStore.setKey('filters', {...currentFilters, page});
 }
 
 export function resetFilters() {
@@ -55,46 +63,9 @@ export function resetFilters() {
     plot: 'all',
     page: 1,
   });
-  applyFilters();
 }
 
 export function setLoading(isLoading: boolean) {
   historyStore.setKey('isLoading', isLoading);
 }
 
-function applyFilters() {
-  const { allDiagnostics, filters } = historyStore.get();
-  let filtered = [...allDiagnostics];
-
-  // Filtrar por severidad
-  if (filters.severity !== 'all') {
-    filtered = filtered.filter(d => d.status === filters.severity);
-  }
-
-  // Filtrar por parcela
-  if (filters.plot !== 'all') {
-    filtered = filtered.filter(d => d.location === filters.plot);
-  }
-
-  // Filtrar por rango de fechas
-  if (filters.dateFrom) {
-    const fromDate = new Date(filters.dateFrom);
-    fromDate.setHours(0, 0, 0, 0);
-    filtered = filtered.filter(d => {
-      const diagDate = new Date(d.predictedAt);
-      diagDate.setHours(0, 0, 0, 0);
-      return diagDate >= fromDate;
-    });
-  }
-
-  if (filters.dateTo) {
-    const toDate = new Date(filters.dateTo);
-    toDate.setHours(23, 59, 59, 999);
-    filtered = filtered.filter(d => {
-      const diagDate = new Date(d.predictedAt);
-      return diagDate <= toDate;
-    });
-  }
-
-  historyStore.setKey('filteredDiagnostics', filtered);
-}

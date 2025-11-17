@@ -98,7 +98,7 @@ export default function UploadImage() {
       // TODO: Cuando se conecte la API, obtener el predictionId real
       // Por ahora, simulamos redirección a resultado con ID de ejemplo
       const predictionId = '1';
-      window.location.href = `/leaf/${predictionId}`;
+      window.location.href = `/diagnostics/${predictionId}`;
     } catch (error) {
       setUploadState((prev) => ({
         ...prev,

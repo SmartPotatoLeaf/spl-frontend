@@ -3,9 +3,10 @@ import type { Diagnostic } from '@/types';
 
 interface DiagnosticCardProps {
   diagnostic: Diagnostic;
+  loadJsImage?: boolean
 }
 
-export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
+export default function DiagnosticCard({ diagnostic, loadJsImage }: DiagnosticCardProps) {
   const { t } = useTranslation();
 
   const formatDate = (date: Date): string => {
@@ -18,8 +19,8 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
     return `${date.getDate()} de ${monthName}, ${date.getFullYear()}`;
   };
 
-  const title = diagnostic.statusLabel === 'Sin rancha' 
-    ? t('history.card.healthyLeaf') 
+  const title = diagnostic.statusLabel === 'Sin rancha'
+    ? t('history.card.healthyLeaf')
     : t('history.card.infectedLeaf');
 
   const getBadgeColor = (status: string) => {
@@ -56,7 +57,7 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
           </div>
         )}
       </div>
-      
+
       <div className="p-4 space-y-3">
         <div>
           <h3 className="text-sm font-medium text-state-idle mb-1">{title}</h3>
@@ -64,8 +65,8 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
             <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${getBadgeColor(diagnostic.status)}`}>
               {diagnostic.statusLabel}
             </span>
-            <span className={`text-xs font-medium ${getConfidenceColor(diagnostic.confidence)}`}>
-              {(diagnostic.confidence * 100).toFixed(0)}% {t('history.card.confidence')}
+            <span className={`text-xs font-medium ${getConfidenceColor(diagnostic.presenceConfidence)}`}>
+              {(diagnostic.presenceConfidence * 100).toFixed(0)}% {t('history.card.confidence')}
             </span>
           </div>
         </div>
@@ -91,7 +92,7 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
 
         <div className="pt-3 border-t border-outline">
           <a
-            href={`/leaf/${diagnostic.predictionId}`}
+            href={`/diagnostics/${diagnostic.id}`}
             className="block w-full text-center py-2 rounded-lg bg-gray-50 text-state-idle text-sm font-medium hover:bg-gray-100 transition-colors"
           >
             {t('history.card.viewDetails')}

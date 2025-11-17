@@ -14,7 +14,8 @@ export default defineConfig({
   }),
   env: {
     schema: {
-      API_URL: envField.string({context: "client", access: "public", })
+      API_URL: envField.string({context: "client", access: "public", }),
+      BLOB_URL: envField.string({context: "client", access: "public", }),
     }
   },
   integrations: [react()],

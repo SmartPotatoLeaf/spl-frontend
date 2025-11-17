@@ -3,7 +3,7 @@ import type {
   TrendDataPoint,
   Diagnostic,
   ComparativeData,
-  DashboardFilters, DashboardSummaryRequest, DashboardSummaryResponse
+  DashboardFilters, DashboardSummaryRequest, DashboardSummaryResponse, DiagnosisSummaryFilters
 } from '@/types';
 import diagnosticsData from '@/data/diagnostics.json';
 import plotsData from '@/data/plots.json';
@@ -23,12 +23,21 @@ class DashboardService extends CrudService<any> {
   async getSummary(filters: DashboardSummaryRequest): Promise<DashboardSummaryResponse> {
     return this.httpPost("/summary/", filters)
   }
+
+  async getFilters(): Promise<DiagnosisSummaryFilters> {
+    return this.httpGet("/filters/")
+  }
 }
 
 function instantiateService() {
   if (!service) {
     service = new DashboardService();
   }
+}
+
+export function getDashboardFilters(): Promise<DiagnosisSummaryFilters> {
+  instantiateService()
+  return service.getFilters()
 }
 
 export function getDashboardSummary(filters: DashboardSummaryRequest): Promise<DashboardSummaryResponse> {

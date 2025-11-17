@@ -7,7 +7,7 @@ interface DiagnosticCardProps {
 
 export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
   const { t, i18n } = useTranslation();
-  
+
   const statusColors = {
     healthy: 'bg-tag-healthy text-white',
     low: 'bg-tag-low text-state-idle',
@@ -46,8 +46,8 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
 
         <div className="flex-1 min-w-0">
           <h3 className="font-semibold text-state-idle text-sm sm:text-base mb-2">
-            {diagnostic.statusLabel === 'Sin rancha' 
-              ? t('home.recentDiagnostics.healthyLeaf') 
+            {diagnostic.statusLabel === 'Sin rancha'
+              ? t('home.recentDiagnostics.healthyLeaf')
               : t('home.recentDiagnostics.infectedLeaf')}
           </h3>
 
@@ -73,14 +73,14 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
             <span className={`inline-block px-3 py-1 rounded text-xs font-medium ${statusColor}`}>
               {diagnostic.statusLabel}
             </span>
-            <span className={`text-xs font-medium ${getConfidenceColor(diagnostic.confidence)}`}>
-              {(diagnostic.confidence * 100).toFixed(0)}% {t('home.recentDiagnostics.confidence')}
+            <span className={`text-xs font-medium ${getConfidenceColor(diagnostic.presenceConfidence)}`}>
+              {(diagnostic.presenceConfidence * 100).toFixed(0)}% {t('home.recentDiagnostics.confidence')}
             </span>
           </div>
         </div>
 
         <a
-          href={`/leaf/${diagnostic.predictionId}`}
+          href={`/diagnostics/${diagnostic.id}`}
           className="text-state-idle text-sm font-normal hover:underline shrink-0 hidden sm:block"
         >
           {t('home.recentDiagnostics.viewDetails')}
@@ -88,7 +88,7 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
       </div>
 
       <a
-        href={`/leaf/${diagnostic.predictionId}`}
+        href={`/diagnostics/${diagnostic.id}`}
         className="text-state-idle text-sm font-normal hover:underline mt-3 block sm:hidden"
       >
         {t('home.recentDiagnostics.viewDetails')}

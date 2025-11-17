@@ -1,3 +1,5 @@
+import type {Plot} from "@/types/database.ts";
+
 export type SeverityLevel = 'healthy' | 'low' | 'moderate' | 'severe';
 export type DashboardMode = 'normal' | 'comparative';
 
@@ -8,17 +10,16 @@ export type DashboardMode = 'normal' | 'comparative';
  */
 export interface Diagnostic {
   // IDs de referencia a database.ts
-  predictionId: bigint;
-  imageId: bigint;
-  labelId: bigint;
+  id: bigint;
 
   // Datos transformados para presentación
   imageUrl: string;
   status: SeverityLevel;
+  severity: number
   statusLabel: string;
-  confidence: number;
+  presenceConfidence: number;
+  absenceConfidence: number;
   predictedAt: Date;
-  uploadedAt: Date;
 
   // Información adicional
   location?: string;
@@ -123,3 +124,9 @@ export interface Label {
   id: number
   name: string
 }
+export interface DiagnosisSummaryFilters {
+  labels: Label[]
+  plots: Plot[]
+}
+
+
