@@ -56,7 +56,7 @@ export default function HistoryView() {
           limit: itemsPerPage,
           item_fields: "$min",
           plot_ids: filters.plot !== "all" ? [
-            (+filters.plot)
+            !filters.plot ? undefined : (+filters.plot)
           ] : undefined
         })
 

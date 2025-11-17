@@ -1,36 +1,39 @@
 import { useStore } from '@nanostores/react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { dashboardStore, setDashboardMode, plotsStore, setPlotsData, setPlotsLoading } from '@/stores';
-import { getAllPlots } from '@/services/plotService';
+import {
+  dashboardStore,
+  setDashboardMode,
+} from '@/stores';
 import DashboardNormal from './DashboardNormal';
 import DashboardComparative from './DashboardComparative';
+import {getDashboardFilters} from "@/services/dashboardService.ts";
+import type {Plot} from "@/types";
+import {setDashboardPlots} from "@/stores/dashboardStore.ts";
 
 export default function DashboardView() {
   const { t } = useTranslation();
-  const { mode } = useStore(dashboardStore);
-  const { plots } = useStore(plotsStore);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const {filters, mode, plots} = useStore(dashboardStore);
 
   useEffect(() => {
-    if (plots.length === 0) {
-      loadPlots();
+    async function initializeFilters() {
+      try {
+        const filters = await getDashboardFilters();
+
+        setDashboardPlots(filters.plots.map((plot: Plot) => ({id: plot.id, name: plot.name})));
+      } catch (e) {
+
+      }
     }
+
+    initializeFilters()
   }, []);
 
-  const loadPlots = async () => {
-    try {
-      setPlotsLoading(true);
-      const plotsData = await getAllPlots();
-      setPlotsData(plotsData);
-    } catch (err) {
-      console.error('Error loading plots:', err);
-    }
-  };
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const handleModeChange = (newMode: 'normal' | 'comparative') => {
     if (newMode === mode) return;
-    
+
     setIsTransitioning(true);
     setTimeout(() => {
       setDashboardMode(newMode);
@@ -57,7 +60,7 @@ export default function DashboardView() {
             {t('history.exportPDF')}
           </button>
         </div>
-        
+
         <div className="relative bg-white rounded-lg border border-outline p-1.5 inline-flex gap-1">
           <div
             className={`
@@ -65,7 +68,7 @@ export default function DashboardView() {
               ${mode === 'normal' ? 'left-1.5 w-[calc(50%-4px)]' : 'left-[calc(50%+2px)] w-[calc(50%-4px)]'}
             `}
           />
-          
+
           <button
             onClick={() => handleModeChange('normal')}
             disabled={isTransitioning}
@@ -80,7 +83,7 @@ export default function DashboardView() {
           >
             {t('dashboard.modes.normal')}
           </button>
-          
+
           <button
             onClick={() => handleModeChange('comparative')}
             disabled={isTransitioning}

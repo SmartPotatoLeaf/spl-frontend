@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import { useStore } from '@nanostores/react';
 import { historyStore, setFilters, resetFilters } from '@/stores';
 import Filters from "@/components/shared/Filters.tsx";
@@ -7,7 +6,6 @@ import Filters from "@/components/shared/Filters.tsx";
 
 
 export default function HistoryFilters() {
-  const { t } = useTranslation();
   const { filters, plots } = useStore(historyStore);
 
   const [dateFrom, setDateFrom] = useState(filters.dateFrom);

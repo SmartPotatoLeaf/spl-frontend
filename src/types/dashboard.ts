@@ -99,7 +99,8 @@ export interface DashboardData {
 export interface DashboardSummaryRequest {
   min_date?: string
   max_date?: string
-  plot_ids?: (number | undefined | null)[]
+  plot_ids?: (number | undefined | null)[];
+  labels?: string[];
 }
 
 export interface DashboardSummaryResponse {

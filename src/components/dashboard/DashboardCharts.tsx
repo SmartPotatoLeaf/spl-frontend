@@ -15,6 +15,7 @@ import {
 } from 'chart.js';
 import ChartModal from '@/components/shared/ChartModal';
 import type { TrendDataPoint, DiagnosticSummary } from '@/types';
+import {createTrendDataset} from "@/components/dashboard/loaders.ts";
 
 ChartJS.register(
   CategoryScale,
@@ -47,43 +48,7 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
     setExpandedChart(null);
   };
 
-  const trendChartData = {
-    labels: trendData.map(d => d.month),
-    datasets: [
-      {
-        label: t('dashboard.categories.healthy'),
-        data: trendData.map(d => d.healthy),
-        borderColor: '#4CAF50',
-        backgroundColor: 'rgba(76, 175, 80, 0.1)',
-        fill: true,
-        tension: 0.4,
-      },
-      {
-        label: t('dashboard.categories.low'),
-        data: trendData.map(d => d.low),
-        borderColor: '#F4B400',
-        backgroundColor: 'rgba(244, 180, 0, 0.1)',
-        fill: true,
-        tension: 0.4,
-      },
-      {
-        label: t('dashboard.categories.moderate'),
-        data: trendData.map(d => d.moderate),
-        borderColor: '#FF9800',
-        backgroundColor: 'rgba(255, 152, 0, 0.1)',
-        fill: true,
-        tension: 0.4,
-      },
-      {
-        label: t('dashboard.categories.severe'),
-        data: trendData.map(d => d.severe),
-        borderColor: '#D32F2F',
-        backgroundColor: 'rgba(211, 47, 47, 0.1)',
-        fill: true,
-        tension: 0.4,
-      },
-    ],
-  };
+  const trendChartData = createTrendDataset(trendData, t);
 
   const trendChartOptions = {
     responsive: true,
@@ -127,6 +92,11 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
     ],
   };
 
+  function calculatePercentage(value: number) {
+    const total = summary.total;
+    return (total ? (value / total) * 100 : 0).toFixed(1);
+  }
+
   const distributionChartOptions = {
     responsive: true,
     maintainAspectRatio: false,
@@ -139,8 +109,7 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
         callbacks: {
           label: function (context: any) {
             const value = context.parsed;
-            const total = summary.total;
-            const percentage = ((value / total) * 100).toFixed(1);
+            const percentage = calculatePercentage(value);
             return `${context.label}: ${value} (${percentage}%)`;
           },
         },
@@ -198,7 +167,7 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
             </button>
           </div>
         </div>
-        
+
         <div className="flex flex-col lg:flex-row items-center gap-6">
           <div className="w-full lg:w-1/2 h-[250px] flex items-center justify-center">
             <div className="relative w-[200px] h-[200px]">
@@ -209,7 +178,7 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
               </div>
             </div>
           </div>
-          
+
           <div className="w-full lg:w-1/2">
             <table className="w-full text-sm">
               <thead>
@@ -227,7 +196,7 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
                   </td>
                   <td className="text-right text-state-idle font-medium">{summary.healthy}</td>
                   <td className="text-right text-state-disabled">
-                    {((summary.healthy / summary.total) * 100).toFixed(1)}%
+                    {calculatePercentage(summary.healthy)}%
                   </td>
                 </tr>
                 <tr className="border-b border-outline">
@@ -237,7 +206,7 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
                   </td>
                   <td className="text-right text-state-idle font-medium">{summary.low}</td>
                   <td className="text-right text-state-disabled">
-                    {((summary.low / summary.total) * 100).toFixed(1)}%
+                    {calculatePercentage(summary.low)}%
                   </td>
                 </tr>
                 <tr className="border-b border-outline">
@@ -247,7 +216,7 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
                   </td>
                   <td className="text-right text-state-idle font-medium">{summary.moderate}</td>
                   <td className="text-right text-state-disabled">
-                    {((summary.moderate / summary.total) * 100).toFixed(1)}%
+                    {calculatePercentage(summary.moderate)}%
                   </td>
                 </tr>
                 <tr>
@@ -257,7 +226,7 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
                   </td>
                   <td className="text-right text-state-idle font-medium">{summary.severe}</td>
                   <td className="text-right text-state-disabled">
-                    {((summary.severe / summary.total) * 100).toFixed(1)}%
+                    {calculatePercentage(summary.severe)}%
                   </td>
                 </tr>
               </tbody>
@@ -291,7 +260,7 @@ export default function DashboardCharts({ trendData, summary }: DashboardChartsP
               </div>
             </div>
           </div>
-          
+
           <div className="w-full lg:w-1/2">
             <table className="w-full text-base">
               <thead>

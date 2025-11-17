@@ -1,8 +1,8 @@
-import { map } from 'nanostores';
-import type { 
-  DashboardMode, 
-  DashboardStats, 
-  TrendDataPoint, 
+import {map} from 'nanostores';
+import type {
+  DashboardMode,
+  DashboardStats,
+  TrendDataPoint,
   Diagnostic,
   DashboardFilters,
   ComparativeData
@@ -16,17 +16,19 @@ export interface DashboardState {
   filters: DashboardFilters;
   isLoading: boolean;
   error: string | null;
-  
+
   comparativeData: ComparativeData | null;
   selectedPlots: [string | null, string | null];
   comparativeFilters: DashboardFilters;
   isLoadingComparative: boolean;
+  plots: { id: number; name: string }[];
 }
 
 export const dashboardStore = map<DashboardState>({
   mode: 'normal',
   stats: null,
   trendData: [],
+  plots: [],
   recentDiagnostics: [],
   filters: {
     dateFrom: undefined,
@@ -36,7 +38,7 @@ export const dashboardStore = map<DashboardState>({
   },
   isLoading: false,
   error: null,
-  
+
   comparativeData: null,
   selectedPlots: [null, null],
   comparativeFilters: {
@@ -47,13 +49,21 @@ export const dashboardStore = map<DashboardState>({
   isLoadingComparative: false,
 });
 
+export function setDashboardPlots(plots: { id: number; name: string }[]) {
+  dashboardStore.setKey('plots', plots);
+}
+
 export function setDashboardMode(mode: DashboardMode) {
   dashboardStore.setKey('mode', mode);
-  
+
   if (mode === 'normal') {
     dashboardStore.setKey('selectedPlots', [null, null]);
     dashboardStore.setKey('comparativeData', null);
   }
+}
+
+export function setDashboardStats(stats: DashboardStats) {
+  dashboardStore.setKey('stats', stats);
 }
 
 export function setDashboardData(
@@ -79,12 +89,12 @@ export function setDashboardError(error: string | null) {
 
 export function setDashboardFilters(filters: Partial<DashboardFilters>) {
   const currentFilters = dashboardStore.get().filters;
-  dashboardStore.setKey('filters', { ...currentFilters, ...filters });
+  dashboardStore.setKey('filters', {...currentFilters, ...filters});
 }
 
 export function setComparativeFilters(filters: Partial<DashboardFilters>) {
   const currentFilters = dashboardStore.get().comparativeFilters;
-  dashboardStore.setKey('comparativeFilters', { ...currentFilters, ...filters });
+  dashboardStore.setKey('comparativeFilters', {...currentFilters, ...filters});
 }
 
 export function setSelectedPlots(plot1Id: string | null, plot2Id: string | null) {
@@ -122,5 +132,6 @@ export function resetDashboard() {
       severity: 'all',
     },
     isLoadingComparative: false,
+    plots: []
   });
 }

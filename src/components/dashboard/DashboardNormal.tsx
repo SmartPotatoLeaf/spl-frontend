@@ -6,31 +6,24 @@ import { getDashboardStats, getDashboardTrendData, getRecentDiagnostics } from '
 import DashboardFilters from './DashboardFilters';
 import DashboardStats from './DashboardStats';
 import DashboardCharts from './DashboardCharts';
+import {createTrendDataset, loadDashboardData} from "@/components/dashboard/loaders.ts";
+import {setDashboardStats} from "@/stores/dashboardStore.ts";
 
 export default function DashboardNormal() {
   const { t } = useTranslation();
   const { stats, trendData, filters, isLoading, error } = useStore(dashboardStore);
 
   useEffect(() => {
-    loadDashboardData();
+    loadData()
   }, [filters]);
 
-  const loadDashboardData = async () => {
-    if (isLoading) return;
-    
-    try {
-      setDashboardLoading(true);
-      
-      const [statsData, trendsData, diagnostics] = await Promise.all([
-        getDashboardStats(filters),
-        getDashboardTrendData(filters),
-        getRecentDiagnostics(10),
-      ]);
-      
-      setDashboardData(statsData, trendsData, diagnostics);
-    } catch (err) {
-      setDashboardError(err instanceof Error ? err.message : t('dashboard.errorMessage'));
-    }
+  const loadData = async () => {
+    const {stats, trends} = await loadDashboardData(filters);
+    setDashboardData(
+      stats,
+      trends,
+      []
+    )
   };
 
   if (error) {
@@ -40,7 +33,7 @@ export default function DashboardNormal() {
         <p className="text-error font-semibold mb-2">{t('dashboard.error')}</p>
         <p className="text-error text-sm mb-4">{error}</p>
         <button
-          onClick={loadDashboardData}
+          onClick={loadData}
           className="inline-flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
         >
           <i className="fas fa-redo"></i>
@@ -64,7 +57,6 @@ export default function DashboardNormal() {
   return (
     <div className="space-y-6">
       <DashboardFilters />
-      
       {stats && (
         <>
           <DashboardStats stats={stats} />

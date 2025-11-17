@@ -2,8 +2,8 @@ import {useTranslation} from "react-i18next";
 import React from "react";
 
 export interface FiltersOptions {
-  dateFrom: string,
-  dateTo: string,
+  dateFrom?: string,
+  dateTo?: string,
   severity: string,
   plot: string,
 
@@ -112,8 +112,8 @@ export default function Filters({options}: FiltersProps) {
             >
               <option value="all">{t('history.filters.allPlots')}</option>
               {plots.map((p) => (
-                <option key={p.id.toString()} value={p.id}>
-                  {p.name}
+                <option key={(p.id ?? 0).toString()} value={p.id}>
+                  {p.id ? p.name : t("plots.default.name")}
                 </option>
               ))}
             </select>
