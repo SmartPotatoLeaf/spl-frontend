@@ -1,59 +1,106 @@
-import { useStore } from '@nanostores/react';
-import { useTranslation } from 'react-i18next';
-import { plotsStore } from '@/stores';
-import { useState } from 'react';
+import {useStore} from '@nanostores/react';
+import {useTranslation} from 'react-i18next';
+import {plotsStore, toast} from '@/stores';
+import {useEffect, useState} from 'react';
+import Pagination from "@/components/shared/Pagination.tsx";
+import useQueryParam from "@/hooks/useQueryParam.ts";
+import {deletePlot, getPlots} from "@/services/plotService.ts";
+import type {PlotDetailed, PlotPaginatedResponse} from "@/types";
+
 
 export default function PlotsGrid() {
-  const { t } = useTranslation();
-  const { plots, isLoading } = useStore(plotsStore);
-  const [currentPage, setCurrentPage] = useState(1);
+  const {t} = useTranslation();
+  const [pagination, setPagination] = useState({
+      total: 0,
+      items: [],
+      limit: 10,
+      page: 1,
+    } as PlotPaginatedResponse),
+    [currentPage, setCurrentPage] = useQueryParam("page", "1"),
+    [isLoading, setIsLoading] = useState(true);
   const itemsPerPage = 10;
+
+  function loadPlots() {
+    getPlots({
+      page: (+currentPage) as number,
+      limit: itemsPerPage,
+    }).then(response => {
+      setPagination(response);
+      setIsLoading(false);
+    }).catch(err => {
+      setIsLoading(false);
+    })
+  }
+
+  useEffect(() => {
+    loadPlots();
+  }, [currentPage])
+
 
   const formatDate = (date: Date): string => {
     const monthKeys = [
       'january', 'february', 'march', 'april', 'may', 'june',
       'july', 'august', 'september', 'october', 'november', 'december'
     ];
+    if(typeof date === 'string')
+      date = new Date(date);
+
     const monthKey = monthKeys[date.getMonth()];
     const monthName = t(`plots.months.${monthKey}`);
     return `${date.getDate()} de ${monthName}, ${date.getFullYear()}`;
   };
 
-  const totalPages = Math.ceil(plots.length / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const paginatedPlots = plots.slice(startIndex, endIndex);
 
   const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setCurrentPage(page as any);
+    window.scrollTo({top: 0, behavior: 'smooth'});
   };
 
-  const getPageNumbers = () => {
-    const pages: (number | string)[] = [];
-    
-    if (totalPages <= 7) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
-    }
+  function PlotActions({plot}: { plot: PlotDetailed }) {
+    return (
+      <>
+        <a
+          href={`/plots/${plot.id ? plot.id : 'default'}`}
+          className="text-primary hover:text-opacity-80 transition-colors"
+          title={t('plots.table.viewDetails')}
+        >
+          <i className="fas fa-eye"></i>
+        </a>
+        {
+          plot.id && <a
+            href={`/plots/${plot.id}/edit`}
+            className="text-state-idle hover:text-primary transition-colors"
+            title={t('plots.table.edit')}
+          >
+            <i className="fas fa-edit"></i>
+          </a>
+        }
+        {
+          plot.id && (
+            <button
+              className="text-error hover:text-opacity-80 transition-colors"
+              title={t('plots.table.delete')}
+              onClick={() => {
+                if (plot.id && confirm(t('plots.deleteConfirm', {name: plot.name}))) {
+                  deletePlot(plot.id)
+                    .then(_ => {
+                      loadPlots()
+                      toast.success("Parcela eliminada correctamente.")
+                    })
+                    .catch(_ => {
+                      toast.error("Non se pudo eliminar a parcela.")
+                    })
+                }
+              }}
+            >
+              <i className="fas fa-trash"></i>
+            </button>
+          )
+        }
+      </>
+    )
+  }
 
-    pages.push(1);
-
-    if (currentPage > 3) {
-      pages.push('...');
-    }
-
-    for (let i = Math.max(2, currentPage - 1); i <= Math.min(totalPages - 1, currentPage + 1); i++) {
-      pages.push(i);
-    }
-
-    if (currentPage < totalPages - 2) {
-      pages.push('...');
-    }
-
-    pages.push(totalPages);
-
-    return pages;
-  };
 
   if (isLoading) {
     return (
@@ -63,7 +110,7 @@ export default function PlotsGrid() {
     );
   }
 
-  if (plots.length === 0) {
+  if (pagination.items.length === 0) {
     return (
       <div className="text-center py-12">
         <i className="fas fa-map-marked-alt text-5xl text-state-disabled mb-4"></i>
@@ -73,95 +120,75 @@ export default function PlotsGrid() {
     );
   }
 
+
   return (
     <>
       {/* Tabla Desktop */}
       <div className="hidden md:block bg-white rounded-lg border border-outline overflow-hidden">
         <table className="w-full">
           <thead className="bg-gray-50 border-b border-outline">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-state-disabled uppercase tracking-wider">
-                {t('plots.table.name')}
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-state-disabled uppercase tracking-wider">
-                {t('plots.table.diagnostics')}
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-state-disabled uppercase tracking-wider">
-                {t('plots.table.description')}
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-state-disabled uppercase tracking-wider">
-                {t('plots.table.lastDiagnostic')}
-              </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-state-disabled uppercase tracking-wider">
-                {t('plots.table.actions')}
-              </th>
-            </tr>
+          <tr>
+            <th className="px-6 py-3 text-left text-xs font-medium text-state-disabled uppercase tracking-wider">
+              {t('plots.table.name')}
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-state-disabled uppercase tracking-wider">
+              {t('plots.table.diagnostics')}
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-state-disabled uppercase tracking-wider">
+              {t('plots.table.description')}
+            </th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-state-disabled uppercase tracking-wider">
+              {t('plots.table.lastDiagnostic')}
+            </th>
+            <th className="px-6 py-3 text-center text-xs font-medium text-state-disabled uppercase tracking-wider">
+              {t('plots.table.actions')}
+            </th>
+          </tr>
           </thead>
           <tbody className="divide-y divide-outline">
-            {paginatedPlots.map((plot) => (
-              <tr key={plot.id.toString()} className="hover:bg-gray-50 transition-colors">
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm font-medium text-state-idle">{plot.name}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-state-idle">{plot.diagnosticsCount}</div>
-                </td>
-                <td className="px-6 py-4">
-                  <div className="text-sm text-state-disabled max-w-md truncate">
-                    {plot.description}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-state-disabled">
-                    {plot.lastDiagnosticDate ? formatDate(plot.lastDiagnosticDate) : '-'}
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center justify-center gap-3">
-                    <a
-                      href={`/plots/${plot.id}`}
-                      className="text-primary hover:text-opacity-80 transition-colors"
-                      title={t('plots.table.viewDetails')}
-                    >
-                      <i className="fas fa-eye"></i>
-                    </a>
-                    <a
-                      href={`/plots/${plot.id}/edit`}
-                      className="text-state-idle hover:text-primary transition-colors"
-                      title={t('plots.table.edit')}
-                    >
-                      <i className="fas fa-edit"></i>
-                    </a>
-                    <button
-                      className="text-error hover:text-opacity-80 transition-colors"
-                      title={t('plots.table.delete')}
-                      onClick={() => {
-                        if (confirm(t('plots.deleteConfirm', { name: plot.name }))) {
-                          // TODO: deletePlot(plot.id)
-                        }
-                      }}
-                    >
-                      <i className="fas fa-trash"></i>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
+          {pagination.items.map((plot) => (
+            <tr key={(plot.id ?? 0).toString()} className="hover:bg-gray-50 transition-colors">
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm font-medium text-state-idle">
+                  {plot.id ? plot.name : t("plots.default.name")}
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm text-state-idle">{plot.total_diagnosis}</div>
+              </td>
+              <td className="px-6 py-4">
+                <div className="text-sm text-state-disabled max-w-md truncate">
+                  {plot.id ? plot.description : t("plots.default.description")}
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="text-sm text-state-disabled">
+                  {plot.last_diagnosis ? formatDate(plot.last_diagnosis) : '-'}
+                </div>
+              </td>
+              <td className="px-6 py-4 whitespace-nowrap">
+                <div className="flex items-center justify-center gap-3">
+                  <PlotActions plot={plot}/>
+                </div>
+              </td>
+            </tr>
+          ))}
           </tbody>
         </table>
       </div>
 
       {/* Cards Mobile */}
       <div className="md:hidden space-y-4">
-        {paginatedPlots.map((plot) => (
-          <div key={plot.id.toString()} className="bg-white rounded-lg border border-outline p-4">
+        {pagination.items.map((plot) => (
+          <div key={(plot.id ?? 0).toString()} className="bg-white rounded-lg border border-outline p-4">
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
                 <h3 className="font-semibold text-state-idle mb-1">{plot.name}</h3>
-                <p className="text-xs text-state-disabled mb-2">{plot.diagnosticsCount} {t('plots.table.diagnostics').toLowerCase()}</p>
+                <p
+                  className="text-xs text-state-disabled mb-2">{plot.total_diagnosis} {t('plots.table.diagnostics').toLowerCase()}</p>
               </div>
               <div className="relative">
-                <button 
+                <button
                   className="p-2 text-state-disabled hover:text-state-idle"
                   onClick={(e) => {
                     const menu = e.currentTarget.nextElementSibling;
@@ -170,39 +197,17 @@ export default function PlotsGrid() {
                 >
                   <i className="fas fa-ellipsis-v"></i>
                 </button>
-                <div className="hidden absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-outline z-10">
-                  <a
-                    href={`/plots/${plot.id}`}
-                    className="flex items-center gap-3 px-4 py-3 text-sm text-state-idle hover:bg-gray-50"
-                  >
-                    <i className="fas fa-eye text-primary w-4"></i>
-                    {t('plots.table.viewDetails')}
-                  </a>
-                  <a
-                    href={`/plots/${plot.id}/edit`}
-                    className="flex items-center gap-3 px-4 py-3 text-sm text-state-idle hover:bg-gray-50"
-                  >
-                    <i className="fas fa-edit w-4"></i>
-                    {t('plots.table.edit')}
-                  </a>
-                  <button
-                    className="flex items-center gap-3 px-4 py-3 text-sm text-error hover:bg-gray-50 w-full text-left"
-                    onClick={() => {
-                      if (confirm(t('plots.deleteConfirm', { name: plot.name }))) {
-                        // TODO: deletePlot(plot.id)
-                      }
-                    }}
-                  >
-                    <i className="fas fa-trash w-4"></i>
-                    {t('plots.table.delete')}
-                  </button>
+                <div
+                  className="hidden absolute right-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-outline z-10">
+                  <PlotActions plot={plot}/>
+
                 </div>
               </div>
             </div>
             <p className="text-sm text-state-disabled mb-3 line-clamp-2">{plot.description}</p>
             <div className="text-xs text-state-disabled">
-              {plot.lastDiagnosticDate ? (
-                <span>{t('plots.table.lastDiagnostic')}: {formatDate(plot.lastDiagnosticDate)}</span>
+              {plot.last_diagnosis ? (
+                <span>{t('plots.table.lastDiagnostic')}: {formatDate(plot.last_diagnosis!)}</span>
               ) : (
                 <span>{t('plots.details.noDiagnostics')}</span>
               )}
@@ -212,71 +217,8 @@ export default function PlotsGrid() {
       </div>
 
       {/* Paginador */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-between pt-4 border-t border-outline mt-6">
-          <p className="text-sm text-state-disabled">
-            {t('plots.pagination.showing')} {startIndex + 1} - {Math.min(endIndex, plots.length)} {t('plots.pagination.of')} {plots.length} {t('plots.pagination.plots')}
-          </p>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => handlePageChange(1)}
-              disabled={currentPage === 1}
-              className="px-3 py-1 rounded border border-outline text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              title={t('plots.pagination.firstPage')}
-            >
-              <i className="fas fa-angle-double-left text-xs"></i>
-            </button>
-
-            <button
-              onClick={() => handlePageChange(currentPage - 1)}
-              disabled={currentPage === 1}
-              className="px-3 py-1 rounded border border-outline text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              title={t('plots.pagination.previousPage')}
-            >
-              <i className="fas fa-chevron-left text-xs"></i>
-            </button>
-
-            {getPageNumbers().map((page, index) => (
-              typeof page === 'number' ? (
-                <button
-                  key={page}
-                  onClick={() => handlePageChange(page)}
-                  className={`px-3 py-1 rounded text-sm transition-colors ${
-                    page === currentPage
-                      ? 'bg-primary text-white'
-                      : 'border border-outline hover:bg-gray-50'
-                  }`}
-                >
-                  {page}
-                </button>
-              ) : (
-                <span key={`ellipsis-${index}`} className="px-2 text-state-disabled">
-                  {page}
-                </span>
-              )
-            ))}
-
-            <button
-              onClick={() => handlePageChange(currentPage + 1)}
-              disabled={currentPage === totalPages}
-              className="px-3 py-1 rounded border border-outline text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              title={t('plots.pagination.nextPage')}
-            >
-              <i className="fas fa-chevron-right text-xs"></i>
-            </button>
-
-            <button
-              onClick={() => handlePageChange(totalPages)}
-              disabled={currentPage === totalPages}
-              className="px-3 py-1 rounded border border-outline text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
-              title={t('plots.pagination.lastPage')}
-            >
-              <i className="fas fa-angle-double-right text-xs"></i>
-            </button>
-          </div>
-        </div>
-      )}
+      <Pagination currentPage={(+currentPage)} total={pagination.total} itemsPerPage={itemsPerPage}
+                  onPageChange={handlePageChange}/>
     </>
   );
 }

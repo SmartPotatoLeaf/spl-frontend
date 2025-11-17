@@ -11,7 +11,7 @@ export interface Diagnostic {
   predictionId: bigint;
   imageId: bigint;
   labelId: bigint;
-  
+
   // Datos transformados para presentación
   imageUrl: string;
   status: SeverityLevel;
@@ -19,7 +19,7 @@ export interface Diagnostic {
   confidence: number;
   predictedAt: Date;
   uploadedAt: Date;
-  
+
   // Información adicional
   location?: string;
   hasLocation: boolean;
@@ -92,4 +92,34 @@ export interface DashboardData {
   filters: DashboardFilters;
   isLoading: boolean;
   error: string | null;
+}
+
+
+export interface DashboardSummaryRequest {
+  min_date?: string
+  max_date?: string
+  plot_ids?: (number | undefined | null)[]
+}
+
+export interface DashboardSummaryResponse {
+  total: number
+  plot_count: number
+  mean_severity: number
+  labels_count: LabelsCount[]
+  diagnosis_distribution: DiagnosisSummaryDistribution[]
+}
+
+export interface DiagnosisSummaryDistribution {
+  month: string;
+  labels_count: LabelsCount[];
+}
+
+export interface LabelsCount {
+  label: Label
+  count: number
+}
+
+export interface Label {
+  id: number
+  name: string
 }

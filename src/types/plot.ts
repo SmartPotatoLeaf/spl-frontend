@@ -1,4 +1,4 @@
-import type { Plot } from './database';
+import type {Plot} from './database';
 
 /**
  * PlotFormData - Datos para crear o editar una parcela
@@ -6,8 +6,6 @@ import type { Plot } from './database';
 export interface PlotFormData {
   name: string;
   description: string;
-  variety?: string;
-  sector?: string;
 }
 
 /**
@@ -63,4 +61,28 @@ export interface PlotDistributionData {
   low: number;
   moderate: number;
   severe: number;
+}
+
+
+export interface PlotPaginatedRequest {
+  "page": number,
+  "limit": number,
+  "labels"?: string[],
+}
+
+export interface PlotPaginatedResponse {
+  total: number
+  limit: number
+  page: number,
+  items: PlotDetailed[]
+}
+
+export interface PlotDetailed {
+  id: number | null
+  name: string
+  description: string
+  created_at: Date
+  total_diagnosis: number
+  last_diagnosis: Date
+  healthy_diagnosis: number
 }

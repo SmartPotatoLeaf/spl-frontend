@@ -156,7 +156,7 @@
       "edit": "Edit",
       "delete": "Delete"
     },
-    "deleteConfirm": "Are you sure you want to delete \"{name}\"?",
+    "deleteConfirm": "Are you sure you want to delete \"{{name}}\"?",
     "form": {
       "nameLabel": "Plot name",
       "namePlaceholder": "E.g.: Plot A",
@@ -222,6 +222,10 @@
       "october": "October",
       "november": "November",
       "december": "December"
+    },
+    "default": {
+      "name": "Default Plot",
+        "description": "The default plot for predictions without an assigned plot."
     }
   },
   "auth": {

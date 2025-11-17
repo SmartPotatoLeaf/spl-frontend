@@ -7,19 +7,17 @@ interface PlotFormProps {
   mode?: 'create' | 'edit';
   onSubmit: (data: PlotFormData) => Promise<void>;
   onCancel: () => void;
+  isSubmitting: boolean;
 }
 
-export default function PlotForm({ initialData, mode = 'create', onSubmit, onCancel }: PlotFormProps) {
+export default function PlotForm({ initialData, mode = 'create', onSubmit, onCancel, isSubmitting }: PlotFormProps) {
   const { t } = useTranslation();
   const [formData, setFormData] = useState<PlotFormData>({
     name: initialData?.name || '',
     description: initialData?.description || '',
-    variety: initialData?.variety || '',
-    sector: initialData?.sector || '',
   });
 
   const [errors, setErrors] = useState<Partial<Record<keyof PlotFormData, string>>>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (field: keyof PlotFormData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -48,14 +46,6 @@ export default function PlotForm({ initialData, mode = 'create', onSubmit, onCan
       newErrors.description = t('plots.form.errors.descriptionMaxLength');
     }
 
-    if (formData.variety && formData.variety.length > 50) {
-      newErrors.variety = t('plots.form.errors.varietyMaxLength');
-    }
-
-    if (formData.sector && formData.sector.length > 50) {
-      newErrors.sector = t('plots.form.errors.sectorMaxLength');
-    }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -67,14 +57,11 @@ export default function PlotForm({ initialData, mode = 'create', onSubmit, onCan
       return;
     }
 
-    setIsSubmitting(true);
-
     try {
       await onSubmit(formData);
     } catch (error) {
       console.error('Error al guardar parcela:', error);
     } finally {
-      setIsSubmitting(false);
     }
   };
 
@@ -131,58 +118,6 @@ export default function PlotForm({ initialData, mode = 'create', onSubmit, onCan
         <p className="mt-1 text-xs text-state-disabled">
           {formData.description.length}/500 {t('plots.form.characters')}
         </p>
-      </div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-        <div>
-          <label htmlFor="variety" className="block text-sm font-medium text-state-idle mb-2">
-            {t('plots.form.varietyLabel')}
-          </label>
-          <input
-            type="text"
-            id="variety"
-            value={formData.variety}
-            onChange={(e) => handleChange('variety', e.target.value)}
-            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-              errors.variety
-                ? 'border-error focus:ring-error/20'
-                : 'border-outline focus:ring-primary/20 focus:border-primary'
-            }`}
-            placeholder={t('plots.form.varietyPlaceholder')}
-            disabled={isSubmitting}
-          />
-          {errors.variety && (
-            <p className="mt-1 text-sm text-error flex items-center gap-1">
-              <i className="fas fa-exclamation-circle"></i>
-              {errors.variety}
-            </p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="sector" className="block text-sm font-medium text-state-idle mb-2">
-            {t('plots.form.sectorLabel')}
-          </label>
-          <input
-            type="text"
-            id="sector"
-            value={formData.sector}
-            onChange={(e) => handleChange('sector', e.target.value)}
-            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 transition-colors ${
-              errors.sector
-                ? 'border-error focus:ring-error/20'
-                : 'border-outline focus:ring-primary/20 focus:border-primary'
-            }`}
-            placeholder={t('plots.form.sectorPlaceholder')}
-            disabled={isSubmitting}
-          />
-          {errors.sector && (
-            <p className="mt-1 text-sm text-error flex items-center gap-1">
-              <i className="fas fa-exclamation-circle"></i>
-              {errors.sector}
-            </p>
-          )}
-        </div>
       </div>
 
       <div className="flex items-center justify-end gap-4 pt-4 border-t border-outline">

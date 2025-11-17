@@ -1,26 +1,27 @@
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import PlotForm from './PlotForm';
-import type { PlotFormData, PlotDetail } from '@/types';
-import { createPlot, updatePlot, getPlotById } from '@/services/plotService';
-import { toast } from '@/stores';
+import type {PlotFormData, PlotDetail, PlotDetailed} from '@/types';
+import {createPlot, getDetailedPlot, updatePlot} from '@/services/plotService';
+import {toast} from '@/stores';
 
 interface PlotFormWrapperProps {
   mode: 'create' | 'edit';
   plotId?: string;
 }
 
-export default function PlotFormWrapper({ mode, plotId }: PlotFormWrapperProps) {
-  const [plot, setPlot] = useState<PlotDetail | null>(null);
+export default function PlotFormWrapper({mode, plotId}: PlotFormWrapperProps) {
+  const [plot, setPlot] = useState<PlotDetailed | null>(null);
   const [isLoading, setIsLoading] = useState(mode === 'edit');
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [saveError, setSaveError] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null),
+    [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     if (mode === 'edit' && plotId) {
       async function loadPlot() {
         try {
           setIsLoading(true);
-          const data = await getPlotById(plotId!);
+          const data = await getDetailedPlot(plotId!);
           setPlot(data);
         } catch (err) {
           const errorMessage = err instanceof Error ? err.message : 'Error al cargar la parcela';
@@ -38,7 +39,7 @@ export default function PlotFormWrapper({ mode, plotId }: PlotFormWrapperProps) 
   const handleSubmit = async (data: PlotFormData) => {
     try {
       setSaveError(null);
-      
+      setIsSaving(true);
       if (mode === 'create') {
         await createPlot(data);
         toast.success('¡Parcela creada!', 'Redirigiendo a tus parcelas...');
@@ -53,6 +54,7 @@ export default function PlotFormWrapper({ mode, plotId }: PlotFormWrapperProps) 
         }, 2000);
       }
     } catch (err) {
+      setIsSaving(false);
       const errorMessage = err instanceof Error ? err.message : 'Error al guardar la parcela';
       setSaveError(errorMessage);
       toast.error('Error al guardar', errorMessage);
@@ -94,8 +96,6 @@ export default function PlotFormWrapper({ mode, plotId }: PlotFormWrapperProps) 
   const initialData: PlotFormData | undefined = mode === 'edit' && plot ? {
     name: plot.name,
     description: plot.description,
-    variety: plot.variety,
-    sector: plot.sector,
   } : undefined;
 
   return (
@@ -109,12 +109,13 @@ export default function PlotFormWrapper({ mode, plotId }: PlotFormWrapperProps) 
           </div>
         </div>
       )}
-      
+
       <PlotForm
         mode={mode}
         initialData={initialData}
         onSubmit={handleSubmit}
         onCancel={handleCancel}
+        isSubmitting={isSaving}
       />
     </div>
   );

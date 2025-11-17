@@ -156,7 +156,7 @@
       "edit": "Editar",
       "delete": "Eliminar"
     },
-    "deleteConfirm": "¿Estás seguro de eliminar \"{name}\"?",
+    "deleteConfirm": "¿Estás seguro de eliminar \"{{name}}\"?",
     "form": {
       "nameLabel": "Nombre de la parcela",
       "namePlaceholder": "Ej: Parcela A",
@@ -222,6 +222,10 @@
       "october": "Octubre",
       "november": "Noviembre",
       "december": "Diciembre"
+    },
+    "default": {
+      "name": "Parcela predeterminada",
+      "description": "La parcela predeterminada reune los diagnosticos sin parcela asignada."
     }
   },
   "auth": {

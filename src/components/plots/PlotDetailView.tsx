@@ -1,20 +1,25 @@
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { TrendChart, DistributionChart } from './PlotCharts';
+import {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {TrendChart, DistributionChart} from './PlotCharts';
 import ChartModal from '@/components/shared/ChartModal';
-import type { PlotDetail } from '@/types';
-import { getPlotById } from '@/services/plotService';
+import type {PlotDetail, PlotDetailed} from '@/types';
+import {getDetailedPlot} from '@/services/plotService';
+import {getDashboardSummary} from "@/services/dashboardService.ts";
+import Loader from "@/components/shared/Loader";
 
 interface PlotDetailViewProps {
-  plotId: string;
+  plotId: string | number | null | undefined;
 }
 
 type ChartType = 'trend' | 'distribution' | null;
 
-export default function PlotDetailView({ plotId }: PlotDetailViewProps) {
-  const { t } = useTranslation();
-  const [plot, setPlot] = useState<PlotDetail | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+export default function PlotDetailView({plotId}: PlotDetailViewProps) {
+  const {t} = useTranslation();
+  const [plot, setPlot] = useState<PlotDetailed | null>(null),
+    [chartData, setChartData] = useState({trend: null, distribution: null});
+  const [isLoading, setIsLoading] = useState(true),
+    [isSummaryLoading, setIsSummaryLoading] = useState(true);
+
   const [error, setError] = useState<string | null>(null);
   const [expandedChart, setExpandedChart] = useState<ChartType>(null);
 
@@ -22,7 +27,7 @@ export default function PlotDetailView({ plotId }: PlotDetailViewProps) {
     async function loadPlot() {
       try {
         setIsLoading(true);
-        const data = await getPlotById(plotId);
+        const data = await getDetailedPlot(plotId);
         setPlot(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Error al cargar la parcela');
@@ -30,22 +35,92 @@ export default function PlotDetailView({ plotId }: PlotDetailViewProps) {
         setIsLoading(false);
       }
     }
+    async function loadSummary() {
+      try {
+        setIsSummaryLoading(true);
+        const data = await getDashboardSummary({
+          plot_ids: plotId ? [(+plotId)] : [undefined],
+        });
+
+        const labelCount: any = {
+          healthy: 0,
+          low: 0,
+          mild: 0,
+          severe: 0,
+        };
+
+        data.labels_count.forEach(label => {
+          labelCount[label.label.name] = label.count;
+        })
+
+        const labels = [],
+          labelData: any = {
+            healthy: {
+              data: [],
+              "borderColor": "#4CAF50",
+              "backgroundColor": "rgba(76, 175, 80, 0.1)",
+            },
+            low: {
+              data: [],
+              "borderColor": "#A4C400",
+              "backgroundColor": "rgba(164, 196, 0, 0.1)"
+            },
+            mild: {
+              data: [],
+              "borderColor": "#F4B400",
+              "backgroundColor": "rgba(244, 180, 0, 0.1)"
+            },
+            severe: {
+              data: [],
+              "borderColor": "#D32F2F",
+              "backgroundColor": "rgba(211, 47, 47, 0.1)"
+            },
+          };
+
+        data.diagnosis_distribution.forEach(el => {
+          labels.push(el.month)
+          el.labels_count.forEach(it => {
+            labelData[it.label.name].data.push(it.count)
+          })
+        });
+
+        labelCount["moderate"] = labelCount.mild;
+
+        setChartData({
+          distribution: labelCount,
+          trend: {
+            labels: labels,
+            datasets: Object.keys(labelData).map(el => ({
+              ...labelData[el],
+              label: t(`home.summaryChart.categories.${el === "mild" ? "moderate" : el}`),
+            }))
+          }
+        })
+      } catch (e) {
+
+      }
+      finally {
+        setIsSummaryLoading(false);
+      }
+    }
 
     loadPlot();
+    loadSummary();
   }, [plotId]);
 
-  const formatDate = (date: Date): string => {
+  const formatDate = (date: Date | string): string => {
     const monthKeys = [
       'january', 'february', 'march', 'april', 'may', 'june',
       'july', 'august', 'september', 'october', 'november', 'december'
     ];
+    if (typeof date === 'string')
+      date = new Date(date);
     const monthKey = monthKeys[date.getMonth()];
     const monthName = t(`plots.months.${monthKey}`);
     return `${date.getDate()} de ${monthName}, ${date.getFullYear()}`;
   };
 
   const handleDownloadChart = (chartName: string) => {
-    // TODO: Implementar descarga de gráfico
     console.log(`Descargar gráfico: ${chartName}`);
   };
 
@@ -58,14 +133,7 @@ export default function PlotDetailView({ plotId }: PlotDetailViewProps) {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-96">
-        <div className="text-center">
-          <i className="fas fa-spinner fa-spin text-4xl text-primary mb-4"></i>
-          <p className="text-state-disabled">{t('plots.loading')}</p>
-        </div>
-      </div>
-    );
+    return <Loader text={t('plots.loading')} />;
   }
 
   if (error || !plot) {
@@ -80,8 +148,8 @@ export default function PlotDetailView({ plotId }: PlotDetailViewProps) {
     );
   }
 
-  const healthyPercentage = plot.diagnosticsCount > 0 
-    ? ((plot.healthyCount / plot.diagnosticsCount) * 100).toFixed(2)
+  const healthyPercentage = plot.total_diagnosis > 0
+    ? ((plot.healthy_diagnosis / plot.total_diagnosis) * 100).toFixed(2)
     : '0.00';
 
   return (
@@ -100,12 +168,16 @@ export default function PlotDetailView({ plotId }: PlotDetailViewProps) {
         <div className="bg-white rounded-lg border border-outline p-6">
           <div className="mb-4">
             <h3 className="text-sm font-medium text-state-disabled mb-1">{t('plots.details.name')}</h3>
-            <p className="text-base text-state-idle font-semibold">{plot.name}</p>
+            <p className="text-base text-state-idle font-semibold">
+              {plot.id ? plot.name : t('plots.default.name')}
+            </p>
           </div>
 
           <div>
             <h3 className="text-sm font-medium text-state-disabled mb-1">{t('plots.details.description')}</h3>
-            <p className="text-sm text-state-idle leading-relaxed">{plot.description}</p>
+            <p className="text-sm text-state-idle leading-relaxed">
+              {plot.id ? plot.description : t('plots.default.description')}
+            </p>
           </div>
         </div>
 
@@ -114,23 +186,23 @@ export default function PlotDetailView({ plotId }: PlotDetailViewProps) {
           <div className="grid grid-cols-2 gap-6">
             <div>
               <h3 className="text-sm font-medium text-state-disabled mb-1">{t('plots.details.diagnosticsCount')}</h3>
-              <p className="text-2xl text-state-idle font-semibold">{plot.diagnosticsCount}</p>
+              <p className="text-2xl text-state-idle font-semibold">{plot.total_diagnosis}</p>
             </div>
 
             <div>
               <h3 className="text-sm font-medium text-state-disabled mb-1">{t('plots.details.healthyCount')}</h3>
-              <p className="text-2xl text-state-idle font-semibold">{plot.healthyCount} ({healthyPercentage}%)</p>
+              <p className="text-2xl text-state-idle font-semibold">{plot.healthy_diagnosis} ({healthyPercentage}%)</p>
             </div>
 
             <div>
               <h3 className="text-sm font-medium text-state-disabled mb-1">{t('plots.details.createdAt')}</h3>
-              <p className="text-sm text-state-idle">{formatDate(plot.create_at)}</p>
+              <p className="text-sm text-state-idle">{formatDate(plot.created_at)}</p>
             </div>
 
             <div>
               <h3 className="text-sm font-medium text-state-disabled mb-1">{t('plots.details.lastDiagnostic')}</h3>
               <p className="text-sm text-state-idle">
-                {plot.lastDiagnosticDate ? formatDate(plot.lastDiagnosticDate) : t('plots.details.noDiagnostics')}
+                {plot.last_diagnosis ? formatDate(plot.last_diagnosis) : t('plots.details.noDiagnostics')}
               </p>
             </div>
           </div>
@@ -147,14 +219,14 @@ export default function PlotDetailView({ plotId }: PlotDetailViewProps) {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-base font-semibold text-state-idle">{t('plots.details.trendChart')}</h3>
               <div className="flex items-center gap-2">
-                <button 
+                <button
                   onClick={() => handleDownloadChart('tendencia')}
                   className="p-2 text-state-disabled hover:text-state-idle transition-colors"
                   title={t('plots.details.download')}
                 >
                   <i className="fas fa-download"></i>
                 </button>
-                <button 
+                <button
                   onClick={() => handleExpandChart('trend')}
                   className="p-2 text-state-disabled hover:text-state-idle transition-colors"
                   title={t('plots.details.expand')}
@@ -163,7 +235,8 @@ export default function PlotDetailView({ plotId }: PlotDetailViewProps) {
                 </button>
               </div>
             </div>
-            <TrendChart data={plot.trendData} />
+            {isSummaryLoading && <Loader text={t("common.loading")}/>}
+            {!isSummaryLoading && chartData.trend && <TrendChart data={chartData.trend}/>}
           </div>
 
           {/* Distribución de diagnósticos */}
@@ -171,14 +244,14 @@ export default function PlotDetailView({ plotId }: PlotDetailViewProps) {
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-base font-semibold text-state-idle">{t('plots.details.distributionChart')}</h3>
               <div className="flex items-center gap-2">
-                <button 
+                <button
                   onClick={() => handleDownloadChart('distribución')}
                   className="p-2 text-state-disabled hover:text-state-idle transition-colors"
                   title={t('plots.details.download')}
                 >
                   <i className="fas fa-download"></i>
                 </button>
-                <button 
+                <button
                   onClick={() => handleExpandChart('distribution')}
                   className="p-2 text-state-disabled hover:text-state-idle transition-colors"
                   title={t('plots.details.expand')}
@@ -187,7 +260,8 @@ export default function PlotDetailView({ plotId }: PlotDetailViewProps) {
                 </button>
               </div>
             </div>
-            <DistributionChart data={plot.distributionData} />
+            {isSummaryLoading && <Loader text={t("common.loading")}/>}
+            {!isSummaryLoading && chartData.distribution && <DistributionChart data={chartData.distribution} />}
           </div>
         </div>
       </div>
@@ -199,7 +273,8 @@ export default function PlotDetailView({ plotId }: PlotDetailViewProps) {
         title={t('plots.details.trendChart')}
       >
         <div className="h-[600px]">
-          {plot && <TrendChart data={plot.trendData} />}
+          {isSummaryLoading && <Loader text={t("common.loading")}/>}
+          {!isSummaryLoading && chartData.trend && <TrendChart data={chartData.trend} />}
         </div>
       </ChartModal>
 
@@ -210,7 +285,8 @@ export default function PlotDetailView({ plotId }: PlotDetailViewProps) {
         title={t('plots.details.distributionChart')}
       >
         <div className="max-w-2xl mx-auto">
-          {plot && <DistributionChart data={plot.distributionData} />}
+          {isSummaryLoading && <Loader text={t("common.loading")}/>}
+          {!isSummaryLoading && chartData.distribution && <DistributionChart data={chartData.distribution} />}
         </div>
       </ChartModal>
     </div>
