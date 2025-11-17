@@ -1,52 +1,66 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {createFeedback, updateFeedback} from "@/components/shared/feedbackService.ts";
+import type {Feedback} from "@/types/feedback.ts";
+import {toast} from "@/stores";
 
 interface IncorrectDiagnosticModalProps {
   isOpen: boolean;
   onClose: () => void;
   predictionId: string;
   currentLabel: string;
+  comment?: string;
+  feedbackId?: number | string;
+  severityOptions: {
+    value: string;
+    labelKey: string;
+  }[];
+  onSubmit?: (data: Feedback) => void;
 }
 
-const severityOptions = [
-  { value: 'healthy', labelKey: 'leaf.details.severity.healthy' },
-  { value: 'low', labelKey: 'leaf.details.severity.low' },
-  { value: 'moderate', labelKey: 'leaf.details.severity.moderate' },
-  { value: 'severe', labelKey: 'leaf.details.severity.severe' },
-];
 
 export default function IncorrectDiagnosticModal({
-  isOpen,
-  onClose,
-  predictionId,
-  currentLabel,
-}: IncorrectDiagnosticModalProps) {
-  const { t } = useTranslation();
-  const [correctLabel, setCorrectLabel] = useState('');
-  const [comments, setComments] = useState('');
+                                                   isOpen,
+                                                   onClose,
+                                                   predictionId,
+                                                   feedbackId,
+                                                   currentLabel,
+                                                   comment,
+                                                   severityOptions,
+                                                   onSubmit
+                                                 }: IncorrectDiagnosticModalProps) {
+  const {t} = useTranslation();
+  const [correctLabel, setCorrectLabel] = useState(currentLabel ?? "");
+  const [comments, setComments] = useState(comment);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   if (!isOpen) return null;
-
   const handleSubmit = async () => {
     if (!correctLabel) return;
 
     setIsSubmitting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const data = await (feedbackId ? updateFeedback((+feedbackId), {
+        correct_label_id: +correctLabel,
+        comment: comments
+      }) : createFeedback({
+        correct_label_id: +correctLabel,
+        comment: comments!,
+        prediction_id: +predictionId
+      }));
 
-    console.log('Submitting feedback for prediction:', predictionId);
-    console.log('Correct label:', correctLabel);
-    console.log('Comments:', comments);
-
-    setIsSubmitting(false);
-    setCorrectLabel('');
-    setComments('');
+      onSubmit && onSubmit(data);
+      toast.success("")
+    } catch (e) {
+      toast.error("")
+    } finally {
+      setIsSubmitting(false);
+    }
     onClose();
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-state-idle/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-state-idle/50 backdrop-blur-sm" onClick={onClose}/>
 
       <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full">
         <div className="sticky top-0 bg-white border-b border-outline p-6 flex items-center justify-between">

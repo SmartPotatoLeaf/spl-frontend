@@ -131,3 +131,64 @@ export interface DiagnosisSummaryFilters {
 }
 
 
+export interface DiagnosticResponse {
+  id: number
+  presence_confidence: number
+  absence_confidence: number
+  severity: number
+  predicted_at: string
+  plot_id: number
+  image: Image
+  label: Label
+  marks: Mark[]
+  feedback?: Feedback
+}
+
+export interface Image {
+  id: number
+  filepath: string
+  filename: string
+  uploaded_at: string
+}
+
+export interface Label {
+  id: number
+  name: string
+  min: number
+  max: number
+  description: string
+  created_at: string
+  updated_at: string
+}
+
+export interface Mark {
+  id: number
+  data: Data
+  type: Type
+}
+
+export interface Data extends Record<string, any> {
+
+}
+
+export interface Type {
+  id: number
+  name: string
+  description: string
+}
+
+export interface Feedback {
+  id: number
+  comment: string
+  status: Status
+  correct_label: Label
+  prediction_id: number
+  create_at: string
+}
+
+export interface Status {
+  id: number
+  name: string
+  description: string
+  create_at: string
+}

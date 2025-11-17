@@ -49,6 +49,18 @@ class PlotService extends CrudService<PlotSummary> {
 
     return this.httpGet(`/detailed/${id}/`)
   }
+
+  async assignToPredictions(plot: number, predictions: number[]) {
+    return this.httpPost(`/${plot}/assign/`, {
+      predictions_id: predictions
+    })
+  }
+
+  async unassignPredictions(predictions: number[]) {
+    return this.httpPost("/unassign/", {
+      predictions_id: predictions
+    })
+  }
 }
 
 export function getPlots(body: PlotPaginatedRequest) {
@@ -74,6 +86,14 @@ export function deletePlot(id: number) {
 export function getDetailedPlot(id: number | null | string | undefined) {
   instantiateService()
   return service.getDetailed(id)
+}
+
+export function assignPlotToPredictions(plot: number | undefined | null, predictions: number[]) {
+  instantiateService()
+  if (!plot)
+    return service.unassignPredictions(predictions)
+
+  return service.assignToPredictions(plot, predictions)
 }
 
 const USE_MOCK = true;

@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {toast} from "@/stores";
+import {deleteDiagnostic} from "@/services/diagnosticsService.ts";
 
 interface DeleteDiagnosticModalProps {
   isOpen: boolean;
@@ -8,26 +10,35 @@ interface DeleteDiagnosticModalProps {
 }
 
 export default function DeleteDiagnosticModal({
-  isOpen,
-  onClose,
-  predictionId,
-}: DeleteDiagnosticModalProps) {
-  const { t } = useTranslation();
+                                                isOpen,
+                                                onClose,
+                                                predictionId,
+                                              }: DeleteDiagnosticModalProps) {
+  const {t} = useTranslation();
   const [isDeleting, setIsDeleting] = useState(false);
 
   if (!isOpen) return null;
 
   const handleDelete = async () => {
     setIsDeleting(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    console.log('Deleting prediction:', predictionId);
-    window.location.href = '/history';
+    try {
+      await deleteDiagnostic(+predictionId);
+      toast.success("")
+      setTimeout(() => {
+        window.location.href = '/history';
+      }, 1500);
+
+    } catch (e) {
+      toast.error("")
+      setIsDeleting(false);
+      onClose();
+    }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      <div className="absolute inset-0 bg-state-idle/50 backdrop-blur-sm" onClick={onClose} />
+      <div className="absolute inset-0 bg-state-idle/50 backdrop-blur-sm" onClick={() => !isDeleting && onClose()}/>
 
       <div className="relative bg-white rounded-xl shadow-xl max-w-md w-full">
         <div className="p-6 space-y-4">

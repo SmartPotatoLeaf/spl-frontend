@@ -1,5 +1,5 @@
 import CrudService from "@/services/crud/CrudService.ts";
-import type {Diagnostic} from "@/types";
+import type {Diagnostic, DiagnosticResponse} from "@/types";
 import {API_URL} from "astro:env/client";
 import type {DiagnosticFilterRequest, DiagnosticFilterResponse} from "@/types/diagnostics.ts";
 import {getToken} from "@/stores/authStore.ts";
@@ -22,8 +22,12 @@ class DiagnosticsService extends CrudService<Diagnostic> {
     return Buffer.from(data, "binary").toString("base64")
   }
 
-  async getDiagnostic(id: number) {
+  async getDiagnostic(id: number): Promise<DiagnosticResponse> {
+    return this.httpGet(`/${id}/`,)
+  }
 
+  async delete(id: number): Promise<DiagnosticResponse> {
+    return this.httpDelete(`/${id}/`);
   }
 }
 
@@ -36,4 +40,14 @@ function instantiateService() {
 export function filterDiagnostics(body: DiagnosticFilterRequest): Promise<DiagnosticFilterResponse> {
   instantiateService();
   return service.filter(body);
+}
+
+export function getDiagnostic(id: number): Promise<DiagnosticResponse> {
+  instantiateService();
+  return service.getDiagnostic(id);
+}
+
+export function deleteDiagnostic(id: number): Promise<DiagnosticResponse> {
+  instantiateService();
+  return service.delete(id);
 }

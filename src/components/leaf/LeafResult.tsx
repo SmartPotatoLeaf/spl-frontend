@@ -1,32 +1,81 @@
-import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useState, useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
 import AssignPlotModal from './AssignPlotModal';
 import DeleteDiagnosticModal from './DeleteDiagnosticModal';
 import IncorrectDiagnosticModal from './IncorrectDiagnosticModal';
-import diagnosticsData from '@/data/diagnostics.json';
+import {getDiagnostic} from "@/services/diagnosticsService.ts";
+import Loader from "@/components/shared/Loader";
+import type {DashboardSummaryRequest, DiagnosisSummaryFilters} from "@/types";
+import {getDashboardFilters} from "@/services/dashboardService.ts";
+import {BLOB_URL} from "astro:env/client";
 
 interface LeafResultProps {
   predictionId: string;
 }
 
-export default function LeafResult({ predictionId }: LeafResultProps) {
-  const { t } = useTranslation();
+export default function LeafResult({predictionId}: LeafResultProps) {
+  const {t} = useTranslation();
   const [diagnostic, setDiagnostic] = useState<any>(null);
   const [showAssignPlot, setShowAssignPlot] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const [showIncorrect, setShowIncorrect] = useState(false);
+  const [showIncorrect, setShowIncorrect] = useState(false),
+    [filters, setFilters] = useState<DiagnosisSummaryFilters>({
+      labels: [],
+      plots: [],
+    });
 
   useEffect(() => {
-    const found = diagnosticsData.find((d) => d.predictionId === predictionId);
-    setDiagnostic(found);
+    async function loadFilters() {
+      try {
+        const data = await getDashboardFilters();
+        setFilters(data);
+      } catch (e) {
+      }
+    }
+
+    loadFilters()
+  }, []);
+
+  useEffect(() => {
+    async function loadDiagnostic() {
+      const data = await getDiagnostic((+predictionId));
+      let name = data.label.name,
+        date = data.predicted_at;
+      name = name === "mild" ? "moderate" : name;
+
+      if (!date.endsWith("Z"))
+        date += "Z";
+
+      let feedbackName = data.feedback?.correct_label.id ?? "";
+
+      const leafMask = data.marks.find(el => el.type.name === "leaf_mask"),
+        lesionMask = data.marks.find(el => el.type.name === "lt_blg_lesion_mask");
+
+      setDiagnostic(
+        {
+          status: name,
+          statusLabel: t(`home.summaryChart.categories.${name}`),
+          plotId: data.plot_id,
+          confidence: data.presence_confidence,
+          affectedArea: data.severity,
+          predictedAt: date,
+          feedback: {
+            id: data.feedback?.id,
+            correctLabel: feedbackName,
+            comment: data.feedback?.comment ?? "",
+          },
+          imageUrl: `${BLOB_URL}${data.image.filepath}`,
+          leafUrl: leafMask ? `${BLOB_URL}${leafMask.data.filepath}` : undefined,
+          lesionUrl: lesionMask ? `${BLOB_URL}${lesionMask.data.filepath}` : undefined,
+        }
+      )
+    }
+
+    loadDiagnostic()
   }, [predictionId]);
 
   if (!diagnostic) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <p className="text-state-disabled">{t('common.loading')}</p>
-      </div>
-    );
+    return <Loader text={t('common.loading')}/>;
   }
 
   const handleExportReport = () => {
@@ -43,36 +92,6 @@ export default function LeafResult({ predictionId }: LeafResultProps) {
     return colors[status] || 'bg-outline';
   };
 
-  const getRecommendations = (status: string) => {
-    const recommendations: Record<string, { treatment: string; nextSteps: string }> = {
-      healthy: {
-        treatment: 'No se requiere tratamiento químico. Mantener prácticas de monitoreo preventivo.',
-        nextSteps:
-          'Continuar con el monitoreo regular. Revisar cada 7 días. Asegurar buena ventilación y drenaje del cultivo.',
-      },
-      low: {
-        treatment:
-          'Aplicar fungicidas preventivos específicos para el tizón tardío. Consulte a un agrónomo para la selección del producto adecuado y la dosis correcta.',
-        nextSteps:
-          'Incrementar frecuencia de monitoreo a cada 3-5 días. Eliminar hojas afectadas para reducir propagación del inóculo.',
-      },
-      moderate: {
-        treatment:
-          'Aplicar fungicidas específicos para el tizón tardío. Consulte a un agrónomo para la selección del producto adecuado y la dosis correcta. Considere opciones como mancozeb o clorotalonil.',
-        nextSteps:
-          'Aumentar la frecuencia de monitoreo a cada 3-5 días. Eliminar y destruir las hojas y plantas severamente afectadas para reducir la propagación del inóculo.',
-      },
-      severe: {
-        treatment:
-          'Aplicar fungicidas sistémicos de alta eficacia inmediatamente. Consulte a un agrónomo para un plan de aplicación intensivo.',
-        nextSteps:
-          'Monitorear diariamente. Eliminar plantas severamente infectadas. Evaluar posible pérdida de cultivo y planificar replantación.',
-      },
-    };
-    return recommendations[status] || recommendations.healthy;
-  };
-
-  const recommendations = getRecommendations(diagnostic.status);
   const hasValidImage = diagnostic.imageUrl && diagnostic.imageUrl !== '/placeholder.jpg';
 
   return (
@@ -110,7 +129,8 @@ export default function LeafResult({ predictionId }: LeafResultProps) {
                   className="w-full h-full object-contain"
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
+                <div
+                  className="w-full h-full flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
                   <i className="fas fa-leaf text-8xl text-gray-300 opacity-40"></i>
                 </div>
               )}
@@ -126,7 +146,7 @@ export default function LeafResult({ predictionId }: LeafResultProps) {
 
           <div className="bg-white rounded-xl shadow-sm border border-outline p-6">
             <h2 className="text-xl font-medium text-state-idle mb-4">
-              {t('leaf.recommendations.title', { severity: diagnostic.statusLabel.toLowerCase() })}
+              {t('leaf.recommendations.title', {severity: diagnostic.statusLabel.toLowerCase()})}
             </h2>
             <div className="space-y-4">
               <div>
@@ -148,7 +168,7 @@ export default function LeafResult({ predictionId }: LeafResultProps) {
                     {t('leaf.recommendations.treatment')}
                   </h3>
                 </div>
-                <p className="text-state-idle/70 ml-7">{recommendations.treatment}</p>
+                <p className="text-state-idle/70 ml-7">{/*recommendations.treatment*/}</p>
               </div>
               <div>
                 <div className="flex items-start gap-2 mb-2">
@@ -169,7 +189,7 @@ export default function LeafResult({ predictionId }: LeafResultProps) {
                     {t('leaf.recommendations.nextSteps')}
                   </h3>
                 </div>
-                <p className="text-state-idle/70 ml-7">{recommendations.nextSteps}</p>
+                <p className="text-state-idle/70 ml-7">{/*recommendations.nextSteps*/}</p>
               </div>
             </div>
           </div>
@@ -256,7 +276,7 @@ export default function LeafResult({ predictionId }: LeafResultProps) {
                   <div className="flex-1 bg-outline/30 rounded-full h-2">
                     <div
                       className="bg-primary rounded-full h-2 transition-all"
-                      style={{ width: `${diagnostic.confidence * 100}%` }}
+                      style={{width: `${diagnostic.confidence * 100}%`}}
                     />
                   </div>
                   <span className="text-sm font-medium text-state-idle">
@@ -278,11 +298,7 @@ export default function LeafResult({ predictionId }: LeafResultProps) {
                     {t('leaf.details.infectedArea')}
                   </p>
                   <p className="text-state-idle font-medium">
-                    {diagnostic.status === 'low'
-                      ? '< 10%'
-                      : diagnostic.status === 'moderate'
-                        ? '10-30%'
-                        : '> 30%'}
+                    {diagnostic.affectedArea.toFixed(2)} %
                   </p>
                 </div>
               )}
@@ -292,20 +308,13 @@ export default function LeafResult({ predictionId }: LeafResultProps) {
                   {t('leaf.details.analysisTime')}
                 </p>
                 <p className="text-state-idle font-medium">
-                  {new Date(diagnostic.predictedAt).toLocaleString('es-PE', {
+                  {new Date(diagnostic.predictedAt).toLocaleDateString('es-PE', {
                     day: '2-digit',
                     month: '2-digit',
                     year: 'numeric',
                     hour: '2-digit',
                     minute: '2-digit',
                   })}
-                </p>
-              </div>
-
-              <div className="border-t border-outline pt-3">
-                <p className="text-sm text-state-disabled mb-1">{t('leaf.details.plot')}</p>
-                <p className="text-state-idle font-medium">
-                  {diagnostic.location || t('leaf.details.noPlot')}
                 </p>
               </div>
             </div>
@@ -317,7 +326,8 @@ export default function LeafResult({ predictionId }: LeafResultProps) {
         isOpen={showAssignPlot}
         onClose={() => setShowAssignPlot(false)}
         predictionId={predictionId}
-        currentPlot={diagnostic.location}
+        currentPlot={diagnostic.plotId}
+        plots={filters.plots}
       />
 
       <DeleteDiagnosticModal
@@ -330,7 +340,23 @@ export default function LeafResult({ predictionId }: LeafResultProps) {
         isOpen={showIncorrect}
         onClose={() => setShowIncorrect(false)}
         predictionId={predictionId}
-        currentLabel={diagnostic.statusLabel}
+        currentLabel={diagnostic.feedback.correctLabel}
+        comment={diagnostic.feedback.comment}
+        feedbackId={diagnostic.feedback.id}
+        onSubmit={(data) => setDiagnostic({
+          ...diagnostic,
+          feedback: {
+            id: data.id,
+            correctLabel: data.correct_label.id,
+            commend: data.comment,
+          }
+        })}
+        severityOptions={
+          filters.labels.map(el => ({
+            value: el.id.toString(),
+            labelKey: `leaf.details.severity.${el.name === "mild" ? "moderate" : el.name}`
+          }))
+        }
       />
     </div>
   );
