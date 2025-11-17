@@ -10,54 +10,56 @@ import type {DiagnosisSummaryFilters} from "@/types";
 import {getDashboardFilters} from "@/services/dashboardService.ts";
 import {getRecommendationsForSeverity} from "@/services/recommendationsService.ts";
 import type {Recommendation} from "@/types/recommendations.ts";
+import {BLOB_URL} from "astro:env/client";
 
 interface LeafResultProps {
   predictionId: string;
 }
 
 interface DiagnosticRecommendationProps {
-  type: "preventive" | "monitoring", recommendations: Recommendation[]
+  type: "preventive" | "monitoring" | "cultural" | "chemical_control" | "corrective",
+  recommendations: Recommendation[]
 }
 
 export function DiagnosticRecommendation({type, recommendations}: DiagnosticRecommendationProps) {
   const {t} = useTranslation();
 
-  return  (
-    <>
-      <div>
-        <div className="flex items-start gap-2 mb-2">
-          <svg
-            className="w-5 h-5 text-primary mt-0.5 shrink-0"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          <h3 className="font-medium text-state-idle">
-            {t(`leaf.recommendations.types.${type}`)}
-          </h3>
-        </div>
-        <p className="text-state-idle/70 ml-7">
-          <ul>
-            {
-              recommendations.map(it => (
-                <li key={it.id}>{it.description}</li>
-              ))
-            }
-          </ul>
-        </p>
+  if (recommendations.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="mb-4">
+      <div className="flex items-start gap-2 mb-3">
+        <svg
+          className="w-5 h-5 text-primary mt-0.5 shrink-0"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <h3 className="font-medium text-state-idle">
+          {t(`leaf.recommendations.types.${type}`)}
+        </h3>
       </div>
-    </>
+      <ul className="ml-7 space-y-2 list-disc list-inside text-state-idle/70">
+        {recommendations.map(it => (
+          <li key={it.id} className="leading-relaxed">
+            {it.description}
+          </li>
+        ))}
+      </ul>
+    </div>
   )
 }
 
-export const recommendationTypes = ["preventive", "monitoring"] as const;
+export const recommendationTypes = ["preventive", "monitoring", "cultural", "chemical_control", "corrective"] as const;
 
 export default function LeafResult({predictionId}: LeafResultProps) {
   const {t} = useTranslation();
@@ -102,37 +104,41 @@ export default function LeafResult({predictionId}: LeafResultProps) {
 
   useEffect(() => {
     async function loadDiagnostic() {
-      const data = await getDiagnostic((+predictionId));
-      let name = data.label.name,
-        date = data.predicted_at;
-      name = name === "mild" ? "moderate" : name;
+      try {
+        const data = await getDiagnostic((+predictionId));
+        let name = data.label.name,
+          date = data.predicted_at;
+        name = name === "mild" ? "moderate" : name;
 
-      if (!date.endsWith("Z"))
-        date += "Z";
+        if (!date.endsWith("Z"))
+          date += "Z";
 
-      let feedbackName = data.feedback?.correct_label.id ?? "";
+        let feedbackName = data.feedback?.correct_label.id ?? "";
 
-      const leafMask = data.marks.find(el => el.type.name === "leaf_mask"),
-        lesionMask = data.marks.find(el => el.type.name === "lt_blg_lesion_mask");
+        const leafMask = data.marks.find(el => el.type.name === "leaf_mask"),
+          lesionMask = data.marks.find(el => el.type.name === "lt_blg_lesion_mask");
 
-      setDiagnostic(
-        {
-          status: name,
-          statusLabel: t(`home.summaryChart.categories.${name}`),
-          plotId: data.plot_id,
-          confidence: data.presence_confidence,
-          affectedArea: data.severity,
-          predictedAt: date,
-          feedback: {
-            id: data.feedback?.id,
-            correctLabel: feedbackName,
-            comment: data.feedback?.comment ?? "",
-          },
-          // imageUrl: `${BLOB_URL}${data.image.filepath}`,
-          // leafUrl: leafMask ? `${BLOB_URL}${leafMask.data.filepath}` : undefined,
-          // lesionUrl: lesionMask ? `${BLOB_URL}${lesionMask.data.filepath}` : undefined,
-        }
-      )
+        setDiagnostic(
+          {
+            status: name,
+            statusLabel: t(`home.summaryChart.categories.${name}`),
+            plotId: data.plot_id,
+            confidence: data.presence_confidence,
+            affectedArea: data.severity,
+            predictedAt: date,
+            feedback: {
+              id: data.feedback?.id,
+              correctLabel: feedbackName,
+              comment: data.feedback?.comment ?? "",
+            },
+            imageUrl: `${BLOB_URL}${data.image.filepath}`,
+            leafUrl: leafMask ? `${BLOB_URL}${leafMask.data.filepath}` : undefined,
+            lesionUrl: lesionMask ? `${BLOB_URL}${lesionMask.data.filepath}` : undefined,
+          }
+        )
+      } catch (e) {
+        window.location.href = '/history';
+      }
     }
 
     loadDiagnostic()
@@ -329,7 +335,8 @@ export default function LeafResult({predictionId}: LeafResultProps) {
               {!recommendations && <Loader text={t("common.loading")}/>}
               {
                 recommendations && recommendationTypes.map(type => (
-                  <DiagnosticRecommendation type={type} recommendations={recommendations.filter(it => it.type.name === type)} />
+                  <DiagnosticRecommendation type={type}
+                                            recommendations={recommendations.filter(it => it.type.name === type)}/>
                 ))
               }
             </div>

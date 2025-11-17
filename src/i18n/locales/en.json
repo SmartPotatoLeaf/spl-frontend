@@ -659,6 +659,15 @@
   "leaf": {
     "title": "Analyzed image",
     "backToHistory": "Back to history",
+    "masks": {
+      "show": "Show masks",
+      "hide": "Hide masks"
+    },
+    "zoom": {
+      "zoomIn": "Zoom in",
+      "zoomOut": "Zoom out",
+      "reset": "Reset zoom"
+    },
     "actions": {
       "title": "Actions",
       "assignPlot": "Assign plot",
@@ -684,7 +693,14 @@
     "recommendations": {
       "title": "Recommendations for {{severity}} level",
       "treatment": "Treatment",
-      "nextSteps": "Next steps"
+      "nextSteps": "Next steps",
+      "types": {
+        "preventive": "Preventive Measures",
+        "monitoring": "Monitoring",
+        "cultural": "Cultural Practices",
+        "chemical_control": "Chemical Control",
+        "corrective": "Corrective Actions"
+      }
     },
     "assignPlotModal": {
       "title": "Assign plot",

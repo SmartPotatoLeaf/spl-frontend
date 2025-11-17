@@ -659,6 +659,15 @@
   "leaf": {
     "title": "Imagen analizada",
     "backToHistory": "Volver al historial",
+    "masks": {
+      "show": "Mostrar máscaras",
+      "hide": "Ocultar máscaras"
+    },
+    "zoom": {
+      "zoomIn": "Acercar",
+      "zoomOut": "Alejar",
+      "reset": "Restablecer zoom"
+    },
     "actions": {
       "title": "Acciones",
       "assignPlot": "Asignar parcela",
@@ -684,7 +693,14 @@
     "recommendations": {
       "title": "Recomendaciones para un nivel {{severity}}",
       "treatment": "Tratamiento",
-      "nextSteps": "Próximos pasos"
+      "nextSteps": "Próximos pasos",
+      "types": {
+        "preventive": "Medidas Preventivas",
+        "monitoring": "Monitoreo",
+        "cultural": "Prácticas Culturales",
+        "chemical_control": "Control Químico",
+        "corrective": "Acciones Correctivas"
+      }
     },
     "assignPlotModal": {
       "title": "Asignar parcela",
