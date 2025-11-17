@@ -1,4 +1,4 @@
-import type { User } from './database';
+import type {User} from './database';
 
 export interface LoginCredentials {
   email: string;
@@ -12,6 +12,9 @@ export interface RegisterData {
   confirmPassword: string;
 }
 
+export type RegisterRequest = Omit<RegisterData, 'confirmPassword'>;
+
+
 /**
  * AuthUser - Subconjunto de User de database.ts para sesión
  * Omite campos sensibles como password_hash
@@ -19,6 +22,6 @@ export interface RegisterData {
 export type AuthUser = Omit<User, 'password_hash' | 'created_at' | 'updated_at'>;
 
 export interface AuthResponse {
-  user: AuthUser;
   token: string;
+  type: string;
 }

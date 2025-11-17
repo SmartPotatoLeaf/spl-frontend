@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { useStore } from '@nanostores/react';
-import { useTranslation } from 'react-i18next';
-import { authStore, setUser } from '@/stores/authStore';
-import { login, register } from '@/services/authService';
-import type { LoginCredentials, RegisterData } from '@/types/auth';
+import {useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {setLogin} from '@/stores/authStore';
+import {login, register} from '@/services/authService';
+import type {LoginCredentials, RegisterData, RegisterRequest} from '@/types/auth';
+import useQueryParam from "@/hooks/useQueryParam.ts";
 
 interface AuthFormProps {
   mode: 'login' | 'register';
@@ -19,17 +19,18 @@ interface ValidationErrors {
   submit?: string;
 }
 
-export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
-  const { t } = useTranslation();
-  const { isLoading } = useStore(authStore);
-  
+export default function AuthForm({mode, onToggleMode}: AuthFormProps) {
+  const {t} = useTranslation(),
+    [isLoading, setLoading] = useState(false),
+    [nextPage] = useQueryParam("next", "/home");
+
   const [formData, setFormData] = useState({
     username: '',
     email: '',
     password: '',
     confirmPassword: '',
   });
-  
+
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -46,7 +47,7 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
 
   const validatePassword = (password: string, isRegister: boolean): string | undefined => {
     if (!password) return t('auth.validation.passwordRequired');
-    
+
     if (isRegister) {
       if (password.length < 8) return t('auth.validation.passwordMin');
       if (!/[A-Z]/.test(password)) return t('auth.validation.passwordUppercase');
@@ -54,7 +55,7 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
       if (!/[0-9]/.test(password)) return t('auth.validation.passwordNumber');
       if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) return t('auth.validation.passwordSpecial');
     }
-    
+
     return undefined;
   };
 
@@ -67,8 +68,8 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
   };
 
   const handleChange = (field: keyof typeof formData, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-    
+    setFormData(prev => ({...prev, [field]: value}));
+
     if (touchedFields.has(field)) {
       validateField(field, value);
     }
@@ -80,7 +81,7 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
   };
 
   const validateField = (field: keyof typeof formData, value: string) => {
-    const newErrors = { ...errors };
+    const newErrors = {...errors};
 
     switch (field) {
       case 'username':
@@ -93,7 +94,7 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
           }
         }
         break;
-      
+
       case 'email':
         const emailError = validateEmail(value);
         if (emailError) {
@@ -102,7 +103,7 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
           delete newErrors.email;
         }
         break;
-      
+
       case 'password':
         const passwordError = validatePassword(value, mode === 'register');
         if (passwordError) {
@@ -110,7 +111,7 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
         } else {
           delete newErrors.password;
         }
-        
+
         if (mode === 'register' && formData.confirmPassword && touchedFields.has('confirmPassword')) {
           if (value !== formData.confirmPassword) {
             newErrors.confirmPassword = t('auth.validation.passwordsMismatch');
@@ -119,7 +120,7 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
           }
         }
         break;
-      
+
       case 'confirmPassword':
         if (mode === 'register') {
           if (!value) {
@@ -166,30 +167,33 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const isValid = validateAllFields();
     if (!isValid) return;
 
     try {
+      setLoading(true);
       if (mode === 'login') {
         const credentials: LoginCredentials = {
           email: formData.email,
           password: formData.password,
         };
         const response = await login(credentials);
-        setUser(response.user);
+        setLogin(response.token);
+        window.location.href = nextPage
       } else {
-        const registerData: RegisterData = {
+        const registerData: RegisterRequest = {
           username: formData.username,
           email: formData.email,
           password: formData.password,
-          confirmPassword: formData.confirmPassword,
         };
-        const response = await register(registerData);
-        setUser(response.user);
+        await register(registerData);
+        onToggleMode()
       }
+      setLoading(false);
     } catch (error) {
-      setErrors({ submit: error instanceof Error ? error.message : t('auth.validation.unknownError') });
+      setLoading(false);
+      setErrors({submit: error instanceof Error ? error.message : t('auth.validation.unknownError')});
     }
   };
 
@@ -332,7 +336,8 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
               <p className={`text-xs flex items-center gap-1.5 ${
                 /[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? 'text-tag-healthy' : 'text-state-idle'
               }`}>
-                <i className={`fas ${/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? 'fa-check-circle' : 'fa-circle'}`}></i>
+                <i
+                  className={`fas ${/[!@#$%^&*(),.?":{}|<>]/.test(formData.password) ? 'fa-check-circle' : 'fa-circle'}`}></i>
                 {t('auth.passwordStrength.special')}
               </p>
             </div>
@@ -391,7 +396,7 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
                   setAcceptTerms(e.target.checked);
                   if (e.target.checked && errors.terms) {
                     setErrors(prev => {
-                      const newErrors = { ...prev };
+                      const newErrors = {...prev};
                       delete newErrors.terms;
                       return newErrors;
                     });
@@ -417,7 +422,7 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
         )}
 
         {mode === 'login' && (
-          <div className="h-16 sm:h-[72px]" />
+          <div className="h-16 sm:h-[72px]"/>
         )}
 
         {errors.submit && (
@@ -428,7 +433,7 @@ export default function AuthForm({ mode, onToggleMode }: AuthFormProps) {
 
         <button
           type="submit"
-          disabled={isLoading}
+          disabled={mode === "login" ? isLoading : isLoading || !acceptTerms}
           className="w-full py-2.5 sm:py-3 px-4 sm:px-6 bg-primary text-white text-sm sm:text-base font-medium rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-4 sm:mt-6"
         >
           {isLoading ? t('auth.loading') : mode === 'login' ? t('auth.login') : t('auth.register')}

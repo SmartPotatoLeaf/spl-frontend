@@ -1,31 +1,28 @@
-import { atom, map } from 'nanostores';
-import type { AuthUser } from '@/types';
+import {persistentMap} from "@nanostores/persistent";
 
-export interface AuthState {
-  user: AuthUser | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
+export type AuthState = {
+  token: string | undefined;
+  isAuthenticated: 'true' | 'false';
 }
 
-export const authStore = map<AuthState>({
-  user: null,
-  isAuthenticated: false,
-  isLoading: false,
+export const authStore = persistentMap<AuthState>("auth:", {
+  token: undefined,
+  isAuthenticated: 'false',
 });
 
-export function setUser(user: AuthUser | null) {
-  authStore.setKey('user', user);
-  authStore.setKey('isAuthenticated', user !== null);
+export function getToken() {
+  return authStore.get().token;
 }
 
-export function setLoading(isLoading: boolean) {
-  authStore.setKey('isLoading', isLoading);
+export function setLogin(token: string | undefined) {
+  authStore.setKey('token', token);
+  authStore.setKey('isAuthenticated', <any>(token !== null));
 }
+
 
 export function logout() {
   authStore.set({
-    user: null,
-    isAuthenticated: false,
-    isLoading: false,
+    token: undefined,
+    isAuthenticated: "false",
   });
 }

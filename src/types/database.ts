@@ -8,10 +8,7 @@ export interface User {
   id: bigint;
   username: string;
   email: string;
-  password_hash: string;
-  role_id: number;
-  created_at: Date;
-  updated_at: Date;
+  role: string;
 }
 
 export interface FeedbackStatus {

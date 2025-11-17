@@ -12,6 +12,7 @@
     "@astrojs/react": "^4.4.1",
     "@astrojs/vercel": "^9.0.0",
     "@gsap/react": "^2.1.2",
+    "@nanostores/persistent": "^1.2.0",
     "@nanostores/react": "^1.0.0",
     "astro": "^5.15.3",
     "chart.js": "^4.5.1",

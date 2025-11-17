@@ -6,3 +6,11 @@ declare namespace App {
     locale: 'es-PE' | 'en';
   }
 }
+
+interface ImportMetaEnv {
+  readonly API_URL: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}

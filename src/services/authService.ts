@@ -1,75 +1,45 @@
-import type { LoginCredentials, RegisterData, AuthResponse } from '@/types/auth';
+import CrudService from "@/services/crud/CrudService.ts";
+import {getToken} from "@/stores/authStore.ts";
+import type {AuthResponse, LoginCredentials, RegisterRequest, User} from "@/types";
+import { API_URL } from "astro:env/client";
 
-const USE_MOCK = true;
+let authService: AuthService = null!;
 
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+
+class AuthService extends CrudService<any> {
+  constructor() {
+    super(API_URL, {
+      tokenProvider: getToken
+    });
+
+    console.log("baseURL", this.baseUrl)
+  }
+
+  async login(credentials: LoginCredentials): Promise<AuthResponse> {
+    return await this.httpPost("/auth/login", credentials)
+  }
+
+  async register(body: RegisterRequest): Promise<User> {
+    return await this.httpPost("/users/", body)
+  }
+
+  protected getAuthToken(): string | null | undefined {
+    return null;
+  }
 }
 
-async function mockLogin(email: string, password: string): Promise<AuthResponse> {
-  await delay(800);
-  
-  if (email === 'test@example.com' && password === 'password123') {
-    return {
-      user: {
-        id: BigInt(1),
-        username: 'Usuario Test',
-        email: 'test@example.com',
-        role_id: 1,
-      },
-      token: 'mock-jwt-token-12345',
-    };
+function instanceService() {
+  if (!authService) {
+    authService = new AuthService();
   }
-  
-  throw new Error('Credenciales incorrectas');
 }
 
-async function mockRegister(data: RegisterData): Promise<AuthResponse> {
-  await delay(1000);
-  
-  return {
-    user: {
-      id: BigInt(2),
-      username: data.username,
-      email: data.email,
-      role_id: 1,
-    },
-    token: 'mock-jwt-token-67890',
-  };
+export function login(credentials: LoginCredentials) {
+  instanceService()
+  return authService.login(credentials)
 }
 
-export async function login(credentials: LoginCredentials): Promise<AuthResponse> {
-  if (USE_MOCK) {
-    return mockLogin(credentials.email, credentials.password);
-  }
-  
-  const response = await fetch('/api/auth/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(credentials),
-  });
-  
-  if (!response.ok) {
-    throw new Error('Error al iniciar sesión');
-  }
-  
-  return response.json();
-}
-
-export async function register(data: RegisterData): Promise<AuthResponse> {
-  if (USE_MOCK) {
-    return mockRegister(data);
-  }
-  
-  const response = await fetch('/api/auth/register', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data),
-  });
-  
-  if (!response.ok) {
-    throw new Error('Error al registrarse');
-  }
-  
-  return response.json();
+export function register(body: RegisterRequest) {
+  instanceService()
+  return authService.register(body)
 }
