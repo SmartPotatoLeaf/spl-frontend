@@ -1,13 +1,9 @@
 ---
 import DashboardLayout from '@/layouts/DashboardLayout.astro';
 import HistoryView from '@/components/history/HistoryView';
-import { getAllDiagnostics } from '@/services/homeService';
-import { getAllPlots } from '@/services/plotService';
 
-const allDiagnostics = await getAllDiagnostics();
-const allPlots = await getAllPlots();
 ---
 
 <DashboardLayout title="History - Smart Potato Leaf" activeRoute="history">
-  <HistoryView client:load plots={allPlots} />
+  <HistoryView client:load />
 </DashboardLayout>

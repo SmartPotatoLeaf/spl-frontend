@@ -12,10 +12,9 @@ import {setPlots, setTotal} from "@/stores/historyStore.ts";
 import {BLOB_URL} from "astro:env/client";
 
 interface HistoryViewProps {
-  plots: PlotSummary[];
 }
 
-export default function HistoryView({plots}: HistoryViewProps) {
+export default function HistoryView() {
   const {t} = useTranslation();
 
   const {filters, itemsPerPage} = useStore(historyStore),
