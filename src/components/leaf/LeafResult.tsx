@@ -1,28 +1,76 @@
 import {useState, useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
+import {TransformWrapper, TransformComponent} from 'react-zoom-pan-pinch';
 import AssignPlotModal from './AssignPlotModal';
 import DeleteDiagnosticModal from './DeleteDiagnosticModal';
 import IncorrectDiagnosticModal from './IncorrectDiagnosticModal';
 import {getDiagnostic} from "@/services/diagnosticsService.ts";
 import Loader from "@/components/shared/Loader";
-import type {DashboardSummaryRequest, DiagnosisSummaryFilters} from "@/types";
+import type {DiagnosisSummaryFilters} from "@/types";
 import {getDashboardFilters} from "@/services/dashboardService.ts";
-import {BLOB_URL} from "astro:env/client";
+import {getRecommendationsForSeverity} from "@/services/recommendationsService.ts";
+import type {Recommendation} from "@/types/recommendations.ts";
 
 interface LeafResultProps {
   predictionId: string;
 }
+
+interface DiagnosticRecommendationProps {
+  type: "preventive" | "monitoring", recommendations: Recommendation[]
+}
+
+export function DiagnosticRecommendation({type, recommendations}: DiagnosticRecommendationProps) {
+  const {t} = useTranslation();
+
+  return  (
+    <>
+      <div>
+        <div className="flex items-start gap-2 mb-2">
+          <svg
+            className="w-5 h-5 text-primary mt-0.5 shrink-0"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+            />
+          </svg>
+          <h3 className="font-medium text-state-idle">
+            {t(`leaf.recommendations.types.${type}`)}
+          </h3>
+        </div>
+        <p className="text-state-idle/70 ml-7">
+          <ul>
+            {
+              recommendations.map(it => (
+                <li key={it.id}>{it.description}</li>
+              ))
+            }
+          </ul>
+        </p>
+      </div>
+    </>
+  )
+}
+
+export const recommendationTypes = ["preventive", "monitoring"] as const;
 
 export default function LeafResult({predictionId}: LeafResultProps) {
   const {t} = useTranslation();
   const [diagnostic, setDiagnostic] = useState<any>(null);
   const [showAssignPlot, setShowAssignPlot] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
-  const [showIncorrect, setShowIncorrect] = useState(false),
-    [filters, setFilters] = useState<DiagnosisSummaryFilters>({
+  const [showIncorrect, setShowIncorrect] = useState(false);
+  const [showMasks, setShowMasks] = useState(false);
+  const [filters, setFilters] = useState<DiagnosisSummaryFilters>({
       labels: [],
       plots: [],
-    });
+    }),
+    [recommendations, setRecommendations] = useState<Recommendation[] | null>(null);
 
   useEffect(() => {
     async function loadFilters() {
@@ -34,7 +82,23 @@ export default function LeafResult({predictionId}: LeafResultProps) {
     }
 
     loadFilters()
-  }, []);
+  }, [predictionId]);
+
+  useEffect(() => {
+    async function loadRecommendations() {
+      if (!diagnostic)
+        return;
+
+      try {
+        const data = await getRecommendationsForSeverity(diagnostic.affectedArea)
+        setRecommendations(data)
+      } catch (e) {
+        setRecommendations([])
+      }
+    }
+
+    loadRecommendations()
+  }, [diagnostic]);
 
   useEffect(() => {
     async function loadDiagnostic() {
@@ -64,9 +128,9 @@ export default function LeafResult({predictionId}: LeafResultProps) {
             correctLabel: feedbackName,
             comment: data.feedback?.comment ?? "",
           },
-          imageUrl: `${BLOB_URL}${data.image.filepath}`,
-          leafUrl: leafMask ? `${BLOB_URL}${leafMask.data.filepath}` : undefined,
-          lesionUrl: lesionMask ? `${BLOB_URL}${lesionMask.data.filepath}` : undefined,
+          // imageUrl: `${BLOB_URL}${data.image.filepath}`,
+          // leafUrl: leafMask ? `${BLOB_URL}${leafMask.data.filepath}` : undefined,
+          // lesionUrl: lesionMask ? `${BLOB_URL}${lesionMask.data.filepath}` : undefined,
         }
       )
     }
@@ -120,27 +184,140 @@ export default function LeafResult({predictionId}: LeafResultProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white rounded-xl shadow-sm border border-outline overflow-hidden">
-            <div className="relative aspect-video bg-outline/20">
-              {hasValidImage ? (
-                <img
-                  src={diagnostic.imageUrl}
-                  alt={t('leaf.title')}
-                  className="w-full h-full object-contain"
-                />
-              ) : (
-                <div
-                  className="w-full h-full flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
-                  <i className="fas fa-leaf text-8xl text-gray-300 opacity-40"></i>
-                </div>
-              )}
-              <div className="absolute top-4 left-4">
+          <div className="bg-white rounded-xl shadow-sm border border-outline overflow-hidden p-2">
+            <div className="top-4 left-4">
                 <span
                   className={`${getSeverityColor(diagnostic.status)} text-white px-3 py-1 rounded-full text-sm font-medium`}
                 >
                   {diagnostic.statusLabel}
                 </span>
-              </div>
+            </div>
+            <div className="relative aspect-video bg-outline/20">
+              <TransformWrapper
+                initialScale={1}
+                minScale={1}
+                maxScale={4}
+                centerOnInit
+              >
+                {({zoomIn, zoomOut, resetTransform}) => (
+                  <>
+                    <div className="absolute top-4 left-4 z-10">
+                      <button
+                        onClick={() => setShowMasks(!showMasks)}
+                        className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all shadow-md ${
+                          showMasks
+                            ? 'bg-primary text-white'
+                            : 'bg-white text-state-idle hover:bg-gray-50'
+                        }`}
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          {showMasks ? (
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
+                            />
+                          ) : (
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"
+                            />
+                          )}
+                        </svg>
+                      </button>
+                    </div>
+
+                    <TransformComponent
+                      wrapperClass="!w-full !h-full"
+                      contentClass="!w-full !h-full"
+
+                    >
+                      {hasValidImage ? (
+                        <div className="relative w-full h-full">
+                          <img
+                            src={diagnostic.imageUrl}
+                            alt={t('leaf.title')}
+                            className="w-full h-full object-contain"
+                          />
+                          {showMasks && (
+                            <>
+                              {diagnostic.leafUrl && (
+                                <img
+                                  src={diagnostic.leafUrl}
+                                  alt="Leaf mask"
+                                  className="absolute inset-0 w-full h-full object-contain opacity-50 mix-blend-multiply"
+                                  style={{pointerEvents: 'none'}}
+                                />
+                              )}
+                              {diagnostic.lesionUrl && (
+                                <img
+                                  src={diagnostic.lesionUrl}
+                                  alt="Lesion mask"
+                                  className="absolute inset-0 w-full h-full object-contain opacity-60 mix-blend-multiply"
+                                  style={{pointerEvents: 'none'}}
+                                />
+                              )}
+                            </>
+                          )}
+                        </div>
+                      ) : (
+                        <div
+                          className="w-full h-full flex items-center justify-center bg-linear-to-br from-gray-50 to-gray-100">
+                          <i className="fas fa-leaf text-8xl text-gray-300 opacity-40"></i>
+                        </div>
+                      )}
+                    </TransformComponent>
+
+                    <div className="absolute right-4 bottom-4 z-10 flex gap-2">
+                      <button
+                        onClick={() => zoomIn()}
+                        className="p-2 bg-white hover:bg-gray-50 text-state-idle rounded-lg shadow-md transition-colors"
+                        title={t('leaf.zoom.zoomIn')}
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m3-3H7"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={() => zoomOut()}
+                        className="p-2 bg-white hover:bg-gray-50 text-state-idle rounded-lg shadow-md transition-colors"
+                        title={t('leaf.zoom.zoomOut')}
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"
+                          />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={() => resetTransform()}
+                        className="p-2 bg-white hover:bg-gray-50 text-state-idle rounded-lg shadow-md transition-colors"
+                        title={t('leaf.zoom.reset')}
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </>
+                )}
+              </TransformWrapper>
             </div>
           </div>
 
@@ -149,48 +326,12 @@ export default function LeafResult({predictionId}: LeafResultProps) {
               {t('leaf.recommendations.title', {severity: diagnostic.statusLabel.toLowerCase()})}
             </h2>
             <div className="space-y-4">
-              <div>
-                <div className="flex items-start gap-2 mb-2">
-                  <svg
-                    className="w-5 h-5 text-primary mt-0.5 shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
-                    />
-                  </svg>
-                  <h3 className="font-medium text-state-idle">
-                    {t('leaf.recommendations.treatment')}
-                  </h3>
-                </div>
-                <p className="text-state-idle/70 ml-7">{/*recommendations.treatment*/}</p>
-              </div>
-              <div>
-                <div className="flex items-start gap-2 mb-2">
-                  <svg
-                    className="w-5 h-5 text-primary mt-0.5 shrink-0"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                    />
-                  </svg>
-                  <h3 className="font-medium text-state-idle">
-                    {t('leaf.recommendations.nextSteps')}
-                  </h3>
-                </div>
-                <p className="text-state-idle/70 ml-7">{/*recommendations.nextSteps*/}</p>
-              </div>
+              {!recommendations && <Loader text={t("common.loading")}/>}
+              {
+                recommendations && recommendationTypes.map(type => (
+                  <DiagnosticRecommendation type={type} recommendations={recommendations.filter(it => it.type.name === type)} />
+                ))
+              }
             </div>
           </div>
         </div>
