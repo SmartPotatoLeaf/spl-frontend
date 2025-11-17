@@ -96,7 +96,8 @@ export default function AuthForm({mode, onToggleMode}: AuthFormProps) {
         break;
 
       case 'email':
-        const emailError = validateEmail(value);
+        const emailError = mode == "login" && !value.includes("@") ?
+          validateUsername(value) : validateEmail(value);
         if (emailError) {
           newErrors.email = emailError;
         } else {
@@ -140,7 +141,8 @@ export default function AuthForm({mode, onToggleMode}: AuthFormProps) {
   const validateAllFields = (): boolean => {
     const newErrors: ValidationErrors = {};
 
-    const emailError = validateEmail(formData.email);
+    const emailError = mode == "login" && !formData.email.includes("@") ?
+      validateUsername(formData.email) : validateEmail(formData.email);
     if (emailError) newErrors.email = emailError;
 
     const passwordError = validatePassword(formData.password, mode === 'register');
@@ -175,9 +177,13 @@ export default function AuthForm({mode, onToggleMode}: AuthFormProps) {
       setLoading(true);
       if (mode === 'login') {
         const credentials: LoginCredentials = {
-          email: formData.email,
           password: formData.password,
         };
+        if (formData.email.includes("@")) {
+          credentials.email = formData.email;
+        } else {
+          credentials.username = formData.email;
+        }
         const response = await login(credentials);
         setLogin(response.token);
         window.location.href = nextPage
@@ -261,7 +267,7 @@ export default function AuthForm({mode, onToggleMode}: AuthFormProps) {
             {mode === 'login' ? t('auth.emailOrUsername') : t('auth.emailLabel')}
           </label>
           <input
-            type="email"
+            type={mode == "register" ? "email" : "text"}
             id="email"
             value={formData.email}
             onChange={(e) => handleChange('email', e.target.value)}

@@ -1,7 +1,8 @@
 import type {User} from './database';
 
 export interface LoginCredentials {
-  email: string;
+  email?: string;
+  username?: string;
   password: string;
 }
 

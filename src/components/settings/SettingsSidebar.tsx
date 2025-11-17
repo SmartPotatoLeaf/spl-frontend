@@ -2,6 +2,7 @@ import { useStore } from '@nanostores/react';
 import { useTranslation } from 'react-i18next';
 import { settingsStore, setCurrentSection } from '@/stores/settingsStore';
 import type { SettingsSection } from '@/types/settings';
+import {logout} from "@/stores";
 
 interface MenuItem {
   section: SettingsSection;
@@ -43,7 +44,8 @@ export default function SettingsSidebar() {
 
       <div className="mt-6 pt-6 border-t border-outline">
         <a
-          href="/home"
+          href="/auth"
+          onClick={logout}
           className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left text-error hover:bg-error/5 transition-colors"
         >
           <i className="fas fa-arrow-right-from-bracket w-5 text-center"></i>
