@@ -1,7 +1,7 @@
-import { useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useRef} from 'react';
+import {useTranslation} from 'react-i18next';
 import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
+import {useGSAP} from '@gsap/react';
 import OptimizedImage from '../shared/OptimizedImage';
 
 export default function Hero() {
@@ -56,10 +56,10 @@ export default function Hero() {
     // Counter animation para stats
     const animateCounter = (element: HTMLElement | null, targetText: string) => {
       if (!element) return;
-      
+
       const isPercentage = targetText.includes('%');
       const targetValue = parseInt(targetText.replace(/\D/g, ''));
-      
+
       gsap.from({ value: 0 }, {
         value: targetValue,
         duration: 2,
@@ -131,7 +131,7 @@ export default function Hero() {
             <div ref={cardRef} className="relative w-full max-w-md">
               {/* Background glow effect */}
               <div className="absolute inset-0 bg-linear-to-br from-primary/20 to-primary/5 rounded-2xl blur-2xl"></div>
-              
+
               {/* Main card with image */}
               <div className="relative bg-white rounded-2xl overflow-hidden shadow-2xl hover:shadow-primary/20 transition-shadow duration-500">
                 {/* Image */}
@@ -147,7 +147,7 @@ export default function Hero() {
                   />
                   {/* Overlay gradient */}
                   <div className="absolute inset-0 bg-linear-to-t from-primary/90 via-primary/50 to-transparent"></div>
-                  
+
                   {/* Icon floating */}
                   <div className="absolute top-4 right-4 bg-white/20 backdrop-blur-md rounded-full p-3">
                     <i className="fas fa-leaf text-3xl text-white"></i>
@@ -165,7 +165,7 @@ export default function Hero() {
                       <p className="text-lg font-bold">{t('landing.hero.cardStatus')}</p>
                     </div>
                   </div>
-                  
+
                   <div className="space-y-3">
                     <div className="bg-white/10 rounded-lg p-3 backdrop-blur-sm">
                       <p className="text-xs opacity-80">{t('landing.hero.cardStatusLabel')}</p>

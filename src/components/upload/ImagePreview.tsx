@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useEffect, useRef} from 'react';
+import {useTranslation} from 'react-i18next';
 import gsap from 'gsap';
-import type { ProcessedImage } from '@/types/upload';
-import { formatFileSize } from '@/utils/imageProcessor';
+import type {ProcessedImage} from '@/types/upload';
+import {formatFileSize} from '@/utils/imageProcessor';
 
 interface ImagePreviewProps {
   image: ProcessedImage;

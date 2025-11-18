@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import PlotFormWrapper from './PlotFormWrapper';
 
 export default function NewPlotView() {

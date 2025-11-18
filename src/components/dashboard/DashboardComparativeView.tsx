@@ -1,8 +1,8 @@
-import { Line, Doughnut } from 'react-chartjs-2';
-import { useTranslation } from 'react-i18next';
-import { useStore } from '@nanostores/react';
-import type { ComparativeData } from '@/types';
-import {dashboardStore, setComparativeData, setSelectedPlots, setComparativeFilters} from '@/stores';
+import {Doughnut, Line} from 'react-chartjs-2';
+import {useTranslation} from 'react-i18next';
+import {useStore} from '@nanostores/react';
+import type {ComparativeData} from '@/types';
+import {dashboardStore, setComparativeData, setComparativeFilters, setSelectedPlots} from '@/stores';
 import Filters from "@/components/shared/Filters.tsx";
 import {useEffect, useState} from "react";
 

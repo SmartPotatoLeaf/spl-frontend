@@ -1,6 +1,6 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import type { PlotFormData } from '@/types';
+import {useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import type {PlotFormData} from '@/types';
 
 interface PlotFormProps {
   initialData?: PlotFormData & { id?: bigint };

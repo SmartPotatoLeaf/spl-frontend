@@ -1,13 +1,13 @@
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 import gsap from 'gsap';
 
 export default function MicroInteractions() {
   useEffect(() => {
     const icons = document.querySelectorAll('.fa, .fas, .fab, .far, .fal');
-    
+
     icons.forEach((icon) => {
       const iconElement = icon as HTMLElement;
-      
+
       iconElement.addEventListener('mouseenter', () => {
         gsap.to(iconElement, {
           scale: 1.15,
@@ -16,7 +16,7 @@ export default function MicroInteractions() {
           ease: 'back.out(2)'
         });
       });
-      
+
       iconElement.addEventListener('mouseleave', () => {
         gsap.to(iconElement, {
           scale: 1,

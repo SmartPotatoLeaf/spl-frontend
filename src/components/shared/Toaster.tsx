@@ -1,7 +1,7 @@
-import { useStore } from '@nanostores/react';
-import { useEffect, useState } from 'react';
-import { toastsStore, removeToast } from '@/stores';
-import type { Toast } from '@/stores/toastStore';
+import {useStore} from '@nanostores/react';
+import {useEffect, useState} from 'react';
+import {removeToast, toastsStore} from '@/stores';
+import type {Toast} from '@/stores/toastStore';
 
 export default function Toaster() {
   const toasts = useStore(toastsStore);
@@ -81,7 +81,7 @@ function ToastItem({ toast }: ToastItemProps) {
         <div className="shrink-0 mt-0.5">
           {getIcon()}
         </div>
-        
+
         <div className="flex-1 min-w-0">
           <p className="text-sm font-semibold text-state-idle">
             {toast.message}

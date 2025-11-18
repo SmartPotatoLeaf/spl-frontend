@@ -1,4 +1,4 @@
-import type { DashboardStats, Diagnostic } from '@/types';
+import type {DashboardStats, Diagnostic} from '@/types';
 import diagnosticsData from '@/data/diagnostics.json';
 
 const USE_MOCK = true;

@@ -1,10 +1,7 @@
-import { useStore } from '@nanostores/react';
-import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import {
-  dashboardStore,
-  setDashboardMode,
-} from '@/stores';
+import {useStore} from '@nanostores/react';
+import {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {dashboardStore, setDashboardMode,} from '@/stores';
 import DashboardNormal from './DashboardNormal';
 import DashboardComparative from './DashboardComparative';
 import {getDashboardFilters} from "@/services/dashboardService.ts";

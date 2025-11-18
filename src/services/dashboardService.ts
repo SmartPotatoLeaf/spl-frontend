@@ -1,9 +1,12 @@
 import type {
-  DashboardStats,
-  TrendDataPoint,
-  Diagnostic,
   ComparativeData,
-  DashboardFilters, DashboardSummaryRequest, DashboardSummaryResponse, DiagnosisSummaryFilters
+  DashboardFilters,
+  DashboardStats,
+  DashboardSummaryRequest,
+  DashboardSummaryResponse,
+  DiagnosisSummaryFilters,
+  Diagnostic,
+  TrendDataPoint
 } from '@/types';
 import diagnosticsData from '@/data/diagnostics.json';
 import plotsData from '@/data/plots.json';

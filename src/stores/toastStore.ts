@@ -1,4 +1,4 @@
-import { atom } from 'nanostores';
+import {atom} from 'nanostores';
 
 export type ToastType = 'success' | 'error' | 'info' | 'warning';
 
@@ -22,16 +22,16 @@ export function showToast(
 ) {
   const id = `toast-${++toastId}`;
   const toast: Toast = { id, type, message, description, duration };
-  
+
   toastsStore.set([...toastsStore.get(), toast]);
-  
+
   // Auto-remove después del duration
   if (duration > 0) {
     setTimeout(() => {
       removeToast(id);
     }, duration);
   }
-  
+
   return id;
 }
 
@@ -43,13 +43,13 @@ export function removeToast(id: string) {
 export const toast = {
   success: (message: string, description?: string, duration?: number) =>
     showToast('success', message, description, duration),
-  
+
   error: (message: string, description?: string, duration?: number) =>
     showToast('error', message, description, duration),
-  
+
   info: (message: string, description?: string, duration?: number) =>
     showToast('info', message, description, duration),
-  
+
   warning: (message: string, description?: string, duration?: number) =>
     showToast('warning', message, description, duration),
 };

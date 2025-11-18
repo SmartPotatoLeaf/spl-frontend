@@ -1,11 +1,11 @@
 import {map} from 'nanostores';
 import type {
+  ComparativeData,
+  DashboardFilters,
   DashboardMode,
   DashboardStats,
-  TrendDataPoint,
   Diagnostic,
-  DashboardFilters,
-  ComparativeData
+  TrendDataPoint
 } from '@/types';
 
 export interface DashboardState {

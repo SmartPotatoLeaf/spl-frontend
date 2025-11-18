@@ -1,6 +1,5 @@
-import {useStore} from '@nanostores/react';
 import {useTranslation} from 'react-i18next';
-import {plotsStore, toast} from '@/stores';
+import {toast} from '@/stores';
 import {useEffect, useState} from 'react';
 import Pagination from "@/components/shared/Pagination.tsx";
 import useQueryParam from "@/hooks/useQueryParam.ts";

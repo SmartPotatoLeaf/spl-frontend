@@ -1,5 +1,5 @@
 import i18n from './config';
-import type { Locale } from './astroUtils';
+import type {Locale} from './astroUtils';
 
 /**
  * Función helper para usar traducciones en componentes Astro SSR
@@ -11,6 +11,6 @@ export function getTranslations(locale: Locale) {
   if (i18n.language !== locale) {
     i18n.changeLanguage(locale);
   }
-  
+
   return i18n.t.bind(i18n);
 }

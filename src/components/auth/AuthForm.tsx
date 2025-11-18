@@ -2,7 +2,7 @@ import {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {setLogin} from '@/stores/authStore';
 import {login, register} from '@/services/authService';
-import type {LoginCredentials, RegisterData, RegisterRequest} from '@/types/auth';
+import type {LoginCredentials, RegisterRequest} from '@/types/auth';
 import useQueryParam from "@/hooks/useQueryParam.ts";
 
 interface AuthFormProps {

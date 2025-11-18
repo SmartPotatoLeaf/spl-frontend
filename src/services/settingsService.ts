@@ -1,10 +1,9 @@
-import type { 
-  AppSettings, 
-  ChangePasswordData, 
-  UpdateProfileData,
+import type {
+  ActivityLog,
+  AppSettings,
+  ChangePasswordData,
   NotificationSettings,
-  SecuritySettings,
-  ActivityLog
+  UpdateProfileData
 } from '@/types/settings';
 
 const USE_MOCK = true;
@@ -41,7 +40,7 @@ const mockActivityLog: ActivityLog[] = [
 export async function getUserSettings(): Promise<AppSettings> {
   if (USE_MOCK) {
     await new Promise(resolve => setTimeout(resolve, MOCK_DELAY));
-    
+
     return {
       user: {
         username: 'juanperes2025',
@@ -122,19 +121,19 @@ export async function updateProfile(data: UpdateProfileData): Promise<void> {
 export async function changePassword(data: ChangePasswordData): Promise<void> {
   if (USE_MOCK) {
     await new Promise(resolve => setTimeout(resolve, MOCK_DELAY));
-    
+
     if (data.currentPassword !== 'password123') {
       throw new Error('Contraseña actual incorrecta');
     }
-    
+
     if (data.newPassword !== data.confirmPassword) {
       throw new Error('Las contraseñas no coinciden');
     }
-    
+
     if (data.newPassword.length < 8) {
       throw new Error('La contraseña debe tener al menos 8 caracteres');
     }
-    
+
     console.log('Contraseña cambiada exitosamente');
     return;
   }
@@ -173,7 +172,7 @@ export async function updateAppearance(theme: string): Promise<void> {
   if (USE_MOCK) {
     await new Promise(resolve => setTimeout(resolve, 300));
     console.log('Tema actualizado:', theme);
-    
+
     // Aplicar tema (SSR-safe: Only runs in browser from component event handlers)
     if (typeof window !== 'undefined' && typeof document !== 'undefined') {
       if (theme === 'dark') {
@@ -185,7 +184,7 @@ export async function updateAppearance(theme: string): Promise<void> {
         document.documentElement.classList.toggle('dark', prefersDark);
       }
     }
-    
+
     return;
   }
 
@@ -220,15 +219,15 @@ export async function updateLanguage(language: string, dateFormat: string, timez
 
 export function calculatePasswordStrength(password: string): 'weak' | 'medium' | 'strong' {
   if (password.length < 8) return 'weak';
-  
+
   let strength = 0;
-  
+
   if (password.length >= 12) strength++;
   if (/[a-z]/.test(password)) strength++;
   if (/[A-Z]/.test(password)) strength++;
   if (/[0-9]/.test(password)) strength++;
   if (/[^a-zA-Z0-9]/.test(password)) strength++;
-  
+
   if (strength >= 4) return 'strong';
   if (strength >= 2) return 'medium';
   return 'weak';

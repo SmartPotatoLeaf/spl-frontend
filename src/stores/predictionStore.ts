@@ -1,5 +1,5 @@
-import { map } from 'nanostores';
-import type { Prediction, Image } from '@/types';
+import {map} from 'nanostores';
+import type {Image, Prediction} from '@/types';
 
 export interface PredictionState {
   current: {
@@ -21,9 +21,9 @@ export const predictionStore = map<PredictionState>({
 
 export function setCurrentPrediction(prediction: Prediction, image: Image) {
   const currentPrediction = { prediction, image };
-  
+
   predictionStore.setKey('current', currentPrediction);
-  
+
   const history = predictionStore.get().history;
   predictionStore.setKey('history', [...history, currentPrediction]);
 }

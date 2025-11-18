@@ -1,5 +1,5 @@
-import { useStore } from '@nanostores/react';
-import {dashboardStore, setDashboardFilters, } from '@/stores';
+import {useStore} from '@nanostores/react';
+import {dashboardStore, setDashboardFilters,} from '@/stores';
 import Filters from "@/components/shared/Filters.tsx";
 import {useEffect, useState} from "react";
 

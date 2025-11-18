@@ -1,7 +1,7 @@
-import { useEffect, useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useEffect, useRef} from 'react';
+import {useTranslation} from 'react-i18next';
 import gsap from 'gsap';
-import type { UploadStatus } from '@/types/upload';
+import type {UploadStatus} from '@/types/upload';
 
 interface ProcessingLoaderProps {
   status: UploadStatus;

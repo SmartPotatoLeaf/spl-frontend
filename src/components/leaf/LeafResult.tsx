@@ -1,6 +1,6 @@
-import {useState, useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {TransformWrapper, TransformComponent} from 'react-zoom-pan-pinch';
+import {TransformComponent, TransformWrapper} from 'react-zoom-pan-pinch';
 import AssignPlotModal from './AssignPlotModal';
 import DeleteDiagnosticModal from './DeleteDiagnosticModal';
 import IncorrectDiagnosticModal from './IncorrectDiagnosticModal';

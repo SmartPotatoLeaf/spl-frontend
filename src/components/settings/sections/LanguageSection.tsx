@@ -1,36 +1,43 @@
-import { useStore } from '@nanostores/react';
-import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
-import { settingsStore, setLanguage, setDateFormat, setTimezone, setSettingsSaving, markSettingsSaved } from '@/stores/settingsStore';
-import { updateLanguage, getTimezones } from '@/services/settingsService';
-import { toast } from '@/stores/toastStore';
-import type { Language, DateFormat } from '@/types/settings';
+import {useStore} from '@nanostores/react';
+import {useTranslation} from 'react-i18next';
+import {useState} from 'react';
+import {
+  markSettingsSaved,
+  setDateFormat,
+  setLanguage,
+  setSettingsSaving,
+  setTimezone,
+  settingsStore
+} from '@/stores/settingsStore';
+import {getTimezones, updateLanguage} from '@/services/settingsService';
+import {toast} from '@/stores/toastStore';
+import type {DateFormat, Language} from '@/types/settings';
 
 export default function LanguageSection() {
   const { t, i18n } = useTranslation();
   const { settings, isSaving } = useStore(settingsStore);
   const { dateFormat, timezone, autoDetectTimezone } = settings.language;
-  
+
   // Usar el idioma actual de i18next en lugar del store
   const currentLanguage = i18n.language as Language;
-  
+
   const [localTimezone, setLocalTimezone] = useState(timezone);
   const [autoDetect, setAutoDetect] = useState(autoDetectTimezone);
 
   const handleLanguageChange = async (newLanguage: Language) => {
     try {
       setSettingsSaving(true);
-      
+
       // Cambiar el idioma en i18next
       await i18n.changeLanguage(newLanguage);
-      
+
       // Actualizar el store
       setLanguage(newLanguage);
-      
+
       await updateLanguage(newLanguage, dateFormat, timezone);
       markSettingsSaved();
       toast.success(t('settings.languageSection.successLanguage'));
-      
+
       // Recargar la página después de 500ms para que se vea el toast
       setTimeout(() => {
         window.location.reload();
@@ -153,7 +160,7 @@ export default function LanguageSection() {
       {/* Zona horaria */}
       <div>
         <h3 className="text-lg font-semibold text-state-idle mb-4">{t('settings.languageSection.timezone')}</h3>
-        
+
         <div className="mb-4">
           <label className="flex items-center gap-3 p-4 border border-outline rounded-lg cursor-pointer hover:bg-gray-50 transition-colors">
             <input

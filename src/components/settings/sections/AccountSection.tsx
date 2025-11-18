@@ -1,16 +1,16 @@
-import { useStore } from '@nanostores/react';
-import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
-import { settingsStore, updateUserProfile, setSettingsSaving, markSettingsSaved } from '@/stores/settingsStore';
-import { updateProfile } from '@/services/settingsService';
-import { toast } from '@/stores/toastStore';
-import type { UpdateProfileData } from '@/types/settings';
+import {useStore} from '@nanostores/react';
+import {useTranslation} from 'react-i18next';
+import {useState} from 'react';
+import {markSettingsSaved, setSettingsSaving, settingsStore, updateUserProfile} from '@/stores/settingsStore';
+import {updateProfile} from '@/services/settingsService';
+import {toast} from '@/stores/toastStore';
+import type {UpdateProfileData} from '@/types/settings';
 
 export default function AccountSection() {
   const { t } = useTranslation();
   const { settings, isSaving } = useStore(settingsStore);
   const { user } = settings;
-  
+
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<UpdateProfileData>({
     fullName: user.fullName || '',
@@ -47,7 +47,7 @@ export default function AccountSection() {
         <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
           <i className="fas fa-user text-3xl text-primary"></i>
         </div>
-        
+
         <div className="flex-1">
           <h3 className="text-xl font-semibold text-state-idle mb-4">{t('settings.accountSection.basicInfo')}</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

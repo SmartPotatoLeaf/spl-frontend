@@ -1,5 +1,5 @@
-import { map } from 'nanostores';
-import type { PlotSummary } from '@/types';
+import {map} from 'nanostores';
+import type {PlotSummary} from '@/types';
 
 export interface PlotsState {
   plots: PlotSummary[];
@@ -33,7 +33,7 @@ export function addPlot(plot: PlotSummary) {
 
 export function updatePlot(updatedPlot: PlotSummary) {
   const currentPlots = plotsStore.get().plots;
-  const updatedPlots = currentPlots.map(plot => 
+  const updatedPlots = currentPlots.map(plot =>
     plot.id === updatedPlot.id ? updatedPlot : plot
   );
   plotsStore.setKey('plots', updatedPlots);

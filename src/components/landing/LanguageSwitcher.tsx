@@ -1,7 +1,7 @@
-import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
-import { useStore } from '@nanostores/react';
-import { atom } from 'nanostores';
+import {useTranslation} from 'react-i18next';
+import {useEffect, useState} from 'react';
+import {useStore} from '@nanostores/react';
+import {atom} from 'nanostores';
 
 const getInitialLanguage = (): string => {
   if (typeof window !== 'undefined') {
@@ -28,12 +28,12 @@ export default function LanguageSwitcher() {
     if (!isInitialized && typeof window !== 'undefined') {
       const initialLang = getInitialLanguage();
       languageStore.set(initialLang);
-      
+
       // Solo cambiar i18n si es diferente
       if (i18n.language !== initialLang) {
         i18n.changeLanguage(initialLang);
       }
-      
+
       setIsInitialized(true);
     }
   }, [isInitialized, i18n]);

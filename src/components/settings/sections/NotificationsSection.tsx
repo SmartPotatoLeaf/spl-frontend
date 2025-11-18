@@ -1,8 +1,8 @@
-import { useStore } from '@nanostores/react';
-import { useTranslation } from 'react-i18next';
-import { settingsStore, setNotifications, setSettingsSaving, markSettingsSaved } from '@/stores/settingsStore';
-import { updateNotifications } from '@/services/settingsService';
-import { toast } from '@/stores/toastStore';
+import {useStore} from '@nanostores/react';
+import {useTranslation} from 'react-i18next';
+import {markSettingsSaved, setNotifications, setSettingsSaving, settingsStore} from '@/stores/settingsStore';
+import {updateNotifications} from '@/services/settingsService';
+import {toast} from '@/stores/toastStore';
 
 export default function NotificationsSection() {
   const { t } = useTranslation();
@@ -33,7 +33,7 @@ export default function NotificationsSection() {
 
   const handleFrequencyChange = async (frequency: 'realtime' | 'daily' | 'weekly') => {
     const updated = { ...notifications, frequency };
-    
+
     try {
       setSettingsSaving(true);
       setNotifications(updated);

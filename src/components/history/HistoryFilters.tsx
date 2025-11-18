@@ -1,8 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useStore } from '@nanostores/react';
-import { historyStore, setFilters, resetFilters } from '@/stores';
+import {useEffect, useState} from 'react';
+import {useStore} from '@nanostores/react';
+import {historyStore, resetFilters, setFilters} from '@/stores';
 import Filters from "@/components/shared/Filters.tsx";
-
 
 
 export default function HistoryFilters() {

@@ -1,8 +1,8 @@
-import { useStore } from '@nanostores/react';
-import { useTranslation } from 'react-i18next';
-import { useState, useEffect } from 'react';
-import { settingsStore, loadAllSettings, setSettingsLoading } from '@/stores/settingsStore';
-import { getUserSettings } from '@/services/settingsService';
+import {useStore} from '@nanostores/react';
+import {useTranslation} from 'react-i18next';
+import {useEffect, useState} from 'react';
+import {loadAllSettings, setSettingsLoading, settingsStore} from '@/stores/settingsStore';
+import {getUserSettings} from '@/services/settingsService';
 import I18nProvider from '@/i18n/I18nProvider';
 import SettingsSidebar from './SettingsSidebar';
 import AccountSection from './sections/AccountSection';
@@ -62,7 +62,7 @@ function SettingsContent() {
   return (
     <div className="flex flex-col lg:flex-row gap-6 min-h-[600px]">
       <SettingsSidebar />
-      
+
       <div className="flex-1">
         {currentSection === 'account' && <AccountSection />}
         {currentSection === 'security' && <SecuritySection />}

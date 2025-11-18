@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next';
-import type { DashboardStats } from '@/types';
+import {useTranslation} from 'react-i18next';
+import type {DashboardStats} from '@/types';
 
 interface DashboardStatsProps {
   stats: DashboardStats;

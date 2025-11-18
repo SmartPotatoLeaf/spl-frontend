@@ -1,5 +1,5 @@
-import { map } from 'nanostores';
-import type { DashboardStats, Diagnostic } from '@/types';
+import {map} from 'nanostores';
+import type {DashboardStats, Diagnostic} from '@/types';
 
 export interface HomeState {
   stats: DashboardStats | null;

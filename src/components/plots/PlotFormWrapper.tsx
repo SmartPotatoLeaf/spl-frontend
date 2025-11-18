@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import PlotForm from './PlotForm';
-import type {PlotFormData, PlotDetail, PlotDetailed} from '@/types';
+import type {PlotDetailed, PlotFormData} from '@/types';
 import {createPlot, getDetailedPlot, updatePlot} from '@/services/plotService';
 import {toast} from '@/stores';
 

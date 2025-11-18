@@ -1,4 +1,4 @@
-import type {DashboardData, DashboardFilters, DashboardStats, LabelsCount, TrendDataPoint} from "@/types";
+import type {DashboardFilters, DashboardStats, LabelsCount, TrendDataPoint} from "@/types";
 import {getDashboardSummary} from "@/services/dashboardService.ts";
 
 function toISODate(date: string | undefined | null | Date) {

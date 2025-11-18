@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import {useEffect} from 'react';
 import gsap from 'gsap';
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
+import {ScrollToPlugin} from 'gsap/ScrollToPlugin';
 
 export default function SmoothScroll() {
   useEffect(() => {
@@ -11,14 +11,14 @@ export default function SmoothScroll() {
     const handleAnchorClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
       const link = target.closest('a[href^="#"]') as HTMLAnchorElement;
-      
+
       if (link) {
         e.preventDefault();
         const targetId = link.getAttribute('href');
-        
+
         if (targetId && targetId !== '#') {
           const targetElement = document.querySelector(targetId);
-          
+
           if (targetElement) {
             gsap.to(window, {
               duration: 1,

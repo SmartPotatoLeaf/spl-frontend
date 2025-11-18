@@ -1,7 +1,7 @@
 import CrudService from "@/services/crud/CrudService.ts";
 import {getToken} from "@/stores/authStore.ts";
 import type {AuthResponse, LoginCredentials, RegisterRequest, User} from "@/types";
-import { API_URL } from "astro:env/client";
+import {API_URL} from "astro:env/client";
 
 let authService: AuthService = null!;
 

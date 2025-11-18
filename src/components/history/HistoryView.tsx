@@ -1,7 +1,7 @@
 import {useTranslation} from 'react-i18next';
 import HistoryFilters from './HistoryFilters';
 import HistoryGrid from './HistoryGrid';
-import type {Diagnostic, Plot, PlotSummary} from '@/types';
+import type {Diagnostic, Plot} from '@/types';
 import {useStore} from "@nanostores/react";
 import {historyStore, setDiagnostics} from "@/stores";
 import {useEffect, useState} from "react";

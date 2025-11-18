@@ -1,8 +1,8 @@
-import { useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useRef} from 'react';
+import {useTranslation} from 'react-i18next';
 import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import {useGSAP} from '@gsap/react';
+import {ScrollTrigger} from 'gsap/ScrollTrigger';
 import OptimizedImage from '../shared/OptimizedImage';
 
 export default function Features() {
@@ -36,7 +36,7 @@ export default function Features() {
       Array.from(featureItems).forEach((item, index) => {
         const icon = item.querySelector('i');
         const content = item.querySelector('div');
-        
+
         // Animar el item
         gsap.from(item, {
           scrollTrigger: {
@@ -97,7 +97,7 @@ export default function Features() {
     if (statCards) {
       Array.from(statCards).forEach((card, index) => {
         const cardElement = card as HTMLElement;
-        
+
         // Animación de entrada
         gsap.from(cardElement, {
           scrollTrigger: {

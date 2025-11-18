@@ -1,5 +1,5 @@
-import { useTranslation } from 'react-i18next';
-import type { Diagnostic } from '@/types';
+import {useTranslation} from 'react-i18next';
+import type {Diagnostic} from '@/types';
 
 interface DiagnosticCardProps {
   diagnostic: Diagnostic;

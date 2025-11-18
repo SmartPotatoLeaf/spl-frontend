@@ -1,13 +1,7 @@
-import { useState, useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import gsap from 'gsap';
-import {
-  validateImageFile,
-  validateImageDimensions,
-  processImageForModel,
-  formatFileSize,
-} from '@/utils/imageProcessor';
-import type { ImageUploadState } from '@/types/upload';
+import type {ImageUploadState} from '@/types/upload';
 import UploadZone from './UploadZone';
 import ImagePreview from './ImagePreview';
 import ProcessingLoader from './ProcessingLoader';

@@ -1,16 +1,16 @@
-import { useStore } from '@nanostores/react';
-import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useStore} from '@nanostores/react';
+import {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import {
   dashboardStore,
   plotsStore,
-  setSelectedPlots,
   setComparativeData,
   setComparativeLoading,
-  setPlotsData
+  setPlotsData,
+  setSelectedPlots,
+  toast
 } from '@/stores';
-import {getComparativeData, getDashboardFilters, getDashboardSummary} from '@/services/dashboardService';
-import { toast } from '@/stores';
+import {getDashboardFilters} from '@/services/dashboardService';
 import DashboardComparativeView from './DashboardComparativeView';
 import {loadDashboardData} from "@/components/dashboard/loaders.ts";
 

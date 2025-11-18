@@ -1,4 +1,4 @@
-import type { UploadConfig, ImageValidationResult, ProcessedImage } from '@/types/upload';
+import type {ImageValidationResult, ProcessedImage, UploadConfig} from '@/types/upload';
 import i18next from 'i18next';
 
 export const UPLOAD_CONFIG: UploadConfig = {

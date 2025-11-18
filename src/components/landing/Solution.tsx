@@ -1,8 +1,8 @@
-import { useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import {useGSAP} from '@gsap/react';
+import {ScrollTrigger} from 'gsap/ScrollTrigger';
 import OptimizedImage from '../shared/OptimizedImage';
 
 export default function Solution() {
@@ -51,7 +51,7 @@ export default function Solution() {
       Array.from(cards).forEach((card) => {
         const cardElement = card as HTMLElement;
         const innerCard = cardElement.querySelector('.group > div');
-        
+
         cardElement.addEventListener('mouseenter', () => {
           gsap.to(cardElement, {
             y: -10,
@@ -100,24 +100,24 @@ export default function Solution() {
   // Magnetic button effect
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!ctaButtonRef.current || !ctaRef.current) return;
-    
+
     const button = ctaButtonRef.current;
     const rect = button.getBoundingClientRect();
     const buttonCenterX = rect.left + rect.width / 2;
     const buttonCenterY = rect.top + rect.height / 2;
-    
+
     const distanceX = e.clientX - buttonCenterX;
     const distanceY = e.clientY - buttonCenterY;
     const distance = Math.sqrt(distanceX ** 2 + distanceY ** 2);
-    
+
     // Magnetic effect radius
     const magnetRadius = 100;
-    
+
     if (distance < magnetRadius) {
       const strength = (magnetRadius - distance) / magnetRadius;
       const moveX = distanceX * strength * 0.3;
       const moveY = distanceY * strength * 0.3;
-      
+
       gsap.to(button, {
         x: moveX,
         y: moveY,
@@ -241,7 +241,7 @@ export default function Solution() {
         </div>
 
         {/* Big CTA */}
-        <div 
+        <div
           ref={ctaRef}
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}

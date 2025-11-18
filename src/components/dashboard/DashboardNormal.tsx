@@ -1,13 +1,11 @@
-import { useStore } from '@nanostores/react';
-import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
-import { dashboardStore, setDashboardData, setDashboardLoading, setDashboardError } from '@/stores';
-import { getDashboardStats, getDashboardTrendData, getRecentDiagnostics } from '@/services/dashboardService';
+import {useStore} from '@nanostores/react';
+import {useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
+import {dashboardStore, setDashboardData} from '@/stores';
 import DashboardFilters from './DashboardFilters';
 import DashboardStats from './DashboardStats';
 import DashboardCharts from './DashboardCharts';
-import {createTrendDataset, loadDashboardData} from "@/components/dashboard/loaders.ts";
-import {setDashboardStats} from "@/stores/dashboardStore.ts";
+import {loadDashboardData} from "@/components/dashboard/loaders.ts";
 
 export default function DashboardNormal() {
   const { t } = useTranslation();

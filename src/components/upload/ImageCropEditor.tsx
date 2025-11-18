@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useEffect, useRef, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import gsap from 'gsap';
 
 interface ImageCropEditorProps {

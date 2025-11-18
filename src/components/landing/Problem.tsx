@@ -1,8 +1,8 @@
-import { useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useRef} from 'react';
+import {useTranslation} from 'react-i18next';
 import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import {useGSAP} from '@gsap/react';
+import {ScrollTrigger} from 'gsap/ScrollTrigger';
 import OptimizedImage from '../shared/OptimizedImage';
 
 export default function Problem() {
@@ -47,7 +47,7 @@ export default function Problem() {
       // Hover effect con GSAP para cada card
       Array.from(cards).forEach((card) => {
         const cardElement = card as HTMLElement;
-        
+
         cardElement.addEventListener('mouseenter', () => {
           gsap.to(cardElement, {
             y: -10,

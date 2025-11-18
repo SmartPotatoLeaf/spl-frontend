@@ -1,20 +1,20 @@
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Line, Doughnut } from 'react-chartjs-2';
+import {useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {Doughnut, Line} from 'react-chartjs-2';
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
   ArcElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Filler,
+  Legend,
+  LinearScale,
+  LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
-  Filler,
 } from 'chart.js';
 import ChartModal from '@/components/shared/ChartModal';
-import type { TrendDataPoint, DiagnosticSummary } from '@/types';
+import type {DiagnosticSummary, TrendDataPoint} from '@/types';
 import {createTrendDataset} from "@/components/dashboard/loaders.ts";
 
 ChartJS.register(

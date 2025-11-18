@@ -1,16 +1,16 @@
-import { useStore } from '@nanostores/react';
-import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
-import { settingsStore, updateSecuritySettings, setSettingsSaving, markSettingsSaved } from '@/stores/settingsStore';
-import { changePassword, calculatePasswordStrength } from '@/services/settingsService';
-import { toast } from '@/stores/toastStore';
-import type { ChangePasswordData } from '@/types/settings';
+import {useStore} from '@nanostores/react';
+import {useTranslation} from 'react-i18next';
+import {useState} from 'react';
+import {markSettingsSaved, setSettingsSaving, settingsStore, updateSecuritySettings} from '@/stores/settingsStore';
+import {calculatePasswordStrength, changePassword} from '@/services/settingsService';
+import {toast} from '@/stores/toastStore';
+import type {ChangePasswordData} from '@/types/settings';
 
 export default function SecuritySection() {
   const { t } = useTranslation();
   const { settings, isSaving } = useStore(settingsStore);
   const { security } = settings;
-  
+
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [passwordData, setPasswordData] = useState<ChangePasswordData>({
     currentPassword: '',
@@ -28,7 +28,7 @@ export default function SecuritySection() {
     const now = new Date();
     const diff = now.getTime() - date.getTime();
     const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    
+
     if (days === 0) return 'Hoy';
     if (days === 1) return 'Ayer';
     if (days < 7) return `Hace ${days} días`;
@@ -68,13 +68,13 @@ export default function SecuritySection() {
     try {
       setSettingsSaving(true);
       await changePassword(passwordData);
-      
+
       const newStrength = calculatePasswordStrength(passwordData.newPassword);
       updateSecuritySettings({
         lastPasswordChange: new Date(),
         passwordStrength: newStrength,
       });
-      
+
       markSettingsSaved();
       setShowChangePassword(false);
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });

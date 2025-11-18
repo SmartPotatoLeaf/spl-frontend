@@ -1,14 +1,13 @@
-import { map } from 'nanostores';
-import type { 
-  AppSettings, 
+import {map} from 'nanostores';
+import type {
+  AppSettings,
+  DateFormat,
+  Language,
+  NotificationSettings,
+  SecuritySettings,
   SettingsSection,
   Theme,
-  Language,
-  DateFormat,
-  NotificationSettings,
-  UserProfile,
-  SecuritySettings,
-  AppInfo
+  UserProfile
 } from '@/types/settings';
 
 export interface SettingsState {
@@ -138,8 +137,8 @@ export function setTimezone(timezone: string, autoDetect: boolean) {
   const current = settingsStore.get().settings;
   settingsStore.setKey('settings', {
     ...current,
-    language: { 
-      ...current.language, 
+    language: {
+      ...current.language,
       timezone,
       autoDetectTimezone: autoDetect,
     },
@@ -151,7 +150,7 @@ export function setNotifications(notifications: Partial<NotificationSettings>) {
   const current = settingsStore.get().settings;
   settingsStore.setKey('settings', {
     ...current,
-    notifications: { 
+    notifications: {
       ...current.notifications,
       ...notifications,
     },

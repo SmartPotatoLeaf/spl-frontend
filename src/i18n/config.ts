@@ -1,5 +1,5 @@
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import {initReactI18next} from 'react-i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 
 import esTranslation from './locales/es-PE.json';
@@ -21,11 +21,11 @@ i18n
     resources,
     fallbackLng: 'es-PE', // Idioma por defecto si no se detecta ninguno
     debug: false, // Modo debug para desarrollo
-    
+
     interpolation: {
       escapeValue: false, // React ya escapa por defecto
     },
-    
+
     detection: {
       order: ['localStorage', 'navigator'],
       caches: ['localStorage'],

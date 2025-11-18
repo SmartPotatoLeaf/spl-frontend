@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import {useCallback, useEffect, useState} from 'react';
 
 /**
  * useQueryParam - a small reusable hook to read and sync a single query param.

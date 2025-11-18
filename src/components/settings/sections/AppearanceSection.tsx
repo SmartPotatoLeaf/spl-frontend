@@ -1,9 +1,9 @@
-import { useStore } from '@nanostores/react';
-import { useTranslation } from 'react-i18next';
-import { settingsStore, setTheme, setSettingsSaving, markSettingsSaved } from '@/stores/settingsStore';
-import { updateAppearance } from '@/services/settingsService';
-import { toast } from '@/stores/toastStore';
-import type { Theme } from '@/types/settings';
+import {useStore} from '@nanostores/react';
+import {useTranslation} from 'react-i18next';
+import {markSettingsSaved, setSettingsSaving, setTheme, settingsStore} from '@/stores/settingsStore';
+import {updateAppearance} from '@/services/settingsService';
+import {toast} from '@/stores/toastStore';
+import type {Theme} from '@/types/settings';
 
 export default function AppearanceSection() {
   const { t } = useTranslation();
@@ -54,7 +54,7 @@ export default function AppearanceSection() {
         <p className="text-sm text-state-disabled mb-6">
           {t('settings.appearanceSection.themeDesc')}
         </p>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {themes.map(themeOption => (
             <button

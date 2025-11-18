@@ -1,8 +1,5 @@
-import { useTranslation } from 'react-i18next';
-import { useEffect } from 'react';
-import { setPlotsData } from '@/stores';
+import {useTranslation} from 'react-i18next';
 import PlotsGrid from './PlotsGrid';
-import type { PlotSummary } from '@/types';
 
 interface Props {
   initialPlots?: string;

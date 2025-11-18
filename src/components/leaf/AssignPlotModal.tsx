@@ -1,6 +1,5 @@
-import {useState, useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {getDashboardFilters} from "@/services/dashboardService.ts";
 import type {Plot} from "@/types";
 import {assignPlotToPredictions} from "@/services/plotService.ts";
 import {toast} from "@/stores";

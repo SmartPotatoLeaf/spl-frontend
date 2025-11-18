@@ -1,8 +1,8 @@
-import { useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useRef} from 'react';
+import {useTranslation} from 'react-i18next';
 import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import {useGSAP} from '@gsap/react';
+import {ScrollTrigger} from 'gsap/ScrollTrigger';
 import AppStore from '../layout/AppStore';
 import GooglePlay from '../layout/GooglePlay';
 

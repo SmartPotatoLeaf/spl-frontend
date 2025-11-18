@@ -1,8 +1,8 @@
-import { useRef } from 'react';
-import { useTranslation } from 'react-i18next';
+import {useRef} from 'react';
+import {useTranslation} from 'react-i18next';
 import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import {useGSAP} from '@gsap/react';
+import {ScrollTrigger} from 'gsap/ScrollTrigger';
 import OptimizedImage from '../shared/OptimizedImage';
 
 export default function Stats() {
@@ -19,7 +19,7 @@ export default function Stats() {
     // Animación del título y contenido
     const title = contentRef.current?.querySelector('h2');
     const subtitle = contentRef.current?.querySelector('p');
-    
+
     if (title) {
       gsap.from(title, {
         scrollTrigger: {
@@ -55,7 +55,7 @@ export default function Stats() {
       Array.from(benefits).forEach((benefit, index) => {
         const checkmark = benefit.querySelector('span:first-child');
         const text = benefit.querySelector('span:last-child');
-        
+
         // Animar beneficio
         gsap.from(benefit, {
           scrollTrigger: {
@@ -92,7 +92,7 @@ export default function Stats() {
       Array.from(statCards).forEach((card, index) => {
         const cardElement = card as HTMLElement;
         const valueElement = cardElement.querySelector('p:first-child');
-        
+
         // Entrada de la card
         gsap.from(cardElement, {
           scrollTrigger: {
@@ -112,11 +112,11 @@ export default function Stats() {
         if (valueElement) {
           const text = valueElement.textContent || '';
           const numberMatch = text.match(/\d+/);
-          
+
           if (numberMatch) {
             const targetValue = parseInt(numberMatch[0]);
             const suffix = text.replace(numberMatch[0], '').trim();
-            
+
             gsap.from({ value: 0 }, {
               scrollTrigger: {
                 trigger: cardElement,

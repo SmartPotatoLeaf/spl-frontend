@@ -1,8 +1,8 @@
 import {useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {TrendChart, DistributionChart} from './PlotCharts';
+import {DistributionChart, TrendChart} from './PlotCharts';
 import ChartModal from '@/components/shared/ChartModal';
-import type {PlotDetail, PlotDetailed} from '@/types';
+import type {PlotDetailed} from '@/types';
 import {getDetailedPlot} from '@/services/plotService';
 import {getDashboardSummary} from "@/services/dashboardService.ts";
 import Loader from "@/components/shared/Loader";

@@ -1,6 +1,6 @@
-import { useStore } from '@nanostores/react';
-import { useTranslation } from 'react-i18next';
-import { settingsStore } from '@/stores/settingsStore';
+import {useStore} from '@nanostores/react';
+import {useTranslation} from 'react-i18next';
+import {settingsStore} from '@/stores/settingsStore';
 
 export default function AboutSection() {
   const { t } = useTranslation();
