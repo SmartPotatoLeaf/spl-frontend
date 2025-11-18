@@ -8,7 +8,6 @@ interface Props {
 export default function PlotsListView({ initialPlots }: Props) {
   const { t } = useTranslation();
 
-
   return (
     <>
       <div className="mb-6 flex items-center justify-between flex-wrap gap-4">

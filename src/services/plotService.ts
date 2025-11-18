@@ -87,33 +87,3 @@ export function assignPlotToPredictions(plot: number | undefined | null, predict
 
   return service.assignToPredictions(plot, predictions)
 }
-
-const USE_MOCK = true;
-
-// Función helper para convertir fechas de string a Date
-function parsePlot(data: any): PlotSummary {
-  return {
-    ...data,
-    id: BigInt(data.id),
-    create_at: new Date(data.create_at),
-    updated_at: new Date(data.updated_at),
-    lastDiagnosticDate: data.lastDiagnosticDate ? new Date(data.lastDiagnosticDate) : undefined,
-  };
-}
-
-function mockGetAllPlots(): Promise<PlotSummary[]> {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      const plots = plotsData.map(parsePlot);
-      resolve(plots);
-    }, 300);
-  });
-}
-
-export async function getAllPlots(): Promise<PlotSummary[]> {
-  if (USE_MOCK) {
-    return mockGetAllPlots();
-  }
-  const response = await fetch('/api/plots');
-  return response.json();
-}
