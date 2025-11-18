@@ -1,9 +1,9 @@
 import {useTranslation} from 'react-i18next';
-import {toast} from '@/stores';
 import {useEffect, useState} from 'react';
 import Pagination from "@/components/shared/Pagination.tsx";
 import useQueryParam from "@/hooks/useQueryParam.ts";
-import {deletePlot, getPlots} from "@/services/plotService.ts";
+import {getPlots} from "@/services/plotService.ts";
+import DeletePlotModal from "@/components/plots/DeletePlotModal.tsx";
 import type {PlotDetailed, PlotPaginatedResponse} from "@/types";
 
 
@@ -16,7 +16,8 @@ export default function PlotsGrid() {
       page: 1,
     } as PlotPaginatedResponse),
     [currentPage, setCurrentPage] = useQueryParam("page", "1"),
-    [isLoading, setIsLoading] = useState(true);
+    [isLoading, setIsLoading] = useState(true),
+    [plotToDelete, setPlotToDelete] = useState<PlotDetailed | null>(null);
   const itemsPerPage = 10;
 
   function loadPlots() {
@@ -79,18 +80,7 @@ export default function PlotsGrid() {
             <button
               className="text-error hover:text-opacity-80 transition-colors"
               title={t('plots.table.delete')}
-              onClick={() => {
-                if (plot.id && confirm(t('plots.deleteConfirm', {name: plot.name}))) {
-                  deletePlot(plot.id)
-                    .then(_ => {
-                      loadPlots();
-                      toast.success("Parcela eliminada correctamente.")
-                    })
-                    .catch(_ => {
-                      toast.error("Non se pudo eliminar a parcela.")
-                    })
-                }
-              }}
+              onClick={() => setPlotToDelete(plot)}
             >
               <i className="fas fa-trash"></i>
             </button>
@@ -218,6 +208,20 @@ export default function PlotsGrid() {
       {/* Paginador */}
       <Pagination currentPage={(+currentPage)} total={pagination.total} itemsPerPage={itemsPerPage}
                   onPageChange={handlePageChange}/>
+
+      {/* Modal de eliminación */}
+      {plotToDelete && plotToDelete.id && (
+        <DeletePlotModal
+          isOpen={!!plotToDelete}
+          onClose={() => setPlotToDelete(null)}
+          plotId={plotToDelete.id}
+          plotName={plotToDelete.name}
+          onSuccess={() => {
+            setPlotToDelete(null);
+            loadPlots();
+          }}
+        />
+      )}
     </>
   );
 }

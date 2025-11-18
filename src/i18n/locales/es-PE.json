@@ -157,6 +157,13 @@
       "delete": "Eliminar"
     },
     "deleteConfirm": "¿Estás seguro de eliminar \"{{name}}\"?",
+    "deleteModal": {
+      "title": "Eliminar parcela",
+      "description": "¿Está seguro de que desea eliminar la parcela \"{{name}}\"? Esta acción no se puede deshacer y se eliminarán todos los datos asociados. Los diagnosticos permanecerán en el historial pero sin parcela asignada.",
+      "confirm": "Sí, eliminar",
+      "deleteSuccess": "Parcela eliminada correctamente",
+      "deleteError": "Error al eliminar la parcela"
+    },
     "form": {
       "nameLabel": "Nombre de la parcela",
       "namePlaceholder": "Ej: Parcela A",

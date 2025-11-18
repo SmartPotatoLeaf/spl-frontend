@@ -157,6 +157,13 @@
       "delete": "Delete"
     },
     "deleteConfirm": "Are you sure you want to delete \"{{name}}\"?",
+    "deleteModal": {
+      "title": "Delete plot",
+      "description": "Are you sure you want to delete the plot \"{{name}}\"? This action cannot be undone and all associated data will be deleted. The diagnostics will remain in the system but without an assigned plot.",
+      "confirm": "Yes, delete",
+      "deleteSuccess": "Plot deleted successfully",
+      "deleteError": "Error deleting plot"
+    },
     "form": {
       "nameLabel": "Plot name",
       "namePlaceholder": "E.g.: Plot A",
