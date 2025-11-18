@@ -1,36 +1,41 @@
 import { useStore } from '@nanostores/react';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { dashboardStore, plotsStore, setSelectedPlots, setComparativeData, setComparativeLoading } from '@/stores';
-import { getComparativeData } from '@/services/dashboardService';
+import {
+  dashboardStore,
+  plotsStore,
+  setSelectedPlots,
+  setComparativeData,
+  setComparativeLoading,
+  setPlotsData
+} from '@/stores';
+import {getComparativeData, getDashboardFilters, getDashboardSummary} from '@/services/dashboardService';
 import { toast } from '@/stores';
 import DashboardComparativeView from './DashboardComparativeView';
+import {loadDashboardData} from "@/components/dashboard/loaders.ts";
 
 export default function DashboardComparative() {
   const { t } = useTranslation();
   const { selectedPlots, comparativeData, comparativeFilters, isLoadingComparative } = useStore(dashboardStore);
   const { plots } = useStore(plotsStore);
-  
+
   const [localPlot1, setLocalPlot1] = useState<string>('');
   const [localPlot2, setLocalPlot2] = useState<string>('');
 
   useEffect(() => {
+    async function loadFilters() {
+      const data = await getDashboardFilters();
+      setPlotsData(data.plots)
+    }
+
+    loadFilters()
+  }, []);
+
+  useEffect(() => {
     if (comparativeData && selectedPlots[0] && selectedPlots[1]) {
-      loadComparativeData();
+      handleCompare();
     }
   }, [comparativeFilters]);
-
-  const loadComparativeData = async () => {
-    if (!selectedPlots[0] || !selectedPlots[1]) return;
-    
-    try {
-      setComparativeLoading(true);
-      const data = await getComparativeData(selectedPlots[0], selectedPlots[1], comparativeFilters);
-      setComparativeData(data);
-    } catch (err) {
-      toast.error(t('dashboard.comparative.errorComparison'), err instanceof Error ? err.message : t('dashboard.comparative.errorComparisonMessage'));
-    }
-  };
 
   const handleCompare = async () => {
     if (!localPlot1 || !localPlot2) {
@@ -46,9 +51,34 @@ export default function DashboardComparative() {
     try {
       setComparativeLoading(true);
       setSelectedPlots(localPlot1, localPlot2);
-      
-      const data = await getComparativeData(localPlot1, localPlot2, comparativeFilters);
-      setComparativeData(data);
+
+      const [plot1, plot2] = await Promise.all([
+        loadDashboardData({
+          ...comparativeFilters,
+          plotId: localPlot1 === "0" ? undefined : localPlot1,
+        }),
+        loadDashboardData({
+          ...comparativeFilters,
+          plotId: localPlot2 === "0" ? undefined : localPlot2,
+        })
+      ]);
+
+      setComparativeData({
+        plot1: {
+          plotId: localPlot1,
+          plotName: "",
+          summary: plot1.stats.summary,
+          stats: plot1.stats,
+          trendData: plot1.trends,
+        },
+        plot2: {
+          plotId: localPlot2,
+          plotName: "",
+          summary: plot2.stats.summary,
+          stats: plot2.stats,
+          trendData: plot2.trends,
+        }
+      });
     } catch (err) {
       toast.error(t('dashboard.comparative.errorComparison'), err instanceof Error ? err.message : t('dashboard.comparative.errorComparisonMessage'));
       setComparativeData(null);
@@ -87,8 +117,8 @@ export default function DashboardComparative() {
               >
                 <option value="">{t('dashboard.comparative.selectPlot')}</option>
                 {plots.map(plot => (
-                  <option key={plot.id.toString()} value={plot.id.toString()}>
-                    {plot.name}
+                  <option key={(plot.id ?? 0).toString()} value={(plot.id ?? 0).toString()}>
+                    {plot.id ? plot.name : t("plots.default.name")}
                   </option>
                 ))}
               </select>
@@ -107,12 +137,12 @@ export default function DashboardComparative() {
               >
                 <option value="">{t('dashboard.comparative.selectPlot')}</option>
                 {plots.map(plot => (
-                  <option 
-                    key={plot.id.toString()} 
-                    value={plot.id.toString()}
-                    disabled={plot.id.toString() === localPlot1}
+                  <option
+                    key={(plot.id ?? 0).toString()}
+                    value={(plot.id ?? 0).toString()}
+                    disabled={(plot.id ?? 0).toString() === localPlot1}
                   >
-                    {plot.name}
+                    {plot.id ? plot.name : t("plots.default.name")}
                   </option>
                 ))}
               </select>

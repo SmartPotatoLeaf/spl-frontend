@@ -12,6 +12,7 @@ import UploadZone from './UploadZone';
 import ImagePreview from './ImagePreview';
 import ProcessingLoader from './ProcessingLoader';
 import ImageCropEditor from './ImageCropEditor';
+import {createPrediction} from "@/services/diagnosticsService.ts";
 
 export default function UploadImage() {
   const { t } = useTranslation();
@@ -56,8 +57,8 @@ export default function UploadImage() {
       const processedImage = {
         file: croppedFile,
         preview,
-        width: 224,
-        height: 224,
+        width: 256,
+        height: 256,
         size: croppedFile.size,
       };
 
@@ -85,20 +86,15 @@ export default function UploadImage() {
   const handleAnalyze = async () => {
     if (!uploadState.processedImage) return;
 
-    setUploadState((prev) => ({ ...prev, status: 'uploading', progress: 0 }));
+    setUploadState((prev) => ({ ...prev, status: 'uploading', progress: null! }));
 
-    // TODO: Implementar llamada a la API para analizar la imagen
     try {
-      // Simular upload progress
-      for (let i = 0; i <= 100; i += 10) {
-        await new Promise((resolve) => setTimeout(resolve, 200));
-        setUploadState((prev) => ({ ...prev, progress: i }));
-      }
-
-      // TODO: Cuando se conecte la API, obtener el predictionId real
-      // Por ahora, simulamos redirección a resultado con ID de ejemplo
-      const predictionId = '1';
-      window.location.href = `/diagnostics/${predictionId}`;
+      const data = new FormData();
+      data.set("request", uploadState.processedImage.file)
+      const response = await createPrediction(data);
+      window.location.href = "/diagnostics/" + response.id;
+      // const predictionId = '1';
+      // window.location.href = `/diagnostics/${predictionId}`;
     } catch (error) {
       setUploadState((prev) => ({
         ...prev,

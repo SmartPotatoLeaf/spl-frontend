@@ -3,10 +3,10 @@ import i18next from 'i18next';
 
 export const UPLOAD_CONFIG: UploadConfig = {
   maxSizeMB: 10, // Máximo 10MB
-  minWidth: 224, // Mínimo para web (ResNet50 usa 224x224)
-  minHeight: 224,
-  targetWidth: 224, // Tamaño objetivo para ResNet50
-  targetHeight: 224,
+  minWidth: 256, // Mínimo para web (ResNet50 usa 224x224)
+  minHeight: 256,
+  targetWidth: 256, // Tamaño objetivo para ResNet50
+  targetHeight: 256,
   quality: 0.9, // Calidad de compresión JPEG
   acceptedFormats: ['image/jpeg', 'image/jpg', 'image/png'],
 };
@@ -16,9 +16,9 @@ export const UPLOAD_CONFIG: UploadConfig = {
  */
 export function validateImageFile(file: File): ImageValidationResult {
   if (!file) {
-    return { 
-      isValid: false, 
-      error: i18next.t('upload.errors.noFile') 
+    return {
+      isValid: false,
+      error: i18next.t('upload.errors.noFile')
     };
   }
 
@@ -57,9 +57,9 @@ export async function validateImageDimensions(file: File): Promise<ImageValidati
       ) {
         resolve({
           isValid: false,
-          error: i18next.t('upload.errors.imageTooSmall', { 
-            minWidth: UPLOAD_CONFIG.minWidth, 
-            minHeight: UPLOAD_CONFIG.minHeight 
+          error: i18next.t('upload.errors.imageTooSmall', {
+            minWidth: UPLOAD_CONFIG.minWidth,
+            minHeight: UPLOAD_CONFIG.minHeight
           }),
         });
       } else {

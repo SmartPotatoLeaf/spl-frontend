@@ -25,12 +25,12 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
   const [containerSize, setContainerSize] = useState({ width: 0, height: 0 });
   const [scale, setScale] = useState(1);
   const [minScale, setMinScale] = useState(0.5);
-  const [cropArea, setCropArea] = useState<CropArea>({ x: 0, y: 0, width: 224, height: 224 });
+  const [cropArea, setCropArea] = useState<CropArea>({ x: 0, y: 0, width: 256, height: 256 });
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [resizeHandle, setResizeHandle] = useState<ResizeHandle>(null);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
-  const [initialCropArea, setInitialCropArea] = useState<CropArea>({ x: 0, y: 0, width: 224, height: 224 });
+  const [initialCropArea, setInitialCropArea] = useState<CropArea>({ x: 0, y: 0, width: 256, height: 256 });
 
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
@@ -66,7 +66,7 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
     // Altura: en mobile usa aspect ratio, en desktop usa altura fija
     const isMobile = window.innerWidth < 640;
     const containerHeight = isMobile ? containerWidth : Math.min(containerWidth, 500);
-    
+
     setContainerSize({ width: containerWidth, height: containerHeight });
 
     // Calcular escala inicial para que la imagen quepa
@@ -75,8 +75,8 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
     const initialScale = Math.min(scaleX, scaleY, 1);
     setScale(initialScale);
 
-    // Calcular escala mínima (el crop area de 224px debe caber)
-    const minScaleForCrop = 224 / Math.min(imgWidth, imgHeight);
+    // Calcular escala mínima (el crop area de 256px debe caber)
+    const minScaleForCrop = 256 / Math.min(imgWidth, imgHeight);
     setMinScale(Math.max(minScaleForCrop, 0.1));
 
     // Calcular dimensiones y posición de la imagen escalada
@@ -89,7 +89,7 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
     setImagePosition({ x: imageX, y: imageY });
 
     // Área de crop inicial (centrada sobre la imagen)
-    const cropSize = 224;
+    const cropSize = 256;
     const cropX = imageX + (displayWidth - cropSize) / 2;
     const cropY = imageY + (displayHeight - cropSize) / 2;
 
@@ -174,7 +174,7 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
 
       // Mantener aspecto cuadrado
       const size = Math.min(newCrop.width, newCrop.height);
-      
+
       // Aplicar límites
       const finalSize = Math.max(minSize, Math.min(size, maxSize));
 
@@ -238,7 +238,7 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
     // Limitar el zoom
     const maxScale = 3;
     const boundedScale = Math.max(minScale, Math.min(newScale, maxScale));
-    
+
     // Calcular el centro del crop area actual
     const cropCenterX = cropArea.x + cropArea.width / 2;
     const cropCenterY = cropArea.y + cropArea.height / 2;
@@ -289,8 +289,8 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
     if (!imageRef.current) return;
 
     const canvas = document.createElement('canvas');
-    canvas.width = 224;
-    canvas.height = 224;
+    canvas.width = 256;
+    canvas.height = 256;
 
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -311,8 +311,8 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
         sourceSize,
         0,
         0,
-        224,
-        224
+        256,
+        256
       );
 
       canvas.toBlob(
@@ -354,7 +354,7 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
         <div
           ref={cropContainerRef}
           className="relative mx-auto bg-gray-800 rounded-lg sm:rounded-xl overflow-hidden shadow-lg"
-          style={{ 
+          style={{
             width: '100%',
             maxWidth: '800px',
             height: containerSize.height > 0 ? `${containerSize.height}px` : '500px',
@@ -451,7 +451,7 @@ export default function ImageCropEditor({ file, onCropComplete, onCancel }: Imag
             <div className="absolute top-2 right-2 sm:top-4 sm:right-4 bg-black/90 backdrop-blur-sm text-white px-2 py-1.5 sm:px-3 sm:py-2 rounded-md sm:rounded-lg shadow-lg z-20">
               <p className="font-bold mb-0.5 sm:mb-1 text-[10px] sm:text-xs">{t('upload.crop.cropArea')}</p>
               <p className="text-xs sm:text-sm">{Math.round(cropArea.width)} × {Math.round(cropArea.height)} px</p>
-              <p className="text-white/70 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">→ 224 × 224 px</p>
+              <p className="text-white/70 mt-0.5 sm:mt-1 text-[10px] sm:text-xs">→ 256 × 256 px</p>
             </div>
         </div>
 

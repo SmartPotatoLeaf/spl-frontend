@@ -116,16 +116,22 @@ export default function ProcessingLoader({ status, progress }: ProcessingLoaderP
           </p>
 
           {/* Barra de progreso */}
-          <div className="w-full bg-outline/30 rounded-full h-2 overflow-hidden">
-            <div
-              className="h-full bg-primary transition-all duration-300 ease-out rounded-full"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
+          {
+            typeof progress === "number" && (
+              <>
+                <div className="w-full bg-outline/30 rounded-full h-2 overflow-hidden">
+                  <div
+                    className="h-full bg-primary transition-all duration-300 ease-out rounded-full"
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
 
-          <p className="text-xs sm:text-sm text-state-disabled mt-3">
-            {progress}%
-          </p>
+                <p className="text-xs sm:text-sm text-state-disabled mt-3">
+                  {progress}%
+                </p>
+              </>
+            )
+          }
         </div>
       </div>
     </div>

@@ -29,6 +29,14 @@ class DiagnosticsService extends CrudService<Diagnostic> {
   async delete(id: number): Promise<DiagnosticResponse> {
     return this.httpDelete(`/${id}/`);
   }
+
+  async create(body: FormData): Promise<DiagnosticResponse> {
+    const init: RequestInit = {method: 'POST'};
+    if (body !== undefined) {
+      init.body = body;
+    }
+    return this.request("/", init);
+  }
 }
 
 function instantiateService() {
@@ -50,4 +58,9 @@ export function getDiagnostic(id: number): Promise<DiagnosticResponse> {
 export function deleteDiagnostic(id: number): Promise<DiagnosticResponse> {
   instantiateService();
   return service.delete(id);
+}
+
+export function createPrediction(file: FormData) {
+  instantiateService();
+  return service.create(file);
 }

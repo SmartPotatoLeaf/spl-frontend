@@ -1,11 +1,9 @@
 import { useStore } from '@nanostores/react';
-import { useTranslation } from 'react-i18next';
 import {dashboardStore, setDashboardFilters, } from '@/stores';
 import Filters from "@/components/shared/Filters.tsx";
 import {useEffect, useState} from "react";
 
 export default function DashboardFilters() {
-  const { t } = useTranslation();
   const { filters, plots } = useStore(dashboardStore);
 
   const [dateFrom, setDateFrom] = useState(filters.dateFrom);
@@ -14,12 +12,18 @@ export default function DashboardFilters() {
   const [plot, setPlot] = useState(filters.plotId);
 
   useEffect(() => {
-    setDateFrom(filters.dateFrom);
-    setDateTo(filters.dateTo);
+    setDateFrom(filters.dateFrom || "");
+    setDateTo(filters.dateTo || "");
     setSeverity(filters.severity);
     setPlot(filters.plotId);
   }, [filters]);
 
+  const handleDateFromChange = (value: string) => {
+    setDateFrom(value);
+    if (dateTo && value && dateTo < value) {
+      setDateTo('');
+    }
+  };
 
   const handleReset = () => {
     setDashboardFilters({
@@ -42,11 +46,11 @@ export default function DashboardFilters() {
 
   return (
     <Filters options={{
-      dateFrom: dateFrom?.toDateString(),
-      dateTo: dateTo?.toDateString(),
+      dateFrom: dateFrom,
+      dateTo: dateTo,
       severity: severity || 'all',
       plot: plot || 'all',
-      setDateFrom: setDateFrom,
+      setDateFrom: handleDateFromChange,
       setDateTo: setDateTo,
       setSeverity: setSeverity,
       setPlot: setPlot,

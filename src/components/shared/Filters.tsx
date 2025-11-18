@@ -99,28 +99,34 @@ export default function Filters({options}: FiltersProps) {
           </div>
         </div>
 
-        <div className="flex flex-col gap-1">
-          <label htmlFor="plot" className="text-xs text-state-disabled font-medium">
-            {t('history.filters.plot')}
-          </label>
-          <div className="relative">
-            <select
-              id="plot"
-              value={plot}
-              onChange={(e) => setPlot(e.target.value)}
-              className="w-full px-3 py-2 border border-outline rounded-lg text-sm text-state-idle focus:outline-none focus:ring-2 focus:ring-primary appearance-none"
-            >
-              <option value="all">{t('history.filters.allPlots')}</option>
-              {plots.map((p) => (
-                <option key={(p.id ?? 0).toString()} value={p.id}>
-                  {p.id ? p.name : t("plots.default.name")}
-                </option>
-              ))}
-            </select>
-            <i
-              className="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-state-disabled pointer-events-none text-xs"></i>
-          </div>
-        </div>
+        {
+          plots.length > 0 && (
+            <>
+              <div className="flex flex-col gap-1">
+                <label htmlFor="plot" className="text-xs text-state-disabled font-medium">
+                  {t('history.filters.plot')}
+                </label>
+                <div className="relative">
+                  <select
+                    id="plot"
+                    value={plot}
+                    onChange={(e) => setPlot(e.target.value)}
+                    className="w-full px-3 py-2 border border-outline rounded-lg text-sm text-state-idle focus:outline-none focus:ring-2 focus:ring-primary appearance-none"
+                  >
+                    <option value="all">{t('history.filters.allPlots')}</option>
+                    {plots.map((p) => (
+                      <option key={(p.id ?? 0).toString()} value={p.id}>
+                        {p.id ? p.name : t("plots.default.name")}
+                      </option>
+                    ))}
+                  </select>
+                  <i
+                    className="fas fa-chevron-down absolute right-3 top-1/2 -translate-y-1/2 text-state-disabled pointer-events-none text-xs"></i>
+                </div>
+              </div>
+            </>
+          )
+        }
       </div>
 
       <div className="flex items-center justify-between gap-3">

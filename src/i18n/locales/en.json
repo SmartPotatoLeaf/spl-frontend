@@ -606,7 +606,7 @@
       "dragDrop": "Drag and drop image here or",
       "orClick": "or click to browse your device",
       "browse": "Browse image",
-      "formats": "Supported formats: JPEG, PNG · Max size: 10MB · Min dimensions: 224x224px",
+      "formats": "Supported formats: JPEG, PNG · Max size: 10MB · Min dimensions: 256x256px",
       "dropHere": "Drop image here",
       "validating": "Validating image..."
     },

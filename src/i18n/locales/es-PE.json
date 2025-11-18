@@ -606,7 +606,7 @@
       "dragDrop": "Arrastre y suelte la imagen aquí o",
       "orClick": "o haga clic para buscar en su dispositivo",
       "browse": "Buscar imagen",
-      "formats": "Formatos soportados: JPEG, PNG · Tamaño máximo: 10MB · Dimensiones mínimas: 224x224px",
+      "formats": "Formatos soportados: JPEG, PNG · Tamaño máximo: 10MB · Dimensiones mínimas: 256x256px",
       "dropHere": "Suelte la imagen aquí",
       "validating": "Validando imagen..."
     },
@@ -624,7 +624,7 @@
       "fileSize": "Peso",
       "format": "Formato",
       "optimized": "Imagen optimizada.",
-      "optimizedDesc": "La imagen ha sido redimensionada a 224×224px y optimizada para obtener los mejores resultados con nuestro modelo de IA.",
+      "optimizedDesc": "La imagen ha sido redimensionada a 256×256px y optimizada para obtener los mejores resultados con nuestro modelo de IA.",
       "analyze": "Analizar ahora",
       "uploadAnother": "Subir otra imagen"
     },
