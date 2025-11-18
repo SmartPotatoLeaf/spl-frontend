@@ -1,15 +1,4 @@
-import type {
-  ComparativeData,
-  DashboardFilters,
-  DashboardStats,
-  DashboardSummaryRequest,
-  DashboardSummaryResponse,
-  DiagnosisSummaryFilters,
-  Diagnostic,
-  TrendDataPoint
-} from '@/types';
-import diagnosticsData from '@/data/diagnostics.json';
-import plotsData from '@/data/plots.json';
+import type {DashboardSummaryRequest, DashboardSummaryResponse, DiagnosisSummaryFilters} from '@/types';
 import CrudService from "@/services/crud/CrudService.ts";
 import {API_URL} from "astro:env/client";
 import {getToken, logout} from "@/stores/authStore.ts";

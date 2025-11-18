@@ -1,5 +1,4 @@
 import type {Plot, PlotDetailed, PlotFormData, PlotPaginatedRequest, PlotPaginatedResponse, PlotSummary} from '@/types';
-import plotsData from '@/data/plots.json';
 import CrudService from "@/services/crud/CrudService.ts";
 import {API_URL} from "astro:env/client";
 import {getToken, logout} from "@/stores/authStore.ts";
