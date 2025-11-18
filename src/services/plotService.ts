@@ -2,7 +2,7 @@ import type {Plot, PlotDetailed, PlotFormData, PlotPaginatedRequest, PlotPaginat
 import plotsData from '@/data/plots.json';
 import CrudService from "@/services/crud/CrudService.ts";
 import {API_URL} from "astro:env/client";
-import {getToken} from "@/stores/authStore.ts";
+import {getToken, logout} from "@/stores/authStore.ts";
 
 let service: PlotService = null!
 
@@ -15,7 +15,8 @@ function instantiateService() {
 class PlotService extends CrudService<PlotSummary> {
   constructor() {
     super(`${API_URL}/plots/`, {
-      tokenProvider: getToken
+      tokenProvider: getToken,
+      tokenRemover: logout
     });
   }
 

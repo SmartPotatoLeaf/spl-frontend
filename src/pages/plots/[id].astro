@@ -1,6 +1,7 @@
 ---
 import DashboardLayout from '@/layouts/DashboardLayout.astro';
 import PlotDetailView from '@/components/plots/PlotDetailView';
+import AuthGuard from "@/components/shared/AuthGuard.tsx";
 
 export const prerender = false;
 
@@ -15,10 +16,12 @@ if (!id) {
 }
 ---
 
-<DashboardLayout 
+<DashboardLayout
   title="Detalles de Parcela - Smart Potato Leaf"
   description="Análisis detallado de la parcela"
   activeRoute="parcelas"
 >
-  <PlotDetailView plotId={id} client:load />
+  <AuthGuard client:load>
+    <PlotDetailView plotId={id} client:load />
+  </AuthGuard>
 </DashboardLayout>

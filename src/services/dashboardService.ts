@@ -12,14 +12,15 @@ import diagnosticsData from '@/data/diagnostics.json';
 import plotsData from '@/data/plots.json';
 import CrudService from "@/services/crud/CrudService.ts";
 import {API_URL} from "astro:env/client";
-import {getToken} from "@/stores/authStore.ts";
+import {getToken, logout} from "@/stores/authStore.ts";
 
 let service: DashboardService = null!
 
 class DashboardService extends CrudService<any> {
   constructor() {
     super(`${API_URL}/dashboard/`, {
-      tokenProvider: getToken
+      tokenProvider: getToken,
+      tokenRemover: logout
     })
   }
 

@@ -1,14 +1,15 @@
 import CrudService from "@/services/crud/CrudService.ts";
 import type {Feedback, FeedbackCreate, FeedbackUpdate} from "@/types/feedback.ts";
 import {API_URL} from "astro:env/client";
-import {getToken} from "@/stores/authStore.ts";
+import {getToken, logout} from "@/stores/authStore.ts";
 
 let service: FeedbackService = null!
 
 export class FeedbackService extends CrudService<Feedback> {
   constructor() {
     super(`${API_URL}/feedbacks/`, {
-      tokenProvider: getToken
+      tokenProvider: getToken,
+      tokenRemover: logout
     });
   }
 

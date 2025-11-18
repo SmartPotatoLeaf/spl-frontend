@@ -1,9 +1,12 @@
 ---
 import DashboardLayout from '@/layouts/DashboardLayout.astro';
 import HistoryView from '@/components/history/HistoryView';
+import AuthGuard from "@/components/shared/AuthGuard.tsx";
 
 ---
 
 <DashboardLayout title="History - Smart Potato Leaf" activeRoute="history">
-  <HistoryView client:load />
+  <AuthGuard client:load>
+    <HistoryView client:load />
+  </AuthGuard>
 </DashboardLayout>

@@ -1,14 +1,17 @@
 ---
 import DashboardLayout from '@/layouts/DashboardLayout.astro';
 import NewPlotView from '@/components/plots/NewPlotView';
+import AuthGuard from "@/components/shared/AuthGuard.tsx";
 
 export const prerender = false;
 ---
 
-<DashboardLayout 
-  title="Nueva Parcela - Smart Potato Leaf" 
+<DashboardLayout
+  title="Nueva Parcela - Smart Potato Leaf"
   description="Agregar nueva parcela de cultivo"
   activeRoute="parcelas"
 >
-  <NewPlotView client:load />
+  <AuthGuard client:load>
+    <NewPlotView client:load />
+  </AuthGuard>
 </DashboardLayout>

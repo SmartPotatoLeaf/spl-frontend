@@ -13,6 +13,7 @@ export interface CrudServiceOptions {
   tokenKey?: string; // localStorage key to read token from (default: 'authToken')
   tokenProvider?: TokenProvider; // optional function to provide token (used before localStorage)
   defaultHeaders?: Record<string, string>;
+  tokenRemover?: () => void; // optional function to remove token on auth failure
 }
 
 export abstract class CrudService<T, CreateDto = any, UpdateDto = any> {
@@ -21,6 +22,7 @@ export abstract class CrudService<T, CreateDto = any, UpdateDto = any> {
   protected retryDelayMs: number;
   protected tokenKey: string;
   protected tokenProvider?: TokenProvider;
+  protected tokenRemover?: () => void;
   protected defaultHeaders: Record<string, string>;
 
   protected constructor(baseUrl: string, options: CrudServiceOptions = {}) {
@@ -29,6 +31,7 @@ export abstract class CrudService<T, CreateDto = any, UpdateDto = any> {
     this.retryDelayMs = options.retryDelayMs ?? 300;
     this.tokenKey = options.tokenKey ?? 'authToken';
     this.tokenProvider = options.tokenProvider;
+    this.tokenRemover = options.tokenRemover;
     this.defaultHeaders = options.defaultHeaders ?? {};
   }
 
@@ -69,6 +72,13 @@ export abstract class CrudService<T, CreateDto = any, UpdateDto = any> {
     return this.request(path, {method: 'DELETE'});
   }
 
+  protected redirect(location: string) {
+    if (location === "auth" && this.tokenRemover && typeof window === "object") {
+      this.tokenRemover();
+      window.location.href = "/auth";
+    }
+  }
+
   // Core request with retry and auth
   protected async request(path: string, init: RequestInit = {}, attempt = 1): Promise<any> {
     const url = this.buildUrl(path);
@@ -91,6 +101,11 @@ export abstract class CrudService<T, CreateDto = any, UpdateDto = any> {
       const response = await fetch(url, finalInit);
 
       if (!response.ok) {
+        // Unauthorized or Forbidden - do not retry
+        if ([401, 403].includes(response.status)) {
+          return this.redirect("auth");
+        }
+
         // Retry on transient server errors (5xx) and rate limiting (429)
         if (attempt < this.maxRetries && (response.status >= 500 || response.status === 429)) {
           await this.delay(this.retryDelayMs * Math.pow(2, attempt - 1));

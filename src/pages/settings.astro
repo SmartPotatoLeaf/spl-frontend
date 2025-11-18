@@ -1,12 +1,15 @@
 ---
 import DashboardLayout from '@/layouts/DashboardLayout.astro';
 import SettingsView from '@/components/settings/SettingsView';
+import AuthGuard from "@/components/shared/AuthGuard.tsx";
 
 export const prerender = false;
 ---
 
 <DashboardLayout title="Configuración - Smart Potato Leaf" activeRoute="settings">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <SettingsView client:load />
+    <AuthGuard client:load>
+      <SettingsView client:load />
+    </AuthGuard>
   </div>
 </DashboardLayout>
