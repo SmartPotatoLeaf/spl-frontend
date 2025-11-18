@@ -27,7 +27,7 @@ export default function DashboardStatsComponent({ stats }: DashboardStatsProps) 
           <div>
             <p className="text-sm text-state-disabled mb-1">{t('dashboard.stats.healthyDiagnostics')}</p>
             <p className="text-3xl sm:text-4xl font-bold text-state-idle">
-              {stats.generalStats.healthyPercentage.toFixed(0)}%
+              {stats.generalStats.healthyPercentage}%
             </p>
           </div>
           <div className="w-10 h-10 bg-tag-healthy/10 rounded-lg flex items-center justify-center">

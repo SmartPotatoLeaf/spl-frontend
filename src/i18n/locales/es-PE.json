@@ -36,7 +36,7 @@
     "title": "Inicio",
     "loadingData": "Cargando datos...",
     "stats": {
-      "weeklyDiagnostics": "Diagnósticos esta semana",
+      "monthlyDiagnostics": "Diagnósticos este mes",
       "healthyLeaves": "Hojas sanas",
       "averageSeverity": "Severidad promedio",
       "totalDiagnostics": "Total diagnósticos"

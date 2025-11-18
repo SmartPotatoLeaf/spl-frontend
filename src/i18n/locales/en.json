@@ -36,7 +36,7 @@
     "title": "Home",
     "loadingData": "Loading data...",
     "stats": {
-      "weeklyDiagnostics": "Diagnostics this week",
+      "monthlyDiagnostics": "Diagnostics this month",
       "healthyLeaves": "Healthy leaves",
       "averageSeverity": "Average severity",
       "totalDiagnostics": "Total diagnostics"

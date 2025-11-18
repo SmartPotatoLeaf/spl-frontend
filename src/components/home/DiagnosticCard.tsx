@@ -6,11 +6,11 @@ interface DiagnosticCardProps {
 }
 
 export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const statusColors = {
     healthy: 'bg-tag-healthy text-white',
-    low: 'bg-tag-low text-state-idle',
+    low: 'bg-tag-low text-state-idle text-white',
     moderate: 'bg-tag-mid text-white',
     severe: 'bg-tag-severe text-white'
   };
@@ -34,13 +34,14 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
   };
 
   const formattedDate = formatDate(diagnostic.predictedAt);
+  const confidence = Math.max(diagnostic.presenceConfidence, diagnostic.absenceConfidence);
 
   return (
     <div className="bg-white rounded-lg border border-outline p-3 sm:p-4 hover:shadow-md transition-shadow">
       <div className="flex items-center gap-3 sm:gap-4">
         <div className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 bg-gray-200 rounded-lg relative overflow-hidden">
           <div className="absolute inset-0 flex items-center justify-center text-state-disabled">
-            <i className="fas fa-leaf text-2xl sm:text-3xl opacity-20"></i>
+            <img loading="lazy" src={diagnostic.imageUrl ?? "/placeholder.jpg"} />
           </div>
         </div>
 
@@ -73,8 +74,8 @@ export default function DiagnosticCard({ diagnostic }: DiagnosticCardProps) {
             <span className={`inline-block px-3 py-1 rounded text-xs font-medium ${statusColor}`}>
               {diagnostic.statusLabel}
             </span>
-            <span className={`text-xs font-medium ${getConfidenceColor(diagnostic.presenceConfidence)}`}>
-              {(diagnostic.presenceConfidence * 100).toFixed(0)}% {t('home.recentDiagnostics.confidence')}
+            <span className={`text-xs font-medium ${getConfidenceColor(confidence)}`}>
+              {(confidence * 100).toFixed(0)}% {t('home.recentDiagnostics.confidence')}
             </span>
           </div>
         </div>

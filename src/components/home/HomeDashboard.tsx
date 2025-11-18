@@ -1,22 +1,68 @@
-import { useStore } from '@nanostores/react';
-import { useTranslation } from 'react-i18next';
-import { homeStore } from '@/stores';
+import {useStore} from '@nanostores/react';
+import {useTranslation} from 'react-i18next';
+import {homeStore, setHomeData, setHomeLoading} from '@/stores';
 import StatsCard from './StatsCard';
 import DiagnosticCard from './DiagnosticCard';
 import SummaryChart from './SummaryChart';
+import Loader from "@/components/shared/Loader";
+import {useEffect} from "react";
+import {loadDashboardData} from "@/components/dashboard/loaders.ts";
+import {filterDiagnostics} from "@/services/diagnosticsService.ts";
+import {BLOB_URL} from "astro:env/client";
 
 export default function HomeDashboard() {
-  const { t } = useTranslation();
-  const { stats, recentDiagnostics, isLoading } = useStore(homeStore);
+  const {t} = useTranslation();
+  const {stats, recentDiagnostics, isLoading} = useStore(homeStore);
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const [data, diagnostics] = await Promise.all([
+          loadDashboardData({
+            plotId: "all"
+          }),
+          filterDiagnostics({limit: 5, page: 1, item_fields: "$min"})
+        ]);
+
+        const now = new Date(),
+          keyName = `${now.getFullYear()}-${now.getMonth() + 1}`,
+          month = data.source.diagnosis_distribution.find(el => el.month === keyName);
+
+        data.stats.weekStats = {
+          currentWeek: month?.labels_count?.reduce((acc, el) => acc + el.count, 0) || 0,
+          percentageChange: undefined!
+        }
+        const items = diagnostics.items.map(el => {
+          const name = el.label.name === "mild" ? "moderate" : el.label.name;
+          return {
+            id: el.id,
+            status: name,
+            statusLabel: t(`leaf.details.severity.${name}`),
+            predictedAt: new Date(el.predicted_at.endsWith("Z") ? el.predicted_at : el.predicted_at + "Z"),
+            severity: el.severity,
+            presenceConfidence: el.presence_confidence,
+            absenceConfidence: el.absence_confidence,
+            imageUrl: `${BLOB_URL}${el.image.filepath}`,
+            hasLocation: !!el.plot_id,
+            location: el.plot?.name
+          }
+        });
+
+        console.log(items)
+        setHomeData(data.stats, items);
+      } catch (e) {
+
+      } finally {
+        setHomeLoading(false);
+      }
+    }
+
+    loadData();
+  }, []);
 
   if (isLoading || !stats) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="text-center">
-          <i className="fas fa-spinner fa-spin text-4xl text-primary mb-4"></i>
-          <p className="text-state-disabled">{t('home.loadingData')}</p>
-        </div>
-      </div>
+      <Loader text={t('home.loadingData')}/>
     );
   }
 
@@ -25,7 +71,7 @@ export default function HomeDashboard() {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <StatsCard
-          title={t('home.stats.weeklyDiagnostics')}
+          title={t('home.stats.monthlyDiagnostics')}
           value={stats.weekStats.currentWeek}
           change={stats.weekStats.percentageChange}
           icon="fa-chart-line"
@@ -75,7 +121,7 @@ export default function HomeDashboard() {
           {recentDiagnostics.length > 0 ? (
             <div className="space-y-3">
               {recentDiagnostics.map((diagnostic) => (
-                <DiagnosticCard key={diagnostic.id.toString()} diagnostic={diagnostic} />
+                <DiagnosticCard key={diagnostic.id.toString()} diagnostic={diagnostic}/>
               ))}
             </div>
           ) : (
@@ -87,7 +133,7 @@ export default function HomeDashboard() {
         </div>
 
         <div className="lg:col-span-1">
-          <SummaryChart summary={stats.summary} />
+          <SummaryChart summary={stats.summary}/>
         </div>
       </div>
     </div>

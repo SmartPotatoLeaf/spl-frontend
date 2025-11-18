@@ -180,7 +180,7 @@ export default function DashboardComparativeView({ data }: DashboardComparativeV
             <div className="bg-gray-50 rounded-lg p-4">
               <p className="text-xs text-state-disabled mb-1">{t('dashboard.comparative.healthyPercentage')}</p>
               <p className="text-2xl font-bold text-tag-healthy">
-                {plot1.stats.generalStats.healthyPercentage.toFixed(0)}%
+                {plot1.stats.generalStats.healthyPercentage}%
               </p>
             </div>
             <div className="bg-gray-50 rounded-lg p-4">
@@ -262,7 +262,7 @@ export default function DashboardComparativeView({ data }: DashboardComparativeV
             <div className="bg-gray-50 rounded-lg p-4">
               <p className="text-xs text-state-disabled mb-1">{t('dashboard.comparative.healthyPercentage')}</p>
               <p className="text-2xl font-bold text-tag-healthy">
-                {plot2.stats.generalStats.healthyPercentage.toFixed(0)}%
+                {plot2.stats.generalStats.healthyPercentage}%
               </p>
             </div>
             <div className="bg-gray-50 rounded-lg p-4">

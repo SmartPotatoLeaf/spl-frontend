@@ -42,7 +42,7 @@ export default function PlotsGrid() {
       'january', 'february', 'march', 'april', 'may', 'june',
       'july', 'august', 'september', 'october', 'november', 'december'
     ];
-    if(typeof date === 'string')
+    if (typeof date === 'string')
       date = new Date(date);
 
     const monthKey = monthKeys[date.getMonth()];
@@ -84,7 +84,8 @@ export default function PlotsGrid() {
                 if (plot.id && confirm(t('plots.deleteConfirm', {name: plot.name}))) {
                   deletePlot(plot.id)
                     .then(_ => {
-                      loadPlots()
+                      if (pagination.total > (pagination.page * pagination.limit))
+                        loadPlots();
                       toast.success("Parcela eliminada correctamente.")
                     })
                     .catch(_ => {

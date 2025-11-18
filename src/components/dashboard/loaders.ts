@@ -86,11 +86,12 @@ export async function loadDashboardData(filters: DashboardFilters) {
     });
 
   summary["total"] = data.total;
+  const healthy = data.labels_count.find(el => el.label.name === "healthy")
   return {
     stats: <DashboardStats>{
       weekStats: {},
       generalStats: {
-        healthyPercentage: data.total === 0 ? 0 : (data.labels_count.find(el => el.label.name === "healthy")?.count ?? 0 / data.total) * 100,
+        healthyPercentage: data.total === 0 ? 0 : (((healthy?.count ?? 0) / data.total) * 100).toFixed(2),
       },
       severityAverage: {
         value: data.mean_severity,
@@ -99,5 +100,6 @@ export async function loadDashboardData(filters: DashboardFilters) {
       totalPlots: data.plot_count
     },
     trends: labelsTrend,
+    source: data,
   };
 }

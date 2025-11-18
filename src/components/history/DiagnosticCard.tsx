@@ -33,7 +33,8 @@ export default function DiagnosticCard({ diagnostic, loadJsImage }: DiagnosticCa
     }
   };
 
-  const hasValidImage = diagnostic.imageUrl && diagnostic.imageUrl !== '/placeholder.jpg';
+  const hasValidImage = diagnostic.imageUrl && diagnostic.imageUrl !== '/placeholder.jpg',
+    confidence = Math.max(diagnostic.presenceConfidence, diagnostic.absenceConfidence);
 
   const getConfidenceColor = (confidence: number) => {
     if (confidence >= 0.8) return 'text-confidence-high';
@@ -65,8 +66,8 @@ export default function DiagnosticCard({ diagnostic, loadJsImage }: DiagnosticCa
             <span className={`inline-block px-2 py-1 rounded text-xs font-medium ${getBadgeColor(diagnostic.status)}`}>
               {diagnostic.statusLabel}
             </span>
-            <span className={`text-xs font-medium ${getConfidenceColor(diagnostic.presenceConfidence)}`}>
-              {(diagnostic.presenceConfidence * 100).toFixed(0)}% {t('history.card.confidence')}
+            <span className={`text-xs font-medium ${getConfidenceColor(confidence)}`}>
+              {(confidence * 100).toFixed(0)}% {t('history.card.confidence')}
             </span>
           </div>
         </div>

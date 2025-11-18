@@ -72,7 +72,8 @@ export default function HistoryView() {
             predictedAt: new Date(d.predicted_at),
             presenceConfidence: d.presence_confidence,
             absenceConfidence: d.absence_confidence,
-            hasLocation: false,
+            hasLocation: !!d.plot_id,
+            location: d.plot?.name,
             statusLabel: t(`dashboard.categories.${labelName}`)
           }
         });
