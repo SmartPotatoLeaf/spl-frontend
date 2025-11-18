@@ -52,7 +52,7 @@
       "confidence": "confianza"
     },
     "summaryChart": {
-      "title": "Diagnósticos por categorías en los últimos 30 días",
+      "title": "Diagnósticos por categorías en este mes",
       "categories": {
         "healthy": "Sin rancha",
         "low": "Rancha leve",

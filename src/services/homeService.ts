@@ -20,7 +20,7 @@ function mockGetDashboardStats(): Promise<DashboardStats> {
     setTimeout(() => {
       resolve({
         weekStats: {
-          currentWeek: 12,
+          currentMonth: 12,
           percentageChange: 8.5
         },
         generalStats: {

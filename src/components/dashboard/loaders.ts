@@ -48,6 +48,23 @@ export function createTrendDataset(data: TrendDataPoint[], t: (key: string) => s
   }
 }
 
+export function countLabels(labels: LabelsCount[]) {
+  const summary: any = {
+    healthy: 0,
+    low: 0,
+    moderate: 0,
+    severe: 0,
+  };
+
+  labels.forEach(label => {
+    let name = label.label.name;
+    name = name === "mild" ? "moderate" : name;
+    summary[name] = label.count;
+  })
+
+  return summary;
+}
+
 export async function loadDashboardData(filters: DashboardFilters) {
   const data = await getDashboardSummary({
     min_date: toISODate(filters.dateFrom),
@@ -60,22 +77,7 @@ export async function loadDashboardData(filters: DashboardFilters) {
     ]
   });
 
-  function countLabels(labels: LabelsCount[]) {
-    const summary: any = {
-      healthy: 0,
-      low: 0,
-      moderate: 0,
-      severe: 0,
-    };
 
-    labels.forEach(label => {
-      let name = label.label.name;
-      name = name === "mild" ? "moderate" : name;
-      summary[name] = label.count;
-    })
-
-    return summary;
-  }
 
   const summary = countLabels(data.labels_count),
     labelsTrend: TrendDataPoint[] = data.diagnosis_distribution.map(el => {
@@ -92,6 +94,7 @@ export async function loadDashboardData(filters: DashboardFilters) {
       weekStats: {},
       generalStats: {
         healthyPercentage: data.total === 0 ? 0 : (((healthy?.count ?? 0) / data.total) * 100).toFixed(2),
+        total: data.total
       },
       severityAverage: {
         value: data.mean_severity,

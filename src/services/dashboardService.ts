@@ -154,7 +154,7 @@ function mockGetDashboardStats(filters?: DashboardFilters): Promise<DashboardSta
 
       const stats: DashboardStats = {
         weekStats: {
-          currentWeek: summary.total,
+          currentMonth: summary.total,
           percentageChange: 12.5,
         },
         generalStats: {

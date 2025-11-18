@@ -52,7 +52,7 @@
       "confidence": "confidence"
     },
     "summaryChart": {
-      "title": "Diagnostics by category in the last 30 days",
+      "title": "Diagnostics by category in this month",
       "categories": {
         "healthy": "No blight",
         "low": "Low blight",

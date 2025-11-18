@@ -5,6 +5,7 @@ import useQueryParam from "@/hooks/useQueryParam.ts";
 import {getPlots} from "@/services/plotService.ts";
 import DeletePlotModal from "@/components/plots/DeletePlotModal.tsx";
 import type {PlotDetailed, PlotPaginatedResponse} from "@/types";
+import Loader from "@/components/shared/Loader";
 
 
 export default function PlotsGrid() {
@@ -92,11 +93,7 @@ export default function PlotsGrid() {
 
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
-      </div>
-    );
+    return <Loader text={t("common.loading")}/>
   }
 
   if (pagination.items.length === 0) {

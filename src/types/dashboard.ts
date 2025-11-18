@@ -27,12 +27,13 @@ export interface Diagnostic {
 }
 
 export interface WeekStats {
-  currentWeek: number;
+  currentMonth: number;
   percentageChange: number;
 }
 
 export interface GeneralStats {
   healthyPercentage: number;
+  total: number;
   percentageChange: number;
 }
 

@@ -6,7 +6,7 @@ import DiagnosticCard from './DiagnosticCard';
 import SummaryChart from './SummaryChart';
 import Loader from "@/components/shared/Loader";
 import {useEffect} from "react";
-import {loadDashboardData} from "@/components/dashboard/loaders.ts";
+import {countLabels, loadDashboardData} from "@/components/dashboard/loaders.ts";
 import {filterDiagnostics} from "@/services/diagnosticsService.ts";
 import {BLOB_URL} from "astro:env/client";
 
@@ -29,9 +29,12 @@ export default function HomeDashboard() {
           month = data.source.diagnosis_distribution.find(el => el.month === keyName);
 
         data.stats.weekStats = {
-          currentWeek: month?.labels_count?.reduce((acc, el) => acc + el.count, 0) || 0,
+          currentMonth: month?.labels_count?.reduce((acc, el) => acc + el.count, 0) || 0,
           percentageChange: undefined!
         }
+
+        data.stats.summary = countLabels(month ? month.labels_count : []);
+
         const items = diagnostics.items.map(el => {
           const name = el.label.name === "mild" ? "moderate" : el.label.name;
           return {
@@ -48,7 +51,6 @@ export default function HomeDashboard() {
           }
         });
 
-        console.log(items)
         setHomeData(data.stats, items);
       } catch (e) {
 
@@ -72,7 +74,7 @@ export default function HomeDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <StatsCard
           title={t('home.stats.monthlyDiagnostics')}
-          value={stats.weekStats.currentWeek}
+          value={stats.weekStats.currentMonth}
           change={stats.weekStats.percentageChange}
           icon="fa-chart-line"
         />
@@ -92,12 +94,7 @@ export default function HomeDashboard() {
         />
         <StatsCard
           title={t('home.stats.totalDiagnostics')}
-          value={
-            stats.summary.healthy +
-            stats.summary.low +
-            stats.summary.moderate +
-            stats.summary.severe
-          }
+          value={stats.generalStats.total}
           icon="fa-clipboard-check"
         />
       </div>
