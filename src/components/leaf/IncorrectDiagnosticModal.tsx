@@ -49,9 +49,9 @@ export default function IncorrectDiagnosticModal({
       }));
 
       onSubmit && onSubmit(data);
-      toast.success("")
+      toast.success(t("leaf.incorrectModal.submitSuccess"))
     } catch (e) {
-      toast.error("")
+      toast.error(t("leaf.incorrectModal.submitError"))
     } finally {
       setIsSubmitting(false);
     }

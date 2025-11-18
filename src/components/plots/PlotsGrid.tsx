@@ -83,8 +83,7 @@ export default function PlotsGrid() {
                 if (plot.id && confirm(t('plots.deleteConfirm', {name: plot.name}))) {
                   deletePlot(plot.id)
                     .then(_ => {
-                      if (pagination.total > (pagination.page * pagination.limit))
-                        loadPlots();
+                      loadPlots();
                       toast.success("Parcela eliminada correctamente.")
                     })
                     .catch(_ => {

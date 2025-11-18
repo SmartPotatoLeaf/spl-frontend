@@ -476,6 +476,9 @@ export default function LeafResult({predictionId}: LeafResultProps) {
         predictionId={predictionId}
         currentPlot={diagnostic.plotId}
         plots={filters.plots}
+        onSubmit={(plot) => {
+          setDiagnostic({...diagnostic, plotId: plot?.id})
+        }}
       />
 
       <DeleteDiagnosticModal

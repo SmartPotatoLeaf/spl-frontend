@@ -24,13 +24,13 @@ export default function DeleteDiagnosticModal({
 
     try {
       await deleteDiagnostic(+predictionId);
-      toast.success("")
+      toast.success(t("leaf.deleteModal.deleteSuccess"))
       setTimeout(() => {
         window.location.href = '/history';
       }, 1500);
 
     } catch (e) {
-      toast.error("")
+      toast.error(t("leaf.deleteModal.deleteError"))
       setIsDeleting(false);
       onClose();
     }

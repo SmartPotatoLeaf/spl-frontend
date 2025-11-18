@@ -9,7 +9,8 @@ interface AssignPlotModalProps {
   onClose: () => void;
   predictionId: string;
   currentPlot?: string;
-  plots: Plot[]
+  plots: Plot[],
+  onSubmit?: (data: Plot | undefined) => void;
 }
 
 export default function AssignPlotModal({
@@ -17,7 +18,7 @@ export default function AssignPlotModal({
                                           onClose,
                                           predictionId,
                                           currentPlot,
-  plots,
+                                          plots, onSubmit
                                         }: AssignPlotModalProps) {
   const {t} = useTranslation();
   const [selectedPlot, setSelectedPlot] = useState(currentPlot);
@@ -42,7 +43,8 @@ export default function AssignPlotModal({
     try {
       setIsSubmitting(true);
       // assign the plot to the prediction
-       await assignPlotToPredictions((+selectedPlot), [+predictionId])
+      await assignPlotToPredictions((+selectedPlot), [+predictionId])
+      onSubmit && onSubmit(plots.find(el => el.id === (+selectedPlot)))
       toast.success(t("leaf.assignPlotModal.assignSuccess"))
     } catch (e) {
       toast.success(t("leaf.assignPlotModal.assignError"))
