@@ -1,18 +1,11 @@
 ---
 import DashboardLayout from '@/layouts/DashboardLayout.astro';
 import LeafResult from '@/components/leaf/LeafResult';
-import diagnosticsData from '@/data/diagnostics.json';
 import AuthGuard from "@/components/shared/AuthGuard.tsx";
 
 const { id } = Astro.params;
 
 if (!id) {
-  return Astro.redirect('/history');
-}
-
-const diagnostic = diagnosticsData.find((d) => d.predictionId === id);
-
-if (!diagnostic) {
   return Astro.redirect('/history');
 }
 ---
