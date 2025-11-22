@@ -79,13 +79,13 @@ export async function getUserSettings(): Promise<AppSettings> {
         autoDetectTimezone: true,
       },
       appInfo: {
-        version: '1.0.0',
-        lastUpdate: new Date('2025-11-01'),
+        version: '1.1.0',
+        lastUpdate: new Date('2025-11-22'),
         changelog: [
           'Lanzamiento inicial de Smart Potato Leaf',
           'Sistema de diagnóstico con IA',
-          'Gestión de parcelas y cultivos',
-          'Dashboard con estadísticas en tiempo real',
+          'Gestión de parcelas',
+          'Dashboard con estadísticas',
           'Comparación de parcelas',
           'Historial de diagnósticos',
         ],

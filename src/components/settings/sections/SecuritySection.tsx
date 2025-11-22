@@ -23,19 +23,6 @@ export default function SecuritySection() {
     confirm: false,
   });
 
-  const formatDate = (date: Date | null): string => {
-    if (!date) return 'Nunca';
-    const now = new Date();
-    const diff = now.getTime() - date.getTime();
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-
-    if (days === 0) return 'Hoy';
-    if (days === 1) return 'Ayer';
-    if (days < 7) return `Hace ${days} días`;
-    if (days < 30) return `Hace ${Math.floor(days / 7)} semanas`;
-    return `Hace ${Math.floor(days / 30)} meses`;
-  };
-
   const getStrengthColor = (strength: string) => {
     switch (strength) {
       case 'weak': return 'text-error';
@@ -86,16 +73,6 @@ export default function SecuritySection() {
     }
   };
 
-  const formatActivityDate = (date: Date): string => {
-    return new Date(date).toLocaleString('es-PE', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
-
   return (
     <div className="bg-white rounded-lg border border-outline p-6 space-y-8">
       <h2 className="text-2xl font-bold text-state-idle">{t('settings.securitySection.title')}</h2>
@@ -119,11 +96,7 @@ export default function SecuritySection() {
           )}
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-          <div>
-            <label className="text-sm text-state-disabled">{t('settings.securitySection.lastChange')}</label>
-            <p className="text-state-idle font-medium">{formatDate(security.lastPasswordChange)}</p>
-          </div>
+        <div className="grid grid-cols-1 gap-4 mb-6">
           <div>
             <label className="text-sm text-state-disabled">{t('settings.securitySection.strength')}</label>
             <p className={`font-medium ${getStrengthColor(security.passwordStrength)}`}>
@@ -225,38 +198,6 @@ export default function SecuritySection() {
             </div>
           </div>
         )}
-      </div>
-
-      {/* Registro de actividad */}
-      <div>
-        <h3 className="text-lg font-semibold text-state-idle mb-4">{t('settings.securitySection.activityLog')}</h3>
-        <div className="space-y-3">
-          {security.recentActivity.map(activity => (
-            <div key={activity.id} className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-                activity.type === 'login' ? 'bg-primary/10 text-primary' :
-                activity.type === 'password_change' ? 'bg-tag-mid/10 text-tag-mid' :
-                'bg-tag-healthy/10 text-tag-healthy'
-              }`}>
-                <i className={`fas ${
-                  activity.type === 'login' ? 'fa-right-to-bracket' :
-                  activity.type === 'password_change' ? 'fa-key' :
-                  'fa-user-pen'
-                }`}></i>
-              </div>
-              <div className="flex-1">
-                <p className="text-state-idle font-medium">{activity.description}</p>
-                <p className="text-sm text-state-disabled mt-1">
-                  {formatActivityDate(activity.timestamp)}
-                  {activity.location && ` • ${activity.location}`}
-                </p>
-                {activity.device && (
-                  <p className="text-xs text-state-disabled mt-1">{activity.device}</p>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );

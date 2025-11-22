@@ -66,8 +66,8 @@ const defaultSettings: AppSettings = {
     autoDetectTimezone: true,
   },
   appInfo: {
-    version: '1.0.0',
-    lastUpdate: new Date('2025-11-01'),
+    version: '1.1',
+    lastUpdate: new Date('2025-11-22'),
     changelog: [
       'Lanzamiento inicial',
       'Sistema de diagnóstico de rancha',

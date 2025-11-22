@@ -13,7 +13,6 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   { section: 'account', labelKey: 'settings.accountSection.title', icon: 'fa-user' },
   { section: 'security', labelKey: 'settings.securitySection.title', icon: 'fa-shield-halved' },
-  { section: 'notifications', labelKey: 'settings.notificationsSection.title', icon: 'fa-bell' },
   { section: 'appearance', labelKey: 'settings.appearanceSection.title', icon: 'fa-palette' },
   { section: 'language', labelKey: 'settings.languageSection.title', icon: 'fa-globe' },
   { section: 'about', labelKey: 'settings.aboutSection.title', icon: 'fa-circle-info' },

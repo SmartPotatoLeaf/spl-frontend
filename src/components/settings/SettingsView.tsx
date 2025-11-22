@@ -7,7 +7,6 @@ import I18nProvider from '@/i18n/I18nProvider';
 import SettingsSidebar from './SettingsSidebar';
 import AccountSection from './sections/AccountSection';
 import SecuritySection from './sections/SecuritySection';
-import NotificationsSection from './sections/NotificationsSection';
 import AppearanceSection from './sections/AppearanceSection';
 import LanguageSection from './sections/LanguageSection';
 import AboutSection from './sections/AboutSection';
@@ -66,7 +65,6 @@ function SettingsContent() {
       <div className="flex-1">
         {currentSection === 'account' && <AccountSection />}
         {currentSection === 'security' && <SecuritySection />}
-        {currentSection === 'notifications' && <NotificationsSection />}
         {currentSection === 'appearance' && <AppearanceSection />}
         {currentSection === 'language' && <LanguageSection />}
         {currentSection === 'about' && <AboutSection />}

@@ -1,9 +1,8 @@
-export type SettingsSection = 
-  | 'account' 
-  | 'security' 
-  | 'notifications' 
-  | 'appearance' 
-  | 'language' 
+export type SettingsSection =
+  | 'account'
+  | 'security'
+  | 'appearance'
+  | 'language'
   | 'about';
 
 export type Theme = 'light' | 'dark' | 'system';
