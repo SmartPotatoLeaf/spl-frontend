@@ -22,7 +22,7 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
     ssr: {
-      noExternal: ['@nanostores/react', 'nanostores']
+      noExternal: ['@nanostores/react', 'nanostores', "@nanostores/persistent"]
     }
   },
 });
